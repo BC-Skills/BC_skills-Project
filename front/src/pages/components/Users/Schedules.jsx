@@ -91,23 +91,22 @@ const ScheduleTable = () => {
     return acc;
   }, {});
 
-  // Filter schedules based on search filters
-  const filteredSchedules = schedules.filter((schedule) => {
-    let searchValue = '';
-
+  const handleSearch = (searchValue) => {
     if (searchOption === 'date') {
-      searchValue = searchDate;
+      setSearchDate(searchValue);
     } else if (searchOption === 'project') {
-      searchValue = searchProject;
+      setSearchProject(searchValue);
     } else if (searchOption === 'ticket') {
-      searchValue = searchTicket;
+      setSearchTicket(searchValue);
     }
+  };
 
-    const dateMatch = schedule.date.toLowerCase().includes(searchValue.toLowerCase());
+  const filteredSchedules = schedules.filter((schedule) => {
+    const dateMatch = schedule.date.toLowerCase().includes(searchDate.toLowerCase());
     const ticket = tickets.find((ticket) => ticket.id === schedule.ticket_id);
     const project = projects.find((project) => project.id === schedule.project_id);
-    const projectMatch = project ? project.nom.toLowerCase().includes(searchValue.toLowerCase()) : true;
-    const ticketMatch = ticket ? ticket.nom.toLowerCase().includes(searchValue.toLowerCase()) : true;
+    const projectMatch = project ? project.nom.toLowerCase().includes(searchProject.toLowerCase()) : true;
+    const ticketMatch = ticket ? ticket.nom.toLowerCase().includes(searchTicket.toLowerCase()) : true;
 
     return dateMatch && projectMatch && ticketMatch;
   });
@@ -133,30 +132,30 @@ const ScheduleTable = () => {
       </button>
   
       <div className="flex justify-center mt-4 space-x-4">
-      <div className="relative">
-  <input
-    type="text"
-    placeholder={`Search by ${searchOption.charAt(0).toUpperCase() + searchOption.slice(1)}`}
-    className="px-4 py-2 border border-gray-300 rounded-lg w-48 focus:outline-none focus:border-blue-500"
-    value={searchDate}
-    onChange={(e) => setSearchDate(e.target.value)}
-  />
-  <svg
-    className="absolute top-3 right-3 w-4 h-4 text-gray-500"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="2"
-      d="M15 11a4 4 0 11-8 0 4 4 0 018 0z"
-    />
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 19l-4.35-4.35" />
-  </svg>
-</div>
+        <div className="relative">
+          <input
+            type="text"
+            placeholder={`Search by ${searchOption}`}
+            className="px-4 py-2 border border-gray-300 rounded-lg w-48 focus:outline-none focus:border-blue-500"
+            value={searchOption === 'date' ? searchDate : searchOption === 'project' ? searchProject : searchTicket}
+            onChange={(e) => handleSearch(e.target.value)}
+          />
+          <svg
+            className="absolute top-3 right-3 w-4 h-4 text-gray-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M15 11a4 4 0 11-8 0 4 4 0 018 0z"
+            />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 19l-4.35-4.35" />
+          </svg>
+        </div>
         <div>
           <select
             className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
