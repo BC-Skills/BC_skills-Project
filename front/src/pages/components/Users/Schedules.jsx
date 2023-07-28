@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ScheduleForm from '../../model/ScheduleForm';
-import { useStateContext } from "../../../contexts/contextProvider";
-import axiosClient from "../../../axios";
+import { useStateContext } from '../../../contexts/contextProvider';
+import axiosClient from '../../../axios';
 
 const ScheduleTable = () => {
   const [schedules, setSchedules] = useState([]);
@@ -10,18 +10,24 @@ const ScheduleTable = () => {
   const [showForm, setShowForm] = useState(false);
   const { currentUser } = useStateContext();
 
+  const [searchDate, setSearchDate] = useState('');
+  const [searchProject, setSearchProject] = useState('');
+  const [searchTicket, setSearchTicket] = useState('');
+
   useEffect(() => {
     // Fetch data from the API using Axios
-    axiosClient.get(`schedules/user/${currentUser.id}`)
-    .then((response) => {
-      setSchedules(response.data);
-    })
-    .catch((error) => {
-      console.error('Error fetching schedules:', error);
-    });
+    axiosClient
+      .get(`schedules/user/${currentUser.id}`)
+      .then((response) => {
+        setSchedules(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching schedules:', error);
+      });
 
     // Fetch tickets
-    axiosClient.get('tickets/')
+    axiosClient
+      .get('tickets/')
       .then((response) => {
         setTickets(response.data);
       })
@@ -30,7 +36,8 @@ const ScheduleTable = () => {
       });
 
     // Fetch projects
-    axiosClient.get('projects/')
+    axiosClient
+      .get('projects/')
       .then((response) => {
         setProjects(response.data);
       })
@@ -71,8 +78,7 @@ const ScheduleTable = () => {
       .catch((error) => {
         console.error('Error downloading file:', error);
       });
-  
-    }
+  };
 
   // Group schedules by date
   const schedulesByDate = schedules.reduce((acc, schedule) => {
@@ -84,46 +90,100 @@ const ScheduleTable = () => {
     return acc;
   }, {});
 
-  return (
-    <div>
-      <button
-            onClick={handleAddSchedule}
-            className="bg-[#41415A] hover:bg-[#6C6D96] text-white font-bold py-2 px-4 rounded ml-6 mt-4"
-          >
-            Add Schedule
-          </button>
+  // Filter schedules based on search filters
+  const filteredSchedules = schedules.filter((schedule) => {
+    const dateMatch = schedule.date.toLowerCase().includes(searchDate.toLowerCase());
+    const ticket = tickets.find((ticket) => ticket.id === schedule.ticket_id);
+    const project = projects.find((project) => project.id === schedule.project_id);
+    const projectMatch = project
+      ? project.nom.toLowerCase().includes(searchProject.toLowerCase())
+      : true;
+    const ticketMatch = ticket ? ticket.nom.toLowerCase().includes(searchTicket.toLowerCase()) : true;
 
-      {Object.entries(schedulesByDate).map(([date, schedulesForDate]) => (
-        <div key={date} className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
-          <h1 className="text-2xl font-bold mb-4 px-6 py-4 bg-gray-50">Schedule Table for {date}</h1>
-          
-          <table className="w-full mt-4 border-collapse bg-white text-left text-sm text-gray-500">
-            <thead className="bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                  Date
-                </th>
-                <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                  Start Hour
-                </th>
-                <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                  End Hour
-                </th>
-                <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                  Ticket Name
-                </th>
-                <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                  Project Name
-                </th>
-                <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                  Description
-                </th>
-                <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                  File
-                </th>
-                <th scope="col" className="px-6 py-4 font-medium text-gray-900">Actions</th>
-              </tr>
-            </thead>
+    return dateMatch && projectMatch && ticketMatch;
+  });
+
+  // Group filtered schedules by date
+  const filteredSchedulesByDate = filteredSchedules.reduce((acc, schedule) => {
+    const date = schedule.date.split('T')[0]; // Remove the time part from the date
+    if (!acc[date]) {
+      acc[date] = [];
+    }
+    acc[date].push(schedule);
+    return acc;
+  }, {});
+
+
+  return (
+      <div>
+        <button
+          onClick={handleAddSchedule}
+          className="bg-[#41415A] hover:bg-[#6C6D96] text-white font-bold py-2 px-4 rounded ml-6 mt-4"
+        >
+          Add Schedule
+        </button>
+  
+        <div className="flex justify-center mt-4 space-x-4">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search by date"
+              className="px-4 py-2 border border-gray-300 rounded-lg w-48 focus:outline-none focus:border-blue-500"
+              value={searchDate}
+              onChange={(e) => setSearchDate(e.target.value)}
+            />
+            <svg
+              className="absolute top-3 right-3 w-4 h-4 text-gray-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M15 11a4 4 0 11-8 0 4 4 0 018 0z"
+              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 19l-4.35-4.35" />
+            </svg>
+          </div>
+          {/* Add more search fields for project and ticket */}
+        </div>
+  
+        {Object.entries(filteredSchedulesByDate).map(([date, schedulesForDate]) => (
+          <div key={date} className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
+            <h1 className="text-2xl font-bold mb-4 px-6 py-4 bg-gray-50">Schedule Table for {date}</h1>
+  
+            <table className="w-full mt-4 border-collapse bg-white text-left text-sm text-gray-500">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                    Date
+                  </th>
+                  <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                    Start Hour
+                  </th>
+                  <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                    End Hour
+                  </th>
+                  <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                    Ticket Name
+                  </th>
+                  <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                    Project Name
+                  </th>
+                  <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                    Description
+                  </th>
+                  <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                    File
+                  </th>
+                  <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
             <tbody className="divide-y divide-gray-100 border-t border-gray-100">
               {schedulesForDate.map((schedule) => {
                 const ticket = tickets.find((ticket) => ticket.id === schedule.ticket_id);

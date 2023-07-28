@@ -63,7 +63,6 @@ export default function Projects() {
         try {
           const response = await axiosClient.get("projects");
           const projectsData = response.data;
-      
           const updatedProjects = await Promise.all(
             projectsData.map(async (project) => {
               const clientResponse = await axiosClient.get(`users/${project.client_id}`);
@@ -106,7 +105,7 @@ export default function Projects() {
       }, []);
       
 
-    const [withValue, setWithValue] = useState(`w-[50%]`);
+    const [withValue, setWithValue] = useState(`w-[10%]`);
 
     const onDragEnd = async (result) => {
         if (!result.destination) {
