@@ -10,7 +10,7 @@ class CorsMiddleware
     public function handle($request, Closure $next)
     {
         // Allow requests from any origin
-        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Origin: * ');
 
         // Allow specific HTTP methods
         header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
