@@ -307,6 +307,7 @@ export default function Projects() {
                                 </h1>
                             </div>
                         </div>
+                        <div className="flex-1 p-2 flex flex-col rounded-3xl gap-6 shadow-2xl bg-gray-300">
                             <Droppable droppableId="pendingProjects">
                                 {(provided) => (
                                     <div
@@ -344,6 +345,7 @@ export default function Projects() {
                                     </div>
                                 )}
                             </Droppable>
+                        </div>
                     </div>
                     <div className="flex-1 bg-white gap-10 flex flex-col">
                         <div className="h-[50px] gap-3 flex relative rounded-xl overflow-hidden shadow-md bg-green-400 shadow-gray-400">
@@ -363,6 +365,7 @@ export default function Projects() {
                                 </h1>
                             </div>
                         </div>
+                        <div className="flex-1 p-2 gap-6 scroll-auto flex flex-col rounded-3xl shadow-2xl bg-gray-300">
                             <Droppable droppableId="completedProjects">
                                 {(provided) => (
                                     <div
@@ -400,6 +403,7 @@ export default function Projects() {
                                     </div>
                                 )}
                             </Droppable>
+                        </div>
                     </div>
                 </div>
             </DragDropContext>

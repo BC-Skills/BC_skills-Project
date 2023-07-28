@@ -4,20 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-// app/Models/Schedule.php
 
 class Schedule extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_id', // Foreign key to link to the User model
-        'hour',
+        'date',
+        'start_hour',
+        'end_hour',
         'ticket_id', // Foreign key to link to the Ticket model
+        'project_id', // Foreign key to link to the Project model
+        'user_id', // Foreign key to link to the User model
+        'file',
+        'file_name', // Add 'file_name' to the $fillable array
         'description',
+        'file_path',
+        
     ];
 
-    // Define the relationships with User and Ticket models
+    // Define the relationships with User, Ticket, and Project models
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -26,6 +32,11 @@ class Schedule extends Model
     public function ticket()
     {
         return $this->belongsTo(Ticket::class);
+    }
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
     }
 }
 

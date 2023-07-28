@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\ProjectManagerController;
 use App\Http\Controllers\Api\DevelopperController;
 use App\Http\Controllers\Api\PrivilegeController;
 use App\Http\Controllers\Api\StatusController;
+use App\Http\Controllers\Api\ScheduleController;
 
 
 
@@ -46,6 +47,9 @@ Route::apiResource('users', UserController::class);
 Route::apiResource('privileges', PrivilegeController::class);
 Route::resource('statuses', StatusController::class);
 
+Route::get('/profile/{id}', 'ProfileController@show');
+
+
 Route::post('/messages', 'MessageController@store');
 
 
@@ -64,7 +68,21 @@ Route::get('/userss/admin', [UserController::class, 'getAdmin']);
 
 
 
+Route::apiResource('schedules', ScheduleController::class);
 
+
+//Route::post('/schedules', [ScheduleController::class, 'store']);
+Route::get('schedules/download/{id}', [ScheduleController::class, 'downloadFile']);
+Route::get('schedules/user/{userId}', [ScheduleController::class, 'getSchedulesByUser']);
+
+
+
+Route::get('tickets/{id}', [TicketController::class, 'getById']); // Custom route to get ticket by ID
+
+
+Route::get('projects/{id}', [ProjectController::class, 'getById']); // Custom route to get project by ID
+
+Route::post('users/{userId}/update-password', [UserController::class, 'updatePassword']);
 
 
 

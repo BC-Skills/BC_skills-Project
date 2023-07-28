@@ -52,5 +52,29 @@ class UserController extends Controller
     
         return response()->json($users);
     }
+
+          // Controller function for updating the user's password
+          public function updatePassword(Request $request, $userId)
+          {
+              try {
+                  // Find the user by their ID
+                  $user = User::find($userId);
+      
+                  if (!$user) {
+                      return response()->json(['error' => 'User not found'], 404);
+                  }
+      
+                  // Update the user's password
+                  $user->password = bcrypt($request->input('newPassword'));
+                  $user->save();
+      
+                  // Respond with a success message or any other relevant data
+                  return response()->json(['message' => 'Password updated successfully'], 200);
+              } catch (\Exception $e) {
+                  // Handle errors (e.g., database errors)
+                  \Log::error('Error updating password: ' . $e->getMessage());
+                  return response()->json(['error' => 'Internal server error'], 500);
+              }
+          }
     
 }
