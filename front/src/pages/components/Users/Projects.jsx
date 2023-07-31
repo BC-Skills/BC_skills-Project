@@ -6,6 +6,7 @@ import axiosClient from "../../../axios";
 import Cards, { Header } from "./Componets/cards";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import AddProject from "../../model/AddProject";
+import DetailsProject from "../../model/DetailsProject";
 
 
 const localStorageKey = "projectsData";
@@ -19,8 +20,11 @@ export default function Projects() {
     const { currentUser, profile } = useStateContext();
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true); // Step 1: Add the loading state
-
     const [showModal, setShowModal] = useState(false);
+    const [editModalOpen, setEditModalOpen] = useState(false); // New state variable for the EditModels modal
+    const [selectedUserId, setSelectedProject] = useState({}); 
+    const [withValue, setWithValue] = useState(`w-[50%]`);
+    const navigate = useNavigate();
 
     const handleShowModal = () => {
         setShowModal(true);
@@ -30,7 +34,18 @@ export default function Projects() {
         setShowModal(false);
     };
 
-    const navigate = useNavigate();
+
+    const handleOpenEditModal = (project) => {
+        setSelectedProject(project); 
+        setEditModalOpen(true); 
+      };
+
+    // Function to close the EditModels modal
+    const handleCloseEditModal = () => {
+        setSelectedProject({});
+        setEditModalOpen(false); 
+    };
+
     useEffect(() => {
         const parsedLinkss = JSON.parse(storedLinks) || [];
         const hasProjectsLink = parsedLinkss.some(
@@ -177,10 +192,6 @@ export default function Projects() {
         }
       }, []);
 
-
-
-    const [withValue, setWithValue] = useState(`w-[50%]`);
-
     const onDragEnd = async (result) => {
         if (!result.destination) {
           return;
@@ -316,7 +327,6 @@ export default function Projects() {
                             {profile.name}
                         </h1>
                     </div>
-
                     <div className="user">
                         <img
                             className="flex-1"
@@ -328,8 +338,7 @@ export default function Projects() {
             </div>
             <DragDropContext onDragEnd={onDragEnd}>
                 <div className="flex-1 flex flex-row justify-around gap-6">
-                    <div className="flex-1 bg-white gap-10 flex flex-col">
-                        
+                    <div className="flex-1 bg-white gap-10 flex flex-col"> 
                         <Header withValue={withValue} />
                         {loading ? (
                                 // Loading indicator or message while data is being fetched
@@ -357,6 +366,7 @@ export default function Projects() {
                                                     <Cards
                                                         project={project}
                                                         key={project.id}
+                                                        onEditProject={handleOpenEditModal}
                                                     />
                                                 </div>
                                             )}
@@ -373,7 +383,6 @@ export default function Projects() {
                             <div
                                 className={` h-full flex justify-center items-center bg-orange-500 ${withValue}`}
                             ></div>
-
                             <div className="absolute text-white inset-0 flex items-center justify-center text-sm font-medium ">
                                 <ion-icon
                                     size="large"
@@ -418,6 +427,7 @@ export default function Projects() {
                                                                     project
                                                                 }
                                                                 key={project.id}
+                                                                onEditProject={handleOpenEditModal}
                                                             />
                                                         </div>
                                                     )}
@@ -479,7 +489,7 @@ export default function Projects() {
                                                                     project
                                                                 }
                                                                 key={project.id}
-                                                            />
+                                                                onEditProject={handleOpenEditModal}                                                            />
                                                         </div>
                                                     )}
                                                 </Draggable>
@@ -494,6 +504,12 @@ export default function Projects() {
                 </div>
             </DragDropContext>
             {showModal && <AddProject onCloseModal={handleCloseModal} fetchUsersData={fetchProjects} />}
+            {editModalOpen && (
+                <DetailsProject
+                    project={selectedUserId}
+                    onCloseModal={handleCloseEditModal}
+                />
+            )}
         </div>
     );
 }

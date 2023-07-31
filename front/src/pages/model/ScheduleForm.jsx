@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable react/prop-types */
+import  { useState, useEffect } from 'react';
 import axiosClient from '../../axios';
 
 const ScheduleForm = ({ onClose, userId }) => {
@@ -9,8 +10,8 @@ const ScheduleForm = ({ onClose, userId }) => {
     ticket_id: '',
     project_id: '',
     user_id: userId,
-    file: null, // New field for the file
-    description: '', // New field for the description
+    file: null, 
+    description: '', 
   });
 
   const [projects, setProjects] = useState([]);

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import PropTypes from "prop-types";
 
 Cards.propTypes = {
@@ -20,7 +21,10 @@ Cards.propTypes = {
     }).isRequired,
 };
 
-export default function Cards({ project }) {
+export default function Cards({ project, onEditProject }) {
+    const handleEditClick = () => {
+        onEditProject(project);
+      };
     return (
         <div
             className="bg-white flex flex-col  p-4 rounded-2xl shadow-2xl"
@@ -77,6 +81,14 @@ export default function Cards({ project }) {
                     </div>
                     <div className="w-20 text-black font-bold">Manager:</div>
                 </div>
+                <div className="flex-1 flex justify-center items-center">
+                       <button className="rounded-full bg-blue-500 px-5 py-3 text-base mb-3 font-medium text-white transition duration-200 hover:bg-blue-600 active:bg-blue-700"
+                               onClick={() => handleEditClick(project)}
+                       >
+                        More Details
+                    </button>
+                </div>
+             
             </div>
         </div>
     );

@@ -6,8 +6,6 @@ import "../../assets/css/dashboard.css";
 import logo from "../../assets/images/logo.png";
 
 export default function DashboardUser() {
-    const { currentUser } = useStateContext();
-
     // eslint-disable-next-line no-unused-vars
     const [privilegeSettings, setPrivilegeSettings] = useState({});
     const [links, setLinks] = useState([]);
@@ -168,25 +166,9 @@ export default function DashboardUser() {
                         <ion-icon name="menu-outline"></ion-icon>
                     </div>
                     <div className="flex flex-row gap-6 justify-center items-center">
-                        <div className="flex-1">
-                            <h1 className="text-[20px] font-bold">
-                                {currentUser.name}
-                            </h1>
-                            <h1 className="text-[15px] font-bold text-blue-400">
-                                {profile.name}
-                            </h1>
-                        </div>
-
-                        <div className="user">
-                            <img
-                                className="flex-1"
-                                src={currentUser.profile_picture}
-                                alt="Profile Picture"
-                            />
-                        </div>
                     </div>
                 </div>
-                <div className="flex-1 p-2   flex  gap-10 flex-row justify-between flex-wrap">
+                <div className="flex-1 p-2 flex  gap-10 flex-row justify-between flex-wrap">
                     <Outlet />
                 </div>
             </div>
