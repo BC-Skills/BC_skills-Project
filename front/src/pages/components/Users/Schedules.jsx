@@ -9,7 +9,7 @@ const ScheduleTable = () => {
   const [tickets, setTickets] = useState([]);
   const [projects, setProjects] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const { currentUser } = useStateContext();
+  const { profile,currentUser } = useStateContext();
 
   const [searchDate, setSearchDate] = useState('');
   const [searchProject, setSearchProject] = useState('');
@@ -17,6 +17,8 @@ const ScheduleTable = () => {
   const [searchOption, setSearchOption] = useState('date');
 
   const [filteredSchedulesByDate, setFilteredSchedulesByDate] = useState({});
+//curren date for excell file
+  const [currentDate] = useState(new Date().toISOString().slice(0, 10));
 
   useEffect(() => {
     axiosClient
@@ -123,13 +125,28 @@ const ScheduleTable = () => {
 
   return (
     
-    <div className="flex flex-1 flex-col items-center justify-center">
-      <button
-        onClick={handleAddSchedule}
-        className="bg-[#41415A] hover:bg-[#6C6D96] text-white font-bold py-2 px-4 rounded ml-6 mt-4"
-      >
-        Add Schedule
-      </button>
+    
+    <div className="flex flex-1 flex-col ">
+      <div className="flex flex-row-reverse  items-center justify-between">
+         <div className="flex flex-row gap-6 justify-center items-center">
+                    <div className="flex-1">
+                        <h1 className="text-[20px] font-bold">
+                            {currentUser.name}
+                        </h1>
+                        <h1 className="text-[15px] font-bold text-blue-400">
+                            {profile.name}
+                        </h1>
+                    </div>
+                    <div className="user">
+                        <img
+                            className="flex-1"
+                            src={currentUser.profile_picture}
+                            alt="Profile Picture"
+                        />
+                    </div>
+                </div>
+    
+   
       <div className="flex justify-center items-center mt-4 space-x-4">
         <div className="relative">
           <input
@@ -167,19 +184,27 @@ const ScheduleTable = () => {
           </select>
         </div>
       </div>
+      <button
+        onClick={handleAddSchedule}
+        className="bg-[#41415A] hover:bg-[#6C6D96] text-white font-bold py-2 px-4 rounded ml-6 mt-4"
+      >
+        Add Schedule
+      </button>
+      </div>
+         
       <div d="table-ex" className="w-full">
         {Object.entries(filteredSchedulesByDate).reverse().map(([date, schedulesForDate]) => {
           const formattedDate = new Date(date).toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
           return (
             <div key={date} className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5 ">
-              <h1 className="text-2xl font-bold mb-4 px-6 py-4 bg-gray-50">
+              <h1 className="text-3xl font-bold mb-4 px-6 py-4 bg-gray-50 text-center text-[#41415A]">
                 {formattedDate.toUpperCase()}
               </h1>
-              <table className="w-full mt-4 border-collapse bg-white text-left text-sm text-gray-500">
-                <thead className="bg-gray-50">
+              <table className="w-full mt-4 border-collapse bg-white text-left text-sm text-gray-600"> 
+                <thead className="bg-gray-100">
                   <tr>
-                    <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                    <th scope="col" className="px-6 py-4 font-medium text-gray-900">  
                       Date
                     </th>
                     <th scope="col" className="px-6 py-4 font-medium text-gray-900">
@@ -336,14 +361,17 @@ const ScheduleTable = () => {
           </div>
         </div>
       )}
-      <ReactHTMLTableToExcel
+      <div className="flex justify-center items-center">
+        <ReactHTMLTableToExcel
         id="excelButton"
-        className="bg-[#107C41] hover:bg-[#5FA780] text-white font-bold py-2 px-4 rounded ml-6 mt-4"
+        className=" bg-[#107C41] hover:bg-[#5FA780] text-white font-bold py-2 px-4 rounded ml-6 mt-4"
         table="table-to-export"
-        filename="schedule_table"
+        filename={`schedule_table_${currentDate}`}
         sheet="schedule_table"
         buttonText="Export to Excel"
       />
+      </div>
+      
     </div>
   );
 };
