@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ScheduleForm from '../../model/ScheduleForm';
 import { useStateContext } from '../../../contexts/contextProvider';
 import axiosClient from '../../../axios';
+import ReactHTMLTableToExcel from 'react-html-table-to-excel'; // Import the library
 
 const ScheduleTable = () => {
   const [schedules, setSchedules] = useState([]);
@@ -15,18 +16,51 @@ const ScheduleTable = () => {
   const [searchTicket, setSearchTicket] = useState('');
   const [searchOption, setSearchOption] = useState('date');
 
+  const [filteredSchedulesByDate, setFilteredSchedulesByDate] = useState({});
+
   useEffect(() => {
-    // Fetch data from the API using Axios
     axiosClient
       .get(`schedules/user/${currentUser.id}`)
       .then((response) => {
         setSchedules(response.data);
+
+        const schedulesByDate = response.data.reduce((acc, schedule) => {
+          const date = schedule.date.split('T')[0];
+          if (!acc[date]) {
+            acc[date] = [];
+          }
+          acc[date].push(schedule);
+          return acc;
+        }, {});
+
+        // filter code
+        const filteredSchedules = response.data.filter((schedule) => {
+          const dateMatch = schedule.date.toLowerCase().includes(searchDate.toLowerCase());
+          const ticket = tickets.find((ticket) => ticket.id === schedule.ticket_id);
+          const project = projects.find((project) => project.id === schedule.project_id);
+          const projectMatch = project ? project.nom.toLowerCase().includes(searchProject.toLowerCase()) : true;
+          const ticketMatch = ticket ? ticket.nom.toLowerCase().includes(searchTicket.toLowerCase()) : true;
+          return dateMatch && projectMatch && ticketMatch;
+        });
+
+        const filteredSchedulesByDate = filteredSchedules.reduce((acc, schedule) => {
+          const date = schedule.date.split('T')[0];
+          if (!acc[date]) {
+            acc[date] = [];
+          }
+          acc[date].push(schedule);
+          return acc;
+        }, {});
+
+        const uniqueDates = Object.keys(filteredSchedulesByDate).sort((a, b) => new Date(a) - new Date(b));
+
+        setFilteredSchedulesByDate(filteredSchedulesByDate);
+        setUniqueDates(uniqueDates);
       })
       .catch((error) => {
         console.error('Error fetching schedules:', error);
       });
 
-    // Fetch tickets
     axiosClient
       .get('tickets/')
       .then((response) => {
@@ -36,7 +70,6 @@ const ScheduleTable = () => {
         console.error('Error fetching tickets:', error);
       });
 
-    // Fetch projects
     axiosClient
       .get('projects/')
       .then((response) => {
@@ -45,7 +78,7 @@ const ScheduleTable = () => {
       .catch((error) => {
         console.error('Error fetching projects:', error);
       });
-  }, [currentUser.id]);
+  }, [currentUser.id, searchDate, searchProject, searchTicket]);
 
   const handleAddSchedule = () => {
     setShowForm(true);
@@ -55,25 +88,19 @@ const ScheduleTable = () => {
     setShowForm(false);
   };
 
+  // download
   const handleFileDownload = (id, fileName) => {
     axiosClient
       .get(`schedules/download/${id}`, {
         responseType: 'blob',
       })
       .then((response) => {
-        // Create a blob from the response data
         const blob = new Blob([response.data], { type: response.headers['content-type'] });
-
-        // Create a download link for the blob
         const downloadLink = document.createElement('a');
         downloadLink.href = window.URL.createObjectURL(blob);
         downloadLink.setAttribute('download', fileName);
         document.body.appendChild(downloadLink);
-
-        // Simulate a click on the link to trigger the download
         downloadLink.click();
-
-        // Remove the temporary download link
         document.body.removeChild(downloadLink);
       })
       .catch((error) => {
@@ -81,16 +108,7 @@ const ScheduleTable = () => {
       });
   };
 
-  // Group schedules by date
-  const schedulesByDate = schedules.reduce((acc, schedule) => {
-    const date = schedule.date.split('T')[0]; // Remove the time part from the date
-    if (!acc[date]) {
-      acc[date] = [];
-    }
-    acc[date].push(schedule);
-    return acc;
-  }, {});
-
+  // Search
   const handleSearch = (searchValue) => {
     if (searchOption === 'date') {
       setSearchDate(searchValue);
@@ -101,37 +119,18 @@ const ScheduleTable = () => {
     }
   };
 
-  const filteredSchedules = schedules.filter((schedule) => {
-    const dateMatch = schedule.date.toLowerCase().includes(searchDate.toLowerCase());
-    const ticket = tickets.find((ticket) => ticket.id === schedule.ticket_id);
-    const project = projects.find((project) => project.id === schedule.project_id);
-    const projectMatch = project ? project.nom.toLowerCase().includes(searchProject.toLowerCase()) : true;
-    const ticketMatch = ticket ? ticket.nom.toLowerCase().includes(searchTicket.toLowerCase()) : true;
-
-    return dateMatch && projectMatch && ticketMatch;
-  });
-
-  // Group filtered schedules by date
-  const filteredSchedulesByDate = filteredSchedules.reduce((acc, schedule) => {
-    const date = schedule.date.split('T')[0]; // Remove the time part from the date
-    if (!acc[date]) {
-      acc[date] = [];
-    }
-    acc[date].push(schedule);
-    return acc;
-  }, {});
-
+  const allSchedules = Object.values(filteredSchedulesByDate).reduce((acc, schedules) => [...acc, ...schedules], []);
 
   return (
-    <div>
+    
+    <div className="flex flex-1 flex-col items-center justify-center">
       <button
         onClick={handleAddSchedule}
         className="bg-[#41415A] hover:bg-[#6C6D96] text-white font-bold py-2 px-4 rounded ml-6 mt-4"
       >
         Add Schedule
       </button>
-  
-      <div className="flex justify-center mt-4 space-x-4">
+      <div className="flex justify-center items-center mt-4 space-x-4">
         <div className="relative">
           <input
             type="text"
@@ -168,84 +167,157 @@ const ScheduleTable = () => {
           </select>
         </div>
       </div>
-  
-      {Object.entries(filteredSchedulesByDate).map(([date, schedulesForDate]) => (
-        <div key={date} className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
-          <h1 className="text-2xl font-bold mb-4 px-6 py-4 bg-gray-50">Schedule Table for {date}</h1>
-  
-          <table className="w-full mt-4 border-collapse bg-white text-left text-sm text-gray-500">
-            <thead className="bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                  Start Hour
-                </th>
-                <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                  End Hour
-                </th>
-                <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                  Ticket Name
-                </th>
-                <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                  Project Name
-                </th>
-                <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                  Description
-                </th>
-                <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                  File
-                </th>
-                <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 border-t border-gray-100">
-              {schedulesForDate.map((schedule) => {
-                const ticket = tickets.find((ticket) => ticket.id === schedule.ticket_id);
-                const project = projects.find((project) => project.id === schedule.project_id);
-  
-                return (
-                  <tr key={schedule.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 border-b border-gray-200">{schedule.date}</td>
-                    <td className="px-6 py-4 border-b border-gray-200">{schedule.start_hour}</td>
-                    <td className="px-6 py-4 border-b border-gray-200">{schedule.end_hour}</td>
-                    <td className="px-6 py-4 border-b border-gray-200">
-                      {ticket ? ticket.nom : '-'}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200">
-                      {project ? project.nom : '-'}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200">{schedule.description}</td>
-  
-                    <td className="px-6 py-4 border-b border-gray-200">
-                      {schedule.file_path ? (
-                        <div>
-                          <p>File Name: {schedule.file_name}</p>
-                          <button onClick={() => handleFileDownload(schedule.id, schedule.file_name)}>
-                            Download File
-                          </button>
-                        </div>
-                      ) : (
-                        <p>No File Uploaded</p>
-                      )}
-                    </td>
-  
-                    <td className="px-6 py-4 border-b border-gray-200">
-                      <div className="flex justify-end gap-4">
-                        {/* ... (existing code for the delete and edit buttons remains unchanged) */}
-                      </div>
-                    </td>
+      <div d="table-ex" className="w-full">
+        {Object.entries(filteredSchedulesByDate).reverse().map(([date, schedulesForDate]) => {
+          const formattedDate = new Date(date).toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+          return (
+            <div key={date} className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5 ">
+              <h1 className="text-2xl font-bold mb-4 px-6 py-4 bg-gray-50">
+                {formattedDate.toUpperCase()}
+              </h1>
+              <table className="w-full mt-4 border-collapse bg-white text-left text-sm text-gray-500">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                      Date
+                    </th>
+                    <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                      De
+                    </th>
+                    <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                      A
+                    </th>
+                    <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                      Ticket
+                    </th>
+                    <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                      Projet
+                    </th>
+                    <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                      Description
+                    </th>
+                    <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                      Fichier
+                    </th>
+
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      ))}
-  
+                </thead>
+                <tbody className="divide-y divide-gray-100 border-t border-gray-100">
+                  {schedulesForDate.map((schedule) => {
+                    const ticket = tickets.find((ticket) => ticket.id === schedule.ticket_id);
+                    const project = projects.find((project) => project.id === schedule.project_id);
+
+                    return (
+                      <tr key={schedule.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 border-b border-gray-200">{schedule.date}</td>
+                        <td className="px-6 py-4 border-b border-gray-200">{schedule.start_hour}</td>
+                        <td className="px-6 py-4 border-b border-gray-200">{schedule.end_hour}</td>
+                        <td className="px-6 py-4 border-b border-gray-200">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[#FF9300] px-2 py-1 text-xs font-semibold text-white">
+                          {ticket ? ticket.nom : '-'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 border-b border-gray-200">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[#0096FF] px-2 py-1 text-xs font-semibold text-white">
+
+                          {project ? project.nom : '-'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 border-b border-gray-200">{schedule.description}</td>
+
+                        <td className="px-6 py-4 border-b border-gray-200">
+                          {schedule.file_path ? (
+                            <div>
+                              {/* <p>File Name: {schedule.file_name}</p> */}
+                              <button  className="bg-[#9437FF] hover:bg-[#B779FF] text-white font-bold py-1 px-2 rounded" onClick={() => handleFileDownload(schedule.id, schedule.file_name)}>
+                                Download File
+                              </button>
+                            </div>
+                          ) : (
+                            <p>No File Uploaded</p>
+                          )}
+                        </td>
+                  </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          );
+        })}
+      </div>
+      {/* hidden table for excell exportation */}
+      <table id="table-to-export" className=" hidden w-full mt-4 border-collapse bg-white text-left text-sm text-gray-500">
+        <thead className="bg-gray-50">
+          <tr>
+            <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+              Date
+            </th>
+            <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+              De
+            </th>
+            <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+              A
+            </th>
+            <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+              Ticket
+            </th>
+            <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+              Projet
+            </th>
+            <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+              Description
+            </th>
+            <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+              fichier
+            </th>
+            <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-100 border-t border-gray-100">
+          {allSchedules.map((schedule) => {
+            const ticket = tickets.find((ticket) => ticket.id === schedule.ticket_id);
+            const project = projects.find((project) => project.id === schedule.project_id);
+
+            return (
+              <tr key={schedule.id} className="hover:bg-gray-50">
+                <td className="px-6 py-4 border-b border-gray-200">{schedule.date}</td>
+                <td className="px-6 py-4 border-b border-gray-200">{schedule.start_hour}</td>
+                <td className="px-6 py-4 border-b border-gray-200">{schedule.end_hour}</td>
+                <td className="px-6 py-4 border-b border-gray-200">{ticket ? ticket.nom : '-'}</td>
+                <td className="px-6 py-4 border-b border-gray-200">{project ? project.nom : '-'}</td>
+                <td className="px-6 py-4 border-b border-gray-200">{schedule.description}</td>
+
+                <td className="px-6 py-4 border-b border-gray-200">
+                  {schedule.file_path ? (
+                    <div>
+                      <p>File Name: {schedule.file_name}</p>
+                      <button onClick={() => handleFileDownload(schedule.id, schedule.file_name)}>
+                        Download File
+                      </button>
+                    </div>
+                  ) : (
+                    <p>No File Uploaded</p>
+                  )}
+                </td>
+
+                <td className="px-6 py-4 border-b border-gray-200">
+                  <div className="flex justify-end gap-4">
+                    {/* ... (existing code for the delete and edit buttons remains unchanged) */}
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+
       {showForm && (
         <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-200 bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-80">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-800">
             {showForm && <ScheduleForm onClose={handleFormClose} userId={currentUser.id} />}
             <button
               onClick={handleFormClose}
@@ -264,11 +336,16 @@ const ScheduleTable = () => {
           </div>
         </div>
       )}
+      <ReactHTMLTableToExcel
+        id="excelButton"
+        className="bg-[#107C41] hover:bg-[#5FA780] text-white font-bold py-2 px-4 rounded ml-6 mt-4"
+        table="table-to-export"
+        filename="schedule_table"
+        sheet="schedule_table"
+        buttonText="Export to Excel"
+      />
     </div>
   );
+};
 
-  };
-  
-  export default ScheduleTable;
-  
-  
+export default ScheduleTable;
