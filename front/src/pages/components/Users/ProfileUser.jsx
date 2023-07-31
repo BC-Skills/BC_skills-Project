@@ -3,27 +3,12 @@ import { useStateContext } from '../../../contexts/contextProvider';
 import axiosClient from '../../../axios';
 
 const ProfilePage = () => {
-  const { currentUser } = useStateContext();
+  const { currentUser , profile } = useStateContext();
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [passwordUpdateStatus, setPasswordUpdateStatus] = useState(null); // State for the password update status
-  const [profilePictureUrl, setProfilePictureUrl] = useState(currentUser.profilePictureUrl);
-  const [profile, setProfile] = useState(null);
 
-  useEffect(() => {
-    // Fetch the user's profile data based on their ID
-    const fetchProfileData = async () => {
-      try {
-        const response = await axiosClient.get(`profile/${currentUser.id}`);
-        setProfile(response.data);
-      } catch (error) {
-        console.error('Error fetching profile data:', error);
-      }
-    };
-
-    fetchProfileData();
-  }, [currentUser.id]);
-
+ 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
     try {
@@ -43,18 +28,16 @@ const ProfilePage = () => {
   };
 
   const handleFileChange = (e) => {
+    // eslint-disable-next-line no-unused-vars
     const file = e.target.files[0];
-    // Assuming the profile picture is uploaded to the server and you get a URL back
-    // Update the profile picture URL state with the new URL
-    setProfilePictureUrl(currentUser.profile_picture);
+
   };
 
   return (
-    <div className="min-h-screen flex-1  bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-      <div className="relative py-3 sm:max-w-xl sm:mx-auto">
-        
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-        <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+    <div className="min-h-screen flex-1  bg-gray-100 py-6 flex flex-col items-center justify-center sm:py-12">
+      <div className="relative  md:min-w-[700px] lg:min-w-[1000px] py-3">
+        <div className="absolute inset-0 bg-gradient-to-r rounded-3xl overflow-hidden from-blue-400 to-purple-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+        <div className="relative px-4 py-10 rounded-3xl overflow-hidden bg-white shadow-lg sm:rounded-3xl sm:p-20">
           <div className="max-w-md mx-auto">
             <div className="flex items-center justify-center">
               <img
@@ -81,9 +64,6 @@ const ProfilePage = () => {
                 <div className="flex justify-center">
                   <p>Tel: {currentUser.tel}</p>
                 </div>
-                {/* <div className="flex justify-center">
-                  <p>Created at : {currentUser.created_at}</p>
-                </div> */}
               </div>
             </div>
             <div className="mt-10">

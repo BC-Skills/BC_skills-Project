@@ -86,3 +86,4 @@ Route::post('users/{userId}/update-password', [UserController::class, 'updatePas
 
 
 
+Route::get('projects/manager/{managerId}', [ProjectController::class, 'getProjectsByManagerId']);

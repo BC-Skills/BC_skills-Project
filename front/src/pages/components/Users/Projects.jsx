@@ -110,7 +110,7 @@ export default function Projects() {
             setLoading(false);
           } else {
             // Data is not available in sessionStorage, fetch the projects from the API
-            const response = await axiosClient.get("projects");
+            const response = await axiosClient.get(`projects/manager/${currentUser.id}`);
             const projectsData = response.data;
       
             // Store the original projects data in sessionStorage

@@ -6,19 +6,23 @@ import "../../assets/css/dashboard.css";
 import logo from "../../assets/images/logo.png";
 
 export default function DashboardUser() {
+    const { currentUser } = useStateContext();
+
     // eslint-disable-next-line no-unused-vars
     const [privilegeSettings, setPrivilegeSettings] = useState({});
     const [links, setLinks] = useState([]);
     // eslint-disable-next-line no-unused-vars
     const [loading, setLoading] = useState(false);
-    
-    const {
-        userToken,
-        setUserToken,
-        setCurrentUser,
-        setprofile,
-        profile,
-    } = useStateContext();
+    const { userToken, setUserToken, setCurrentUser, setprofile, profile } =
+        useStateContext();
+
+    // eslint-disable-next-line no-unused-vars
+    const [activeLinkIndex, setActiveLinkIndex] = useState(-1);
+    const [isSidebarActive, setIsSidebarActive] = useState(false);
+
+    const handleToggleClick = () => {
+        setIsSidebarActive(!isSidebarActive);
+    };
 
     const navigate = useNavigate(); // Get the navigate function from useNavigate hook
 
@@ -30,62 +34,89 @@ export default function DashboardUser() {
     useEffect(() => {
         const storedLinks = localStorage.getItem("links");
         if (storedLinks) {
-          setLinks(JSON.parse(storedLinks));
-          setLoading(false);
+            setLinks(JSON.parse(storedLinks));
+            setLoading(false);
         } else {
-          setLoading(true);
-          getPrivilages();
-        }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, []);
-    
-      const getPrivilages = async () => {
-        try {
-          const response = await axiosClient.get(`profiless/${profile.id}/privileges`);
-          const privilegeIds = response.data.map((privilege) => privilege.status_id);
-          const promises = privilegeIds.map((id) => axiosClient.get(`statuses/${id}`));
-    
-          const responses = await Promise.all(promises);
-          const statusNames = new Set(responses.map((response) => response.data.name));
-    
-          const linksArray = Array.from(statusNames).map((statusName) => ({
-            name: statusName,
-            url: "/users/" + statusName.toLowerCase().replace(/\s/g, "-"),
-          }));
-    
-          // Set the state after the data is successfully fetched
-          setLinks(linksArray);
-          setPrivilegeSettings(response.data[0].status_id);
-          setLoading(false); // Set loading to false after successful data fetching
-    
-          // Now store the linksArray in local storage
-          localStorage.setItem("links", JSON.stringify(linksArray));
-        } catch (error) {
-          if (error.response && error.response.status === 429) {
-            await new Promise((resolve) => setTimeout(resolve, 5000));
+            setLoading(true);
             getPrivilages();
-          } else {
-            console.error("Error fetching data:", error);
-            setLoading(false); // Set loading to false in case of an error
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+  
+
+    const getPrivilages = async () => {
+      try {
+        const response = await axiosClient.get(
+          `profiless/${profile.id}/privileges`
+        );
+        const privilegeIds = response.data.map((privilege) => privilege.status_id);
+        const promises = privilegeIds.map((id) =>
+          axiosClient.get(`statuses/${id}`)
+        );
+    
+        const responses = await Promise.all(promises);
+        const statusNames = responses.map((response) => response.data.name);
+        const uniqueStatusNames = Array.from(new Set(statusNames));
+
+        const linksArray = uniqueStatusNames.map((statusName, index) => {
+          const url = "/users/" + statusName.toLowerCase().replace(/\s/g, "-");
+          const logo = statusName.toLowerCase(); // Assuming the logo name follows this pattern
+    
+          let attribute = "";
+    
+          // Compare the status name with the static const variables
+          if (statusName === 'projets') {
+            attribute = "code-outline";
+          } else if (statusName === 'formation') {
+            attribute = "newspaper-outline";
+          } else if (statusName === 'schedules') {
+            attribute = "calendar-outline";
+          } else if (statusName === 'tickets') {
+            attribute = 'ticket-outline';
+          } else if (statusName === 'users') {
+            attribute = 'people-outline';
           }
+    
+          return {
+            name: statusName,
+            url,
+            logo,
+            attribute,
+            id: index,
+          };
+        });
+    
+        setLinks(linksArray);
+        setPrivilegeSettings(response.data[0].status_id);
+        setLoading(false);
+        localStorage.setItem("links", JSON.stringify(linksArray));
+      } catch (error) {
+        if (error.response && error.response.status === 429) {
+          await new Promise((resolve) => setTimeout(resolve, 5000));
+          getPrivilages();
+        } else {
+          console.error("Error fetching data:", error);
+          setLoading(false); // Set loading to false in case of an error
         }
-      };
+      }
+    };
 
-      const logout = async () => {
+    const logout = async () => {
         try {
-          setCurrentUser(null);
-          setprofile(null);
-          setUserToken(null);
-          localStorage.removeItem("links"); // Remove the "links" entry from local storage
-          navigate("/"); 
+            setCurrentUser(null);
+            setprofile(null);
+            setUserToken(null);
+            localStorage.removeItem("links"); // Remove the "links" entry from local storage
+            navigate("/");
         } catch (error) {
-          console.error("Error logging out:", error);
+            console.error("Error logging out:", error);
         }
-      };
+    };
 
-      return (
+    return (
         <div className="container">
-            <div className={`navigation flex flex-col justify-around`}>
+            <div className={`navigation  ${isSidebarActive ? "active" : ""}`}>
                 <ul className="mt-[10%]">
                     <li className="flex justify-center items-center">
                         <span className="icon">
@@ -96,23 +127,22 @@ export default function DashboardUser() {
                             />
                         </span>
                     </li>
-                   {links.map((link , index)=>(
-                         <li key={index}>
-                         <a href={link.url}>
-                             
-                             <span className="title font-bold text-[20px]">{link.name}</span>
-                         </a>
-                     </li>
-                   ))}
-            
+                    {links.map((link) => (
+                        <li key={link.id}>
+                            <a href={link.url}>
+                                <span className="icon">
+                                    <ion-icon name={link.attribute}></ion-icon>
+                                </span>
+                                <span className="title">{link.name}</span>
+                            </a>
+                        </li>
+                    ))}
                 </ul>
-                <ul className="">
+                <ul className="pt-8">
+                    <li></li>
                     <li>
-                       
-                    </li>
-                    <li>
-                        <Link to="/users" >
-                        <span className="icon">
+                        <Link to="/users">
+                            <span className="icon">
                                 <ion-icon name="people-outline"></ion-icon>
                             </span>
                             <span className="title">Profil</span>
@@ -128,9 +158,36 @@ export default function DashboardUser() {
                     </li>
                 </ul>
             </div>
-            <div className={`main flex flex-col`}>
-                <div className="flex-1 p-2  flex  gap-10 flex-row justify-between flex-wrap">
-                <Outlet />
+            <div
+                className={`main flex flex-col flex-1   ${
+                    isSidebarActive ? "active" : ""
+                }`}
+            >
+                <div className="topbar mt-4 ">
+                    <div className="toggle" onClick={handleToggleClick}>
+                        <ion-icon name="menu-outline"></ion-icon>
+                    </div>
+                    <div className="flex flex-row gap-6 justify-center items-center">
+                        <div className="flex-1">
+                            <h1 className="text-[20px] font-bold">
+                                {currentUser.name}
+                            </h1>
+                            <h1 className="text-[15px] font-bold text-blue-400">
+                                {profile.name}
+                            </h1>
+                        </div>
+
+                        <div className="user">
+                            <img
+                                className="flex-1"
+                                src={currentUser.profile_picture}
+                                alt="Profile Picture"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div className="flex-1 p-2   flex  gap-10 flex-row justify-between flex-wrap">
+                    <Outlet />
                 </div>
             </div>
         </div>

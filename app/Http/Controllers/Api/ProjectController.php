@@ -62,6 +62,11 @@ class ProjectController extends Controller
         $count = Project::where('status', 'finished')->count();
         return response()->json(['count' => $count]);
     }
+    public function getProjectsByManagerId($managerId)
+{
+    $projects = Project::where('project_manager_id', $managerId)->get();
+    return response()->json($projects);
+}
 
 
 }
