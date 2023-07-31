@@ -214,10 +214,15 @@ const ScheduleTable = () => {
                         <td className="px-6 py-4 border-b border-gray-200">{schedule.start_hour}</td>
                         <td className="px-6 py-4 border-b border-gray-200">{schedule.end_hour}</td>
                         <td className="px-6 py-4 border-b border-gray-200">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[#FF9300] px-2 py-1 text-xs font-semibold text-white">
                           {ticket ? ticket.nom : '-'}
+                          </span>
                         </td>
                         <td className="px-6 py-4 border-b border-gray-200">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[#0096FF] px-2 py-1 text-xs font-semibold text-white">
+
                           {project ? project.nom : '-'}
+                          </span>
                         </td>
                         <td className="px-6 py-4 border-b border-gray-200">{schedule.description}</td>
 
@@ -312,7 +317,7 @@ const ScheduleTable = () => {
 
       {showForm && (
         <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-200 bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-80">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-800">
             {showForm && <ScheduleForm onClose={handleFormClose} userId={currentUser.id} />}
             <button
               onClick={handleFormClose}
