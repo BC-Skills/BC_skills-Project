@@ -174,7 +174,7 @@ const ScheduleTable = () => {
           return (
             <div key={date} className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5 ">
               <h1 className="text-2xl font-bold mb-4 px-6 py-4 bg-gray-50">
-                {formattedDate}
+                {formattedDate.toUpperCase()}
               </h1>
               <table className="w-full mt-4 border-collapse bg-white text-left text-sm text-gray-500">
                 <thead className="bg-gray-50">
@@ -224,8 +224,8 @@ const ScheduleTable = () => {
                         <td className="px-6 py-4 border-b border-gray-200">
                           {schedule.file_path ? (
                             <div>
-                              <p>File Name: {schedule.file_name}</p>
-                              <button onClick={() => handleFileDownload(schedule.id, schedule.file_name)}>
+                              {/* <p>File Name: {schedule.file_name}</p> */}
+                              <button  className="bg-[#9437FF] hover:bg-[#B779FF] text-white font-bold py-1 px-2 rounded" onClick={() => handleFileDownload(schedule.id, schedule.file_name)}>
                                 Download File
                               </button>
                             </div>
@@ -242,6 +242,7 @@ const ScheduleTable = () => {
           );
         })}
       </div>
+      {/* hidden table for excell exportation */}
       <table id="table-to-export" className=" hidden w-full mt-4 border-collapse bg-white text-left text-sm text-gray-500">
         <thead className="bg-gray-50">
           <tr>
