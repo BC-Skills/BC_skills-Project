@@ -11,9 +11,7 @@ class Formation extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name', 'description', 'formation_type_id'
-    ];
+    protected $fillable = ['name', 'description', 'formation_type_id', 'file_path'];
 
     public function developers()
     {
