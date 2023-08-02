@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axiosClient from "../../../axios";
 import { useStateContext } from '../../../contexts/contextProvider';
 import FormationTypeFormModal from "../../model/FormationTypeFormModal";
-import { API_URL } from '../../../config'; // Import the API_URL from config.js
-
+import { API_URL } from '../../../config';
 
 export default function Formations() {
   const [formationTypes, setFormationTypes] = useState([]);
@@ -42,10 +41,6 @@ export default function Formations() {
     setIsFormModalOpen(false);
     // Refresh or fetch updated formation types if needed
   };
-
-  function getImageUrl(imagePath) {
-    return `${API_URL}/${imagePath}`;
-  }
 
   return (
     <div className="flex flex-1 flex-col">
@@ -96,11 +91,11 @@ export default function Formations() {
               className="bg-white rounded-lg overflow-hidden mb-10 shadow-2xl"
             >
             <img
-            src={formationType.imagePath}
-            // src={getImageUrl(formationType.imagePath)}
+            src={formationType.imageUrl}
             alt="Formation Type"
             className="w-full"
           />
+
               <div className="p-8 sm:p-9 md:p-7 xl:p-9 text-center">
                 <h3 className="font-semibold text-dark text-xl mb-4 hover:text-primary">
                   {formationType.name}
