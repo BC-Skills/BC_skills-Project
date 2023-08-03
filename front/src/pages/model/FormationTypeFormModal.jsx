@@ -144,7 +144,7 @@ const FormationTypeFormModal = ({ isOpen, onClose, onFormSubmit }) => {
             )}
             <div className="flex items-center justify-between mt-4">
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                className="bg-[#41415A] hover:bg-[#6C6D96] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 type="submit"
               >
                 Add

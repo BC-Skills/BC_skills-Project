@@ -4,11 +4,14 @@ import axiosClient from "../../../axios";
 import { useStateContext } from '../../../contexts/contextProvider';
 import FormationTypeFormModal from "../../model/FormationTypeFormModal";
 import { API_URL } from '../../../config';
+import { Transition } from 'react-transition-group';
 
 export default function Formations() {
   const [formationTypes, setFormationTypes] = useState([]);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [formationPerPage] = useState(6);
   const storedLinks = localStorage.getItem("links");
   const navigate = useNavigate();
   const { profile, currentUser } = useStateContext();
@@ -39,8 +42,22 @@ export default function Formations() {
 
   const handleFormSubmit = () => {
     setIsFormModalOpen(false);
-    // Refresh or fetch updated formation types if needed
+    try {
+      window.location.reload();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
+
+  const indexOfLastFormation = currentPage * formationPerPage;
+  const indexOfFirstFormation = indexOfLastFormation - formationPerPage;
+  const currentFormations = formationTypes
+    .filter((formationType) =>
+      formationType.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .slice(indexOfFirstFormation, indexOfLastFormation);
+
+  const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
     <div className="flex flex-1 flex-col">
@@ -51,7 +68,7 @@ export default function Formations() {
             <h1 className="text-[15px] font-bold text-blue-400">{profile.name}</h1>
           </div>
           <div className="user">
-            <img className="flex-1" src={currentUser.profile_picture} alt="Profile Picture" />
+            <img className="flex-1 " src={currentUser.profile_picture} alt="Profile Picture" />
           </div>
         </div>
         <div className="relative">
@@ -75,43 +92,53 @@ export default function Formations() {
         </div>
         <button
           onClick={handleOpenFormModal}
-          className="bg-[#41415A] hover:bg-[#6C6D96] text-white font-bold py-2 px-4 rounded ml-6 mt-4"
+          className="bg-[#41415A] hover:bg-[#6C6D96] text-white font-bold py-2 px-4 rounded ml-6 mt-4 "
         >
           Add Formation Type
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-10">
-        {formationTypes
-          .filter((formationType) =>
-            formationType.name.toLowerCase().includes(searchQuery.toLowerCase())
-          )
-          .map((formationType) => (
-            <div
-              key={formationType.id}
-              className="bg-white rounded-lg overflow-hidden mb-10 shadow-2xl"
-            >
-            <img
-            src={formationType.imageUrl}
-            alt="Formation Type"
-            className="w-full"
-          />
-
-              <div className="p-8 sm:p-9 md:p-7 xl:p-9 text-center">
-                <h3 className="font-semibold text-dark text-xl mb-4 hover:text-primary">
-                  {formationType.name}
-                </h3>
-                <p className="text-base text-body-color leading-relaxed mb-7">
-                  {formationType.description}
-                </p>
-                <button
-                  onClick={() => handleViewDetails(formationType)}
-                  className="inline-block py-2 px-7 border border-[#E5E7EB] rounded-full text-base text-body-color font-medium hover:border-primary hover:bg-primary hover:text-white transition"
-                >
-                  View Details
-                </button>
-              </div>
+        {currentFormations.map((formationType, index) => (
+          <div
+            key={formationType.id}
+            className={`bg-white rounded-lg overflow-hidden mb-10 shadow-2xl   ${
+              currentFormations.length > 0 ? 'opacity-100 translate-y-0 transition duration-500 ease-in-out' : 'opacity-0 translate-y-5'
+            }`}
+            style={{ animationDelay: `${index * 0.1}s` }}
+          >
+            <img src={formationType.imageUrl} alt="Formation Type" className="w-full  " />
+            <div className="p-8 sm:p-9 md:p-7 xl:p-9 text-center">
+              <h3 className="font-semibold text-dark text-xl mb-4 hover:text-primary">
+                {formationType.name}
+              </h3>
+              <p className="text-base text-body-color leading-relaxed mb-7">
+                {formationType.description}
+              </p>
+              <button
+                onClick={() => handleViewDetails(formationType)}
+                className="inline-block py-2 px-7 border border-[#E5E7EB] rounded-full text-base text-body-color font-medium hover:border-primary hover:bg-primary hover:text-white transition"
+              >
+                View Details
+              </button>
             </div>
+          </div>
+        ))}
+      </div>
+      <div className="flex justify-center mt-4">
+        <ul className="flex">
+          {Array.from({ length: Math.ceil(formationTypes.length / formationPerPage) }, (_, index) => (
+            <li key={index}>
+              <button
+                className={`px-3 py-2 mx-1 ${
+                  index + 1 === currentPage ? "bg-[#41415A] text-white" : "bg-white text-blue-500"
+                }`}
+                onClick={() => paginate(index + 1)}
+              >
+                {index + 1}
+              </button>
+            </li>
           ))}
+        </ul>
       </div>
       {isFormModalOpen && (
         <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-200 bg-opacity-50">
