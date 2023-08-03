@@ -18,9 +18,9 @@ export default function DetailsProject({ project, onCloseModal }) {
             <div
                 id="authentication-modal"
                 aria-hidden="true"
-                className="fixed ml-[25%] mt-[2%] z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
+                className="fixed ml-[25%] mt-[2%] z-50 w-full p-4  overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full "
             >
-                <div className="relative w-full max-w-[700px] bg max-h-full">
+                <div className="relative w-full max-w-[700px] bg max-h-full ">
                     <div className="relative rounded-3xl shadow-2xl bg-gray-200">
                         <div className="px-6 py-6 lg:px-8">
                             <div className="flex items-center justify-between pb-3">
@@ -115,9 +115,54 @@ export default function DetailsProject({ project, onCloseModal }) {
                                         </div>
                                     </div>
                                 </div>
-                                <div>
-                                        <p>{project.description}  </p>
+                                <div className="flex-1">
+                                    <h1 className="text-black font-bold text-[25px]">
+                                        {" "}
+                                        Description:
+                                    </h1>
+                                    <p className="text-black font-bold">
+                                        {project.description}
+                                    </p>
+                                </div>
+                                <div className="flex-1 flex flex-col ">
+                                    <h1 className="text-black font-bold text-[25px]"> 
+                                                Collaborateur
+                                    </h1>
+                                    <div className="grid grid-cols-12 gap-1">
+                                        {[
+                                            "https://media.licdn.com/dms/image/D4E03AQHz0YlNqxAY7Q/profile-displayphoto-shrink_800_800/0/1685212295560?e=1694649600&v=beta&t=3-zuPMyFKkrF_zzZNwKPCRvp6EnKc4nUkusrhZDEdBM",
+                                            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80",
+                                            "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1256&q=80",
+                                            "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80",
+                                            "https://media.licdn.com/dms/image/D4E03AQHz0YlNqxAY7Q/profile-displayphoto-shrink_800_800/0/1685212295560?e=1694649600&v=beta&t=3-zuPMyFKkrF_zzZNwKPCRvp6EnKc4nUkusrhZDEdBM",
+                                        
+                                        ]
+                                            .slice(0, 9)
+                                            .map((imageUrl, index) => (
+                                                <img
+                                                    key={index}
+                                                    className="object-cover w-14 h-14 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0"
+                                                    src={imageUrl}
+                                                    alt=""
+                                                />
+                                            ))}
+                                        <p className="flex items-center justify-center w-14 h-14 -mx-1 text-xs text-blue-600 bg-blue-100 border-2 border-white rounded-full">
+                                            +{Math.max(0, 9 - 9)}{" "}
+                                        </p>
                                     </div>
+                                </div>
+                                <div className="flex-1 flex flex-row mt-10  items-center">
+                                    <div className="flex-1 font-bold text-[20px]"><h1>Start date:</h1>
+                                    <h1 className="ml-10">
+                                        {project.start_date}
+                                    </h1>
+                                    </div>
+                                    <div className="flex-1 font-bold text-[20px]"><h1>End date:</h1>
+                                    <h1 className="ml-10">
+                                    {project.end_date}
+                                    </h1>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
