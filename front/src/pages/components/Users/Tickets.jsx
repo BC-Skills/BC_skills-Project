@@ -18,7 +18,7 @@ const Tickets = () => {
 
     return (
       <div>
-        <span className="text-sm">hey</span>
+        f
       </div>
     );
   };

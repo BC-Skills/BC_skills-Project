@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import axiosClient from "../../../axios";
 import { useStateContext } from '../../../contexts/contextProvider';
 import FormationTypeFormModal from "../../model/FormationTypeFormModal";
-import { API_URL } from '../../../config';
-import { Transition } from 'react-transition-group';
 
 export default function Formations() {
   const [formationTypes, setFormationTypes] = useState([]);
@@ -101,10 +99,7 @@ export default function Formations() {
         {currentFormations.map((formationType, index) => (
           <div
             key={formationType.id}
-            className={`bg-white rounded-lg overflow-hidden mb-10 shadow-2xl   ${
-              currentFormations.length > 0 ? 'opacity-100 translate-y-0 transition duration-500 ease-in-out' : 'opacity-0 translate-y-5'
-            }`}
-            style={{ animationDelay: `${index * 0.1}s` }}
+            className={`bg-white rounded-lg overflow-hidden mb-10 shadow-2xl `}
           >
             <img src={formationType.imageUrl} alt="Formation Type" className="w-full  " />
             <div className="p-8 sm:p-9 md:p-7 xl:p-9 text-center">
@@ -130,7 +125,7 @@ export default function Formations() {
             <li key={index}>
               <button
                 className={`px-3 py-2 mx-1 ${
-                  index + 1 === currentPage ? "bg-[#41415A] text-white" : "bg-white text-blue-500"
+                  index + 1 === currentPage ? "bg-[#41415A] text-white" : "bg-white text-gray-900"
                 }`}
                 onClick={() => paginate(index + 1)}
               >
