@@ -21,7 +21,7 @@ export default function DetailsProject({ project, onCloseModal }) {
                 className="fixed ml-[25%] mt-[2%] z-50 w-full p-4  overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full "
             >
                 <div className="relative w-full max-w-[700px] bg max-h-full ">
-                    <div className="relative rounded-3xl shadow-2xl bg-gray-200">
+                    <div className="relative rounded-3xl shadow-2xl bg-gray-100">
                         <div className="px-6 py-6 lg:px-8">
                             <div className="flex items-center justify-between pb-3">
                                 <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-black">
@@ -115,8 +115,8 @@ export default function DetailsProject({ project, onCloseModal }) {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="flex-1">
-                                    <h1 className="text-black font-bold text-[25px]">
+                                <div className="flex-1 ">
+                                    <h1 className="text-black font-bold text-[25px] text-center ">
                                         {" "}
                                         Description:
                                     </h1>
@@ -124,11 +124,11 @@ export default function DetailsProject({ project, onCloseModal }) {
                                         {project.description}
                                     </p>
                                 </div>
-                                <div className="flex-1 flex flex-col ">
+                                <div className="flex-1 text-center ">
                                     <h1 className="text-black font-bold text-[25px]"> 
                                                 Collaborateur
                                     </h1>
-                                    <div className="grid grid-cols-12 gap-1">
+                                    <div className="grid grid-cols-12 gap-1 ">
                                         {[
                                             "https://media.licdn.com/dms/image/D4E03AQHz0YlNqxAY7Q/profile-displayphoto-shrink_800_800/0/1685212295560?e=1694649600&v=beta&t=3-zuPMyFKkrF_zzZNwKPCRvp6EnKc4nUkusrhZDEdBM",
                                             "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80",

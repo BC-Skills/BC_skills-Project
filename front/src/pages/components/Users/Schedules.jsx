@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable no-undef */
+import  { useState, useEffect } from 'react';
 import ScheduleForm from '../../model/ScheduleForm';
 import { useStateContext } from '../../../contexts/contextProvider';
 import axiosClient from '../../../axios';
@@ -6,6 +7,7 @@ import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import { Transition } from '@headlessui/react';
 
 const ScheduleTable = () => {
+  // eslint-disable-next-line no-unused-vars
   const [schedules, setSchedules] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [projects, setProjects] = useState([]);
@@ -26,6 +28,7 @@ const ScheduleTable = () => {
       .then((response) => {
         setSchedules(response.data);
 
+        // eslint-disable-next-line no-unused-vars
         const schedulesByDate = response.data.reduce((acc, schedule) => {
           const date = schedule.date.split('T')[0];
           if (!acc[date]) {

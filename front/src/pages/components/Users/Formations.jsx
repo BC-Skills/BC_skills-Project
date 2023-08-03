@@ -12,6 +12,12 @@ export default function Formations() {
   const storedLinks = localStorage.getItem("links");
   const navigate = useNavigate();
   const { profile, currentUser } = useStateContext();
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+
+  // Function to toggle the description expansion
+  const toggleDescription = () => {
+    setIsDescriptionExpanded(!isDescriptionExpanded);
+  };
 
   useEffect(() => {
     const parsedLinks = JSON.parse(storedLinks) || [];
@@ -80,7 +86,7 @@ export default function Formations() {
           Add Formation Type
         </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-10">
         {formationTypes
           .filter((formationType) =>
             formationType.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -100,9 +106,23 @@ export default function Formations() {
                 <h3 className="font-semibold text-dark text-xl mb-4 hover:text-primary">
                   {formationType.name}
                 </h3>
+                <div className="mb-10">
+                {isDescriptionExpanded ? (
                 <p className="text-base text-body-color leading-relaxed mb-7">
                   {formationType.description}
                 </p>
+              ) : (
+                <p className="text-base text-body-color leading-relaxed mb-7">
+                  {formationType.description.split(" ").slice(0, 15).join(" ")}...
+                </p>
+              )}
+               <button
+                className="text-primary font-bold text-red-700"
+                onClick={toggleDescription}
+              >
+                {isDescriptionExpanded ? "Show less" : "Read more"}
+              </button>
+              </div>
                 <button
                   onClick={() => handleViewDetails(formationType)}
                   className="inline-block py-2 px-7 border border-[#E5E7EB] rounded-full text-base text-body-color font-medium hover:border-primary hover:bg-primary hover:text-white transition"
