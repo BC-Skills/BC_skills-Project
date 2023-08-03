@@ -1,50 +1,56 @@
-import  { useState } from 'react';
+import React, { useState } from 'react';
 import { useStateContext } from '../../../contexts/contextProvider';
 import axiosClient from '../../../axios';
+import { Transition } from '@headlessui/react';
 
 const ProfilePage = () => {
-  const { currentUser , profile } = useStateContext();
+  const { currentUser, profile } = useStateContext();
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
   const [newPassword, setNewPassword] = useState('');
-  const [passwordUpdateStatus, setPasswordUpdateStatus] = useState(null); // State for the password update status
+  const [passwordUpdateStatus, setPasswordUpdateStatus] = useState(null);
 
- 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
     try {
-      // Send a request to the server to update the password
       const response = await axiosClient.post(`users/${currentUser.id}/update-password`, {
         newPassword: newPassword,
       });
-
-      // Handle the response from the server (e.g., show a success message)
-      setPasswordUpdateStatus('success'); // Set password update status to success
+      setPasswordUpdateStatus('success');
       console.log(response.data);
+      setShowChangePasswordForm(false);
     } catch (error) {
-      // Handle errors (e.g., display an error message)
-      setPasswordUpdateStatus('error'); // Set password update status to error
+      setPasswordUpdateStatus('error');
       console.error('Error updating password:', error);
     }
   };
 
   const handleFileChange = (e) => {
-    // eslint-disable-next-line no-unused-vars
     const file = e.target.files[0];
-
+    // You can handle file upload logic here
   };
 
   return (
-    <div className="min-h-screen flex-1  bg-gray-100 py-6 flex flex-col items-center justify-center sm:py-12">
-      <div className="relative  md:min-w-[700px] lg:min-w-[1000px] py-3">
+    <div className="min-h-screen flex-1 bg-white-100 py-6 flex flex-col items-center justify-center sm:py-12">
+      <div className="relative md:min-w-[700px] lg:min-w-[1000px] py-3">
         <div className="absolute inset-0 bg-gradient-to-r rounded-3xl overflow-hidden from-blue-400 to-purple-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
         <div className="relative px-4 py-10 rounded-3xl overflow-hidden bg-white shadow-lg sm:rounded-3xl sm:p-20">
           <div className="max-w-md mx-auto">
             <div className="flex items-center justify-center">
-              <img
-                className="w-24 h-24 object-cover rounded-full shadow-lg"
-                src={currentUser.profile_picture}
-                alt="Profile"
-              />
+              <Transition
+                show={true}
+                enter="transition-opacity duration-1000"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="transition-opacity duration-300"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <img
+                  className="w-24 h-24 object-cover rounded-full shadow-lg"
+                  src={currentUser.profile_picture}
+                  alt="Profile"
+                />
+              </Transition>
             </div>
             <div className="divide-y divide-gray-200">
               <div className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
@@ -69,18 +75,25 @@ const ProfilePage = () => {
             <div className="mt-10">
               <button
                 onClick={() => setShowChangePasswordForm(!showChangePasswordForm)}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300"
               >
                 Change Password
               </button>
-              {/* Display password update status message */}
               {passwordUpdateStatus === 'success' && (
                 <p className="text-green-500 mt-2">Password updated successfully!</p>
               )}
               {passwordUpdateStatus === 'error' && (
                 <p className="text-red-500 mt-2">An error occurred while updating the password.</p>
               )}
-              {showChangePasswordForm && (
+              <Transition
+                show={showChangePasswordForm}
+                enter="transition-opacity duration-500"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="transition-opacity duration-300"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
                 <form onSubmit={handlePasswordChange}>
                   <div className="mb-4">
                     <label htmlFor="newPassword" className="block font-bold mb-1">
@@ -102,13 +115,13 @@ const ProfilePage = () => {
                     </button>
                     <button
                       type="submit"
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300"
                     >
                       Update Password
                     </button>
                   </div>
                 </form>
-              )}
+              </Transition>
             </div>
             <div className="mt-10">
               <div className="mb-4">

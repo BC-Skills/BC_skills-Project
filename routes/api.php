@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Api\FormationController;
 use App\Http\Controllers\Api\FormationDeveloperController;
 use App\Http\Controllers\Api\FormationTypeController;
@@ -87,3 +87,10 @@ Route::post('users/{userId}/update-password', [UserController::class, 'updatePas
 
 
 Route::get('projects/manager/{managerId}', [ProjectController::class, 'getProjectsByManagerId']);
+
+
+//images
+
+Route::get('/storage/{path}', function ($path) {
+    return response()->file(storage_path('app/public/' . $path));
+})->where('path', '.*');

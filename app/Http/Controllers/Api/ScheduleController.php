@@ -87,6 +87,24 @@ class ScheduleController extends Controller
             return response()->json(['error' => 'File not found'], 404);
         }
     }
+ 
+
+// public function downloadFile($id)
+// {
+//     $schedule = Schedule::findOrFail($id);
+
+//     // Generate the URL for the file using the Storage facade
+//     $fileUrl = Storage::disk('public')->url($schedule->file_name);
+
+//     if ($fileUrl) {
+//         // Redirect the user to the file URL, which will initiate the download
+//         return redirect($fileUrl);
+//     } else {
+//         // File not found
+//         return response()->json(['error' => 'File not found'], 404);
+//     }
+// }
+
 
 
     public function getSchedulesByUser($userId)
