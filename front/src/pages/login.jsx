@@ -10,11 +10,12 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate(); // Get the navigate function from useNavigate hook
- 
+  const [loginError, setLoginError] = useState(false);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const formData = {
         email,
@@ -26,12 +27,19 @@ export default function Login() {
       setprofile(response.data.profile)
       setEmail('');
       setPassword('');
-      if (response.data.profile.name === 'admin') {
-        navigate("/dashboard"); 
+  
+      if (response.data.error) {
+        setLoginError(true); // Set loginError to true to display the error message
       } else {
-        navigate("/users"); 
+        setLoginError(false); // Set loginError to false to hide the error message (if it was shown previously)
+        if (response.data.profile.name === 'admin') {
+          navigate("/dashboard"); 
+        } else {
+          navigate("/users"); 
+        }
       }
     } catch (error) {
+      setLoginError(true); // Set loginError to true to display the error message
       console.error(error);
     }
   };
@@ -57,6 +65,9 @@ export default function Login() {
             <img src={logo} className="w-full h-full object-contain" alt="Logo" />
           </div>
           <form onSubmit={handleSubmit} className="flex flex-col gap-10 items-center">
+          {loginError && (
+        <p className="text-red-500 text-center mt-2">Invalid email or password. Please try again.</p>
+      )}
             <input
               className="w-[400px] h-[70px] rounded-md shadow-md pl-10 placeholder:font-bold placeholder:text-black"
               type="email"

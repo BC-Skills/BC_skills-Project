@@ -15,7 +15,7 @@ class Profile extends Model
     
     public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class, 'profile_id');
     }
     
     public function privileges()

@@ -105,8 +105,9 @@ export default function DashboardUser() {
             setCurrentUser(null);
             setprofile(null);
             setUserToken(null);
-            localStorage.removeItem("links"); // Remove the "links" entry from local storage
-            navigate("/");
+            sessionStorage.clear();
+            localStorage.clear();
+                    navigate("/");
         } catch (error) {
             console.error("Error logging out:", error);
         }

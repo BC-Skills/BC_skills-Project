@@ -48,6 +48,7 @@ Route::apiResource('privileges', PrivilegeController::class);
 Route::resource('statuses', StatusController::class);
 
 Route::get('/profile/{id}', 'ProfileController@show');
+Route::post('ticketss', [TicketController::class, 'storez']);
 
 
 Route::post('/messages', 'MessageController@store');
@@ -58,8 +59,18 @@ Route::post('profiless/{profile}/detach-privileges', [ProfileController::class, 
 Route::get('profiless/{profileId}/privileges', [ProfileController::class, 'getPrivileges']);
 
 
-Route::get('/projects/count/completed', [ProjectController::class, 'countCompletedProjects']);
-Route::get('/projects/count/inprogress', [ProjectController::class, 'countInProgressProjects']);
+Route::post('/projects/{projectId}/users/attach', [ProjectController::class, 'attachUser']);
+
+// Route to detach users from a project
+Route::post('/projects/{projectId}/users/detach', [ProjectController::class, 'detachUser']);
+
+// Route to get all users associated with a project
+Route::get('/projects/{projectId}/users', [ProjectController::class, 'getProjectUsers']);
+
+
+
+Route::get('/projects/count/manager/{managerId}', [ProjectController::class, 'countByManagerId']);
+
 Route::get('/clients/{clientId}/projects', [ClientController::class, 'getProjects']);
 Route::get('/projectmanagers/{projectmanagerId}/projects', [ProjectManagerController::class, 'getProjects']);
 Route::get('users/{user}/schedule', [TicketController::class, 'showScheduleForUser'])->name('tickets.schedule');
@@ -75,6 +86,7 @@ Route::apiResource('schedules', ScheduleController::class);
 Route::get('schedules/download/{id}', [ScheduleController::class, 'downloadFile']);
 Route::get('schedules/user/{userId}', [ScheduleController::class, 'getSchedulesByUser']);
 
+Route::get('/sprintss/{project_id}', [SprintController::class, 'getSprints']);
 
 
 Route::get('tickets/{id}', [TicketController::class, 'getById']); // Custom route to get ticket by ID
@@ -84,10 +96,20 @@ Route::get('projects/{id}', [ProjectController::class, 'getById']); // Custom ro
 
 Route::post('users/{userId}/update-password', [UserController::class, 'updatePassword']);
 
+Route::get('/ticketss/{projectId}', [TicketController::class, 'getTicketsByProjectId']);
+Route::put('/ticketss/{projectId}', [TicketController::class, 'update2']);
+
+Route::get('/ticketss/projectss/{projectId}/sprintss/{sprintId}', [TicketController::class, 'getTicketsByProjectAndSprintIdd']);
+
+Route::get('projects/{projectId}/tickets-without-sprint', [TicketController::class, 'getTicketsByProjectWithoutSprint']);
 
 
 Route::get('projects/manager/{managerId}', [ProjectController::class, 'getProjectsByManagerId']);
 
+Route::get('/projects/{id}/users', [ProjectController::class, 'getUsersInProject']);
+
+
+Route::get('/projectss', [ProjectController::class, 'getAllProjectsWithManagerAndClientNames']);
 
 //images
 

@@ -1,0 +1,51 @@
+.slide-enter {
+    opacity: 0;
+    transform: translateX(100%); /* Change translateX value */
+}
+
+.slide-enter-active {
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 300ms, transform 300ms;
+}
+
+.slide-exit {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.slide-exit-active {
+    opacity: 0;
+    transform: translateX(100%); /* Change translateX value */
+    transition: opacity 300ms, transform 300ms;
+}
+
+.my-button {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.active .circle {
+    background-color: #007bff;
+    color: white;
+}
+
+.circle svg {
+    width: 20px;
+    height: 20px;
+}

@@ -3,17 +3,16 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../../../contexts/contextProvider";
 import axiosClient from "../../../axios";
-import Cards, { Header } from "./Componets/cards";
+import Cards from "./Componets/cards";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import AddProject from "../../model/AddProject";
 import DetailsProject from "../../model/DetailsProject";
-
-
+import Collaborator from "../../model/Collaborator";
+import Sprints from "../../model/Sprints";
 const localStorageKey = "projectsData";
 const completedProjectsKey = "completedProjects";
 const pendingProjectsKey = "pendingProjects";
 const startProjectsKey = "startProjects";
-
 
 export default function Projects() {
     const storedLinks = localStorage.getItem("links");
@@ -22,9 +21,10 @@ export default function Projects() {
     const [loading, setLoading] = useState(true); // Step 1: Add the loading state
     const [showModal, setShowModal] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false); // New state variable for the EditModels modal
-    const [selectedUserId, setSelectedProject] = useState({}); 
-    const [withValue, setWithValue] = useState(`w-[50%]`);
+    const [Collaborateur, setCollaborateur] = useState(false); // New state variable for the EditModels modal
+    const [selectedUserId, setSelectedProject] = useState({});
     const navigate = useNavigate();
+    const [sprints, setSprints] = useState(false); // New state variable for the EditModels modal
 
     const handleShowModal = () => {
         setShowModal(true);
@@ -34,16 +34,37 @@ export default function Projects() {
         setShowModal(false);
     };
 
-
     const handleOpenEditModal = (project) => {
-        setSelectedProject(project); 
-        setEditModalOpen(true); 
-      };
+        setSelectedProject(project);
+        setEditModalOpen(true);
+    };
 
     // Function to close the EditModels modal
     const handleCloseEditModal = () => {
         setSelectedProject({});
-        setEditModalOpen(false); 
+        setEditModalOpen(false);
+    };
+
+    const handleCollaboratoropen = (project) => {
+        setSelectedProject(project);
+        setCollaborateur(true);
+    };
+
+    // Function to close the EditModels modal
+    const handleCollaboratorclose = () => {
+        setSelectedProject({});
+        setCollaborateur(false);
+    };
+
+    const handleSprintsropen = (project) => {
+        setSelectedProject(project);
+        setSprints(true);
+    };
+
+    // Function to close the EditModels modal
+    const handleSprintsclose = () => {
+        setSelectedProject({});
+        setSprints(false);
     };
 
     useEffect(() => {
@@ -57,237 +78,296 @@ export default function Projects() {
         }
     }, [storedLinks]);
 
-    const handleSearchChange = (searchText, tableRows) => {
-        searchText = searchText.toLowerCase();
-        for (let i = 1; i < tableRows.length; i++) {
-            const rowData = tableRows[i].textContent.toLowerCase();
-            if (rowData.includes(searchText)) {
-                tableRows[i].style.display = "";
-            } else {
-                tableRows[i].style.display = "none";
-            }
-        }
-    };
-    const handleSearch = () => {
-        const searchText = searchInputRef.current.value;
-        const employeeTable = document.getElementById("employeeTable");
-        const tableRows = employeeTable.getElementsByTagName("tr");
-        handleSearchChange(searchText, tableRows);
-    };
-    const searchInputRef = useRef(null);
-    useEffect(() => {
-        const searchInput = searchInputRef.current;
-        if (searchInput) {
-            searchInput.addEventListener("input", handleSearch);
-        }
-
-        // Remove the event listener when the component unmounts
-        return () => {
-            if (searchInput) {
-                searchInput.removeEventListener("input", handleSearch);
-            }
-        };
-    }, []);
-
     const [completedProjects, setCompletedProjects] = useState([]);
     const [pendingProjects, setPendingProjects] = useState([]);
     const [startProjects, setStartProjects] = useState([]);
 
     const fetchProjects = async () => {
         try {
-          const storedProjectsData = sessionStorage.getItem(localStorageKey);
-          if (storedProjectsData) {
-            // Data is available in sessionStorage, parse and set them in state
-            const projectsData = JSON.parse(storedProjectsData);
-            setProjects(projectsData);
-      
-            const updatedProjects = await Promise.all(
-              projectsData.map(async (project) => {
-                const clientResponse = await axiosClient.get(`users/${project.client_id}`);
-                const projectManagerResponse = await axiosClient.get(`users/${project.project_manager_id}`);
-                const client = clientResponse.data;
-                const projectManager = projectManagerResponse.data;
-                return { ...project, client, projectManager };
-              })
-            );
-      
-            // Categorize projects based on their status
-            const completedProjects = updatedProjects.filter((project) => project.status === "Completed");
-            const pendingProjects = updatedProjects.filter((project) => project.status === "Pending");
-            const startProjects = updatedProjects.filter((project) => project.status === "Start");
-      
-            // Set the state with the categorized projects
-            setCompletedProjects(completedProjects);
-            setPendingProjects(pendingProjects);
-            setStartProjects(startProjects);
-      
-            // Set loading to false after successful data fetching
-            setLoading(false);
-          } else {
-            // Data is not available in sessionStorage, fetch the projects from the API
-            const response = await axiosClient.get(`projects/manager/${currentUser.id}`);
-            const projectsData = response.data;
-      
-            // Store the original projects data in sessionStorage
-            sessionStorage.setItem(localStorageKey, JSON.stringify(projectsData));
-      
-            const updatedProjects = await Promise.all(
-              projectsData.map(async (project) => {
-                const clientResponse = await axiosClient.get(`users/${project.client_id}`);
-                const projectManagerResponse = await axiosClient.get(`users/${project.project_manager_id}`);
-                const client = clientResponse.data;
-                const projectManager = projectManagerResponse.data;
-                return { ...project, client, projectManager };
-              })
-            );
-      
-            // Categorize projects based on their status
-            const completedProjects = updatedProjects.filter((project) => project.status === "Completed");
-            const pendingProjects = updatedProjects.filter((project) => project.status === "Pending");
-            const startProjects = updatedProjects.filter((project) => project.status === "Start");
-      
-            // Store the categorized projects in sessionStorage
-            sessionStorage.setItem(localStorageKey, JSON.stringify(projectsData));
-            sessionStorage.setItem(completedProjectsKey, JSON.stringify(completedProjects));
-            sessionStorage.setItem(pendingProjectsKey, JSON.stringify(pendingProjects));
-            sessionStorage.setItem(startProjectsKey, JSON.stringify(startProjects));
-      
-            // Set the state with the categorized projects
-            setProjects(projectsData);
-            setCompletedProjects(completedProjects);
-            setPendingProjects(pendingProjects);
-            setStartProjects(startProjects);
-      
-            // Set loading to false after successful data fetching
-            setLoading(false);
-          }
+            const storedProjectsData = sessionStorage.getItem(localStorageKey);
+            if (storedProjectsData) {
+                // Data is available in sessionStorage, parse and set them in state
+                const projectsData = JSON.parse(storedProjectsData);
+                setProjects(projectsData);
+
+                // Categorize projects based on their status
+                const completedProjects = projectsData.filter(
+                    (project) => project.status === "Completed"
+                );
+                const pendingProjects = projectsData.filter(
+                    (project) => project.status === "Pending"
+                );
+                const startProjects = projectsData.filter(
+                    (project) => project.status === "Start"
+                );
+
+                // Set the state with the categorized projects
+                setCompletedProjects(completedProjects);
+                setPendingProjects(pendingProjects);
+                setStartProjects(startProjects);
+
+                // Set loading to false after successful data fetching
+                setLoading(false);
+            } else {
+                // Data is not available in sessionStorage, fetch the projects from the API
+                const response = await axiosClient.get(
+                    `projects/manager/${currentUser.id}`
+                );
+                const projectsData = response.data;
+
+                // Store the original projects data in sessionStorage
+                sessionStorage.setItem(
+                    localStorageKey,
+                    JSON.stringify(projectsData)
+                );
+
+                // Categorize projects based on their status
+                const completedProjects = projectsData.filter(
+                    (project) => project.status === "Completed"
+                );
+                const pendingProjects = projectsData.filter(
+                    (project) => project.status === "Pending"
+                );
+                const startProjects = projectsData.filter(
+                    (project) => project.status === "Start"
+                );
+
+                sessionStorage.setItem(
+                    localStorageKey,
+                    JSON.stringify(projectsData)
+                );
+
+                sessionStorage.setItem(
+                    completedProjectsKey,
+                    JSON.stringify(completedProjects)
+                );
+
+                sessionStorage.setItem(
+                    pendingProjectsKey,
+                    JSON.stringify(pendingProjects)
+                );
+                
+                sessionStorage.setItem(
+                    startProjectsKey,
+                    JSON.stringify(startProjects)
+                );
+
+                // Set the state with the categorized projects
+                setProjects(projectsData);
+                setCompletedProjects(completedProjects);
+                setPendingProjects(pendingProjects);
+                setStartProjects(startProjects);
+
+                // Set loading to false after successful data fetching
+                setLoading(false);
+            }
         } catch (error) {
-          console.error("Error fetching projects:", error);
-          // Handle error if needed and set loading to false here as well
-          setLoading(false);
+            console.error("Error fetching projects:", error);
+            // Handle error if needed and set loading to false here as well
+            setLoading(false);
         }
-      };
-      
-      useEffect(() => {
+    };
+
+    useEffect(() => {
+        getCount();
+
         // Check if the projects data is already stored in localStorage to avoid fetching again
         const storedProjectsData = sessionStorage.getItem(localStorageKey);
         if (storedProjectsData) {
-          // Data is available, parse and set them in state
-          const projectsData = JSON.parse(storedProjectsData);
-          setProjects(projectsData);
-      
-          // Parse and set categorized projects in state
-          const storedCompletedProjects = sessionStorage.getItem(completedProjectsKey);
-          const storedPendingProjects = sessionStorage.getItem(pendingProjectsKey);
-          const storedStartProjects = sessionStorage.getItem(startProjectsKey);
-          if (storedCompletedProjects) setCompletedProjects(JSON.parse(storedCompletedProjects));
-          if (storedPendingProjects) setPendingProjects(JSON.parse(storedPendingProjects));
-          if (storedStartProjects) setStartProjects(JSON.parse(storedStartProjects));
-          
-          // Set loading to false as the data is available
-          setLoading(false);
+            // Data is available, parse and set them in state
+            const projectsData = JSON.parse(storedProjectsData);
+            setProjects(projectsData);
+
+            // Parse and set categorized projects in state
+            const storedCompletedProjects =
+                sessionStorage.getItem(completedProjectsKey);
+            const storedPendingProjects =
+                sessionStorage.getItem(pendingProjectsKey);
+            const storedStartProjects =
+                sessionStorage.getItem(startProjectsKey);
+            if (storedCompletedProjects)
+                setCompletedProjects(JSON.parse(storedCompletedProjects));
+            if (storedPendingProjects)
+                setPendingProjects(JSON.parse(storedPendingProjects));
+            if (storedStartProjects)
+                setStartProjects(JSON.parse(storedStartProjects));
+
+            // Set loading to false as the data is available
+            setLoading(false);
         } else {
-          // Data is not available in sessionStorage, fetch the projects
-          fetchProjects();
+            // Data is not available in sessionStorage, fetch the projects
+            fetchProjects();
         }
-      }, []);
+    }, []);
 
     const onDragEnd = async (result) => {
         if (!result.destination) {
-          return;
+            return;
         }
-      
+
         const { source, destination } = result;
-      
+
         // Get the dragged project based on the source index and droppableId
         const draggedProject =
-          source.droppableId === "startProjects"
-            ? startProjects[source.index]
-            : source.droppableId === "pendingProjects"
-            ? pendingProjects[source.index]
-            : completedProjects[source.index];
-      
+            source.droppableId === "startProjects"
+                ? startProjects[source.index]
+                : source.droppableId === "pendingProjects"
+                ? pendingProjects[source.index]
+                : completedProjects[source.index];
+
         // Update the status of the dragged project based on the destination droppableId
         let updatedDraggedProject;
         if (destination.droppableId === "startProjects") {
-          updatedDraggedProject = { ...draggedProject, status: "Start" };
+            updatedDraggedProject = { ...draggedProject, status: "Start" };
         } else if (destination.droppableId === "pendingProjects") {
-          updatedDraggedProject = { ...draggedProject, status: "Pending" };
+            updatedDraggedProject = { ...draggedProject, status: "Pending" };
         } else if (destination.droppableId === "completedProjects") {
-          updatedDraggedProject = { ...draggedProject, status: "Completed" };
+            updatedDraggedProject = { ...draggedProject, status: "Completed" };
         }
-      
+
         // Update the respective lists based on the updated project status
         setStartProjects((prevStartProjects) =>
-          source.droppableId === "startProjects"
-            ? [...prevStartProjects.slice(0, source.index), ...prevStartProjects.slice(source.index + 1)]
-            : prevStartProjects
+            source.droppableId === "startProjects"
+                ? [
+                      ...prevStartProjects.slice(0, source.index),
+                      ...prevStartProjects.slice(source.index + 1),
+                  ]
+                : prevStartProjects
         );
-      
+
         setPendingProjects((prevPendingProjects) =>
-          source.droppableId === "pendingProjects"
-            ? [...prevPendingProjects.slice(0, source.index), ...prevPendingProjects.slice(source.index + 1)]
-            : prevPendingProjects
+            source.droppableId === "pendingProjects"
+                ? [
+                      ...prevPendingProjects.slice(0, source.index),
+                      ...prevPendingProjects.slice(source.index + 1),
+                  ]
+                : prevPendingProjects
         );
-      
+
         setCompletedProjects((prevCompletedProjects) =>
-          source.droppableId === "completedProjects"
-            ? [
-                ...prevCompletedProjects.slice(0, source.index),
-                ...prevCompletedProjects.slice(source.index + 1),
-              ]
-            : prevCompletedProjects
+            source.droppableId === "completedProjects"
+                ? [
+                      ...prevCompletedProjects.slice(0, source.index),
+                      ...prevCompletedProjects.slice(source.index + 1),
+                  ]
+                : prevCompletedProjects
         );
-      
+
         // Update the destination list based on the updated project status
         if (destination.droppableId === "startProjects") {
-          setStartProjects((prevStartProjects) => [
-            ...prevStartProjects.slice(0, destination.index),
-            updatedDraggedProject,
-            ...prevStartProjects.slice(destination.index),
-          ]);
+            setStartProjects((prevStartProjects) => [
+                ...prevStartProjects.slice(0, destination.index),
+                updatedDraggedProject,
+                ...prevStartProjects.slice(destination.index),
+            ]);
         } else if (destination.droppableId === "pendingProjects") {
-          setPendingProjects((prevPendingProjects) => [
-            ...prevPendingProjects.slice(0, destination.index),
-            updatedDraggedProject,
-            ...prevPendingProjects.slice(destination.index),
-          ]);
+            setPendingProjects((prevPendingProjects) => [
+                ...prevPendingProjects.slice(0, destination.index),
+                updatedDraggedProject,
+                ...prevPendingProjects.slice(destination.index),
+            ]);
         } else if (destination.droppableId === "completedProjects") {
-          setCompletedProjects((prevCompletedProjects) => [
-            ...prevCompletedProjects.slice(0, destination.index),
-            updatedDraggedProject,
-            ...prevCompletedProjects.slice(destination.index),
-          ]);
+            setCompletedProjects((prevCompletedProjects) => [
+                ...prevCompletedProjects.slice(0, destination.index),
+                updatedDraggedProject,
+                ...prevCompletedProjects.slice(destination.index),
+            ]);
         }
-      
+
         // Make API request to update the project status
         try {
-          await axiosClient.put(`projects/${updatedDraggedProject.id}`, {
-            status: updatedDraggedProject.status,
-          });
-      
-          // Clear storage and call fetchProjects again
-          sessionStorage.removeItem(localStorageKey);
-          sessionStorage.removeItem(completedProjectsKey);
-          sessionStorage.removeItem(pendingProjectsKey);
-          sessionStorage.removeItem(startProjectsKey);
-          setLoading(true); // Set loading to true to indicate data fetching
-          fetchProjects(); // Call fetchProjects again to refetch the updated data
+            await axiosClient.put(`projects/${updatedDraggedProject.id}`, {
+                status: updatedDraggedProject.status,
+            });
+
+            // Clear storage and call fetchProjects again
+            sessionStorage.removeItem(localStorageKey);
+            sessionStorage.removeItem(completedProjectsKey);
+            sessionStorage.removeItem(pendingProjectsKey);
+            sessionStorage.removeItem(startProjectsKey);
+            setLoading(true);
+            getCount();
+            // Set loading to true to indicate data fetching
+            fetchProjects(); // Call fetchProjects again to refetch the updated data
         } catch (error) {
-          console.error("Error updating project status:", error);
+            console.error("Error updating project status:", error);
         }
+    };
+
+    const [completedProjectscount, setCompletedProjectscount] = useState(0);
+    const [inProgressProjectscount, setInProgressProjectscount] = useState(0);
+    const [startProjectscount, setStartProjectscount] = useState(0);
+    const [allProjectscount, setAllProjectscount] = useState(0);
+
+    const [withValuecompleted, setWithValuecompleted] = useState(0);
+    const [withValuePending, setWithValuePending] = useState(0);
+    const [withValueStart, setWithValueStart] = useState(0);
+
+    const getCount = async () => {
+        try {
+            // Fetch count of completed projects
+            const allResponse = await axiosClient.get(
+                `/projects/count/manager/${currentUser.id}`
+            );
+
+            setCompletedProjectscount(allResponse.data.Completed);
+
+            // Fetch count of projects in progress (pending)
+            setInProgressProjectscount(allResponse.data.Pending);
+
+            // Fetch count of projects in start state
+            setStartProjectscount(allResponse.data.Start);
+
+            // Fetch count of all projects
+            setAllProjectscount(allResponse.data.count);
+
+            const pendingPercentage =
+                (allResponse.data.Pending / allResponse.data.count) * 100;
+            setWithValuePending(pendingPercentage);
+            const startPercentage =
+                (allResponse.data.Start / allResponse.data.count) * 100;
+            setWithValueStart(startPercentage);
+            const completePercentage =
+                (allResponse.data.Completed / allResponse.data.count) * 100;
+            setWithValuecompleted(completePercentage);
+        } catch (error) {
+            console.error("Error fetching project counts:", error);
+        }
+    };
+
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
       };
+    
+      const filteredStartProjects = startProjects.filter(
+        (project) =>
+          project.nom?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
       
+      const filteredPendingProjects = pendingProjects.filter(
+        (project) =>
+          project.nom?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      
+      const filteredCompletedProjects = completedProjects.filter(
+        (project) =>
+          project.nom?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
     return (
         <div className="flex-1 flex flex-col p-4">
             <div className="h-[100px] flex justify-between  items-center">
                 <div className="mt-5 mb-2 border-2 py-1 px-3 flex justify-between  rounded-md hover:border-blue-500">
                     <input
-                        ref={searchInputRef}
                         id="searchInput"
                         className="flex-grow outline-none text-gray-600 focus:text-blue-600"
                         type="text"
-                        placeholder="Search Employee..."
+                        
+                        placeholder="Search Project..."
+                        value={searchQuery}
+                        onChange={handleSearchChange}
                     />
                     <span>
                         <svg
@@ -297,6 +377,7 @@ export default function Projects() {
                             viewBox="0 0 24 24"
                             stroke="currentColor"
                         >
+                            {" "}
                             <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </span>
@@ -338,76 +419,37 @@ export default function Projects() {
             </div>
             <DragDropContext onDragEnd={onDragEnd}>
                 <div className="flex-1 flex flex-row justify-around gap-6">
-                    <div className="flex-1 bg-white gap-10 flex flex-col"> 
-                        <Header withValue={withValue} />
-                        {loading ? (
-                                // Loading indicator or message while data is being fetched
-                                <div>Loading...</div>
-                            ) : (
-                        <Droppable droppableId="startProjects">
-                            {(provided) => (
-                                <div
-                                    {...provided.droppableProps}
-                                    ref={provided.innerRef}
-                                    className="flex-1 p-2 flex flex-col gap-6 rounded-3xl shadow-2xl bg-gray-300"
-                                >
-                                    {startProjects.map((project, index) => (
-                                        <Draggable
-                                            key={project.id}
-                                            draggableId={project.id.toString()}
-                                            index={index}
-                                        >
-                                            {(provided) => (
-                                                <div
-                                                    ref={provided.innerRef}
-                                                    {...provided.draggableProps}
-                                                    {...provided.dragHandleProps}
-                                                >
-                                                    <Cards
-                                                        project={project}
-                                                        key={project.id}
-                                                        onEditProject={handleOpenEditModal}
-                                                    />
-                                                </div>
-                                            )}
-                                        </Draggable>
-                                    ))}
-                                    {provided.placeholder}
-                                </div>
-                            )}
-                        </Droppable>
-                            )}
-                    </div>
                     <div className="flex-1 bg-white gap-10 flex flex-col">
-                        <div className="h-[50px] gap-3 flex relative rounded-xl overflow-hidden bg-orange-300 shadow-md shadow-gray-400">
+                        <div className="h-[50px] gap-3 flex relative rounded-xl overflow-hidden bg-violet-300 shadow-md shadow-gray-400">
                             <div
-                                className={` h-full flex justify-center items-center bg-orange-500 ${withValue}`}
+                                className={`h-full flex justify-center items-center bg-violet-900 `}
+                                style={{ width: `${withValueStart}%` }}
                             ></div>
-                            <div className="absolute text-white inset-0 flex items-center justify-center text-sm font-medium ">
+
+                            <div className="absolute text-white inset-0 flex items-center justify-center text-sm font-medium">
                                 <ion-icon
                                     size="large"
                                     name="checkmark-circle-outline"
                                 ></ion-icon>
-                                <h1 className="text-[25px] font-bold">
-                                    Panding
+                                <h1 className="text-[25px] font-bold text-white">
+                                    Start
                                 </h1>
-                                <h1 className="font-bold ml-11  text-lg text-red">
-                                    13/17
+                                <h1 className="font-bold ml-11 text-[25px] text-red">
+                                    {startProjectscount}/{allProjectscount}
                                 </h1>
                             </div>
-                        </div>
+                        </div>{" "}
                         {loading ? (
-                                // Loading indicator or message while data is being fetched
-                                <div>Loading...</div>
-                            ) : (
-                            <Droppable droppableId="pendingProjects">
+                            <div>Loading...</div>
+                        ) : (
+                            <Droppable droppableId="startProjects">
                                 {(provided) => (
                                     <div
                                         {...provided.droppableProps}
                                         ref={provided.innerRef}
                                         className="flex-1 p-2 flex flex-col gap-6 rounded-3xl shadow-2xl bg-gray-300"
                                     >
-                                        {pendingProjects.map(
+                                        {filteredStartProjects.map(
                                             (project, index) => (
                                                 <Draggable
                                                     key={project.id}
@@ -427,7 +469,15 @@ export default function Projects() {
                                                                     project
                                                                 }
                                                                 key={project.id}
-                                                                onEditProject={handleOpenEditModal}
+                                                                onEditProject={
+                                                                    handleOpenEditModal
+                                                                }
+                                                                AddCollaboratorProject={
+                                                                    handleCollaboratoropen
+                                                                }
+                                                                AddSprintsProject={
+                                                                    handleSprintsropen
+                                                                }
                                                             />
                                                         </div>
                                                     )}
@@ -438,12 +488,13 @@ export default function Projects() {
                                     </div>
                                 )}
                             </Droppable>
-                            )}
+                        )}
                     </div>
                     <div className="flex-1 bg-white gap-10 flex flex-col">
-                        <div className="h-[50px] gap-3 flex relative rounded-xl overflow-hidden shadow-md bg-green-400 shadow-gray-400">
+                        <div className="h-[50px] gap-3 flex relative rounded-xl overflow-hidden bg-orange-300 shadow-md shadow-gray-400">
                             <div
-                                className={` h-full flex justify-center items-center  bg-green-800 ${withValue}`}
+                                className={` h-full flex justify-center items-center bg-orange-500 `}
+                                style={{ width: `${withValuePending}%` }}
                             ></div>
                             <div className="absolute text-white inset-0 flex items-center justify-center text-sm font-medium ">
                                 <ion-icon
@@ -451,25 +502,25 @@ export default function Projects() {
                                     name="checkmark-circle-outline"
                                 ></ion-icon>
                                 <h1 className="text-[25px] font-bold">
-                                    Completed
+                                    Panding
                                 </h1>
-                                <h1 className="font-bold ml-11  text-lg text-red">
-                                    13/17
+                                <h1 className="font-bold ml-11  text-[25px] text-red">
+                                    {inProgressProjectscount}/{allProjectscount}
                                 </h1>
                             </div>
                         </div>
                         {loading ? (
-                                // Loading indicator or message while data is being fetched
-                                <div>Loading...</div>
-                            ) : (
-                            <Droppable droppableId="completedProjects">
+                            // Loading indicator or message while data is being fetched
+                            <div>Loading...</div>
+                        ) : (
+                            <Droppable droppableId="pendingProjects">
                                 {(provided) => (
                                     <div
                                         {...provided.droppableProps}
                                         ref={provided.innerRef}
-                                        className="flex-1 p-2 gap-6 scroll-auto flex flex-col rounded-3xl shadow-2xl bg-gray-300"
+                                        className="flex-1 p-2 flex flex-col gap-6 rounded-3xl shadow-2xl bg-gray-300"
                                     >
-                                        {completedProjects.map(
+                                        {filteredPendingProjects.map(
                                             (project, index) => (
                                                 <Draggable
                                                     key={project.id}
@@ -489,7 +540,16 @@ export default function Projects() {
                                                                     project
                                                                 }
                                                                 key={project.id}
-                                                                onEditProject={handleOpenEditModal}                                                            />
+                                                                onEditProject={
+                                                                    handleOpenEditModal
+                                                                }
+                                                                AddCollaboratorProject={
+                                                                    handleCollaboratoropen
+                                                                }
+                                                                AddSprintsProject={
+                                                                    handleSprintsropen
+                                                                }
+                                                            />
                                                         </div>
                                                     )}
                                                 </Draggable>
@@ -499,15 +559,103 @@ export default function Projects() {
                                     </div>
                                 )}
                             </Droppable>
-                            )}
+                        )}
+                    </div>
+                    <div className="flex-1 bg-white gap-10 flex flex-col">
+                        <div className="h-[50px] gap-3 flex relative rounded-xl overflow-hidden shadow-md bg-green-400 shadow-gray-400">
+                            <div
+                                className={` h-full flex justify-center items-center  bg-green-800`}
+                                style={{ width: `${withValuecompleted}%` }}
+                            ></div>
+                            <div className="absolute text-white inset-0 flex items-center justify-center text-sm font-medium ">
+                                <ion-icon
+                                    size="large"
+                                    name="checkmark-circle-outline"
+                                ></ion-icon>
+                                <h1 className="text-[25px] font-bold">
+                                    Completed
+                                </h1>
+                                <h1 className="font-bold ml-11  text-[25px] text-red">
+                                    {completedProjectscount}/{allProjectscount}
+                                </h1>
+                            </div>
+                        </div>
+                        {loading ? (
+                            // Loading indicator or message while data is being fetched
+                            <div>Loading...</div>
+                        ) : (
+                            <Droppable droppableId="completedProjects">
+                                {(provided) => (
+                                    <div
+                                        {...provided.droppableProps}
+                                        ref={provided.innerRef}
+                                        className="flex-1 p-2 gap-6 scroll-auto flex flex-col rounded-3xl shadow-2xl bg-gray-300"
+                                    >
+                                        {filteredCompletedProjects.map(
+                                            (project, index) => (
+                                                <Draggable
+                                                    key={project.id}
+                                                    draggableId={project.id.toString()}
+                                                    index={index}
+                                                >
+                                                    {(provided) => (
+                                                        <div
+                                                            ref={
+                                                                provided.innerRef
+                                                            }
+                                                            {...provided.draggableProps}
+                                                            {...provided.dragHandleProps}
+                                                        >
+                                                            <Cards
+                                                                project={
+                                                                    project
+                                                                }
+                                                                key={project.id}
+                                                                onEditProject={
+                                                                    handleOpenEditModal
+                                                                }
+                                                                AddCollaboratorProject={
+                                                                    handleCollaboratoropen
+                                                                }
+                                                                AddSprintsProject={
+                                                                    handleSprintsropen
+                                                                }
+                                                            />
+                                                        </div>
+                                                    )}
+                                                </Draggable>
+                                            )
+                                        )}
+                                        {provided.placeholder}
+                                    </div>
+                                )}
+                            </Droppable>
+                        )}
                     </div>
                 </div>
             </DragDropContext>
-            {showModal && <AddProject onCloseModal={handleCloseModal} fetchUsersData={fetchProjects} />}
+            {showModal && (
+                <AddProject
+                    onCloseModal={handleCloseModal}
+                    fetchUsersData={fetchProjects}
+                />
+            )}
             {editModalOpen && (
                 <DetailsProject
                     project={selectedUserId}
                     onCloseModal={handleCloseEditModal}
+                />
+            )}
+            {Collaborateur && (
+                <Collaborator
+                    project={selectedUserId}
+                    onCloseModal={handleCollaboratorclose}
+                />
+            )}
+            {sprints && (
+                <Sprints
+                    project={selectedUserId}
+                    onCloseModal={handleSprintsclose}
                 />
             )}
         </div>
