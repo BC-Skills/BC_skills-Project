@@ -13,6 +13,8 @@ export default function Formations() {
   const storedLinks = localStorage.getItem("links");
   const navigate = useNavigate();
   const { profile, currentUser } = useStateContext();
+  const [showMore, setShowMore] = useState({});
+
 
   useEffect(() => {
     const parsedLinks = JSON.parse(storedLinks) || [];
@@ -46,6 +48,13 @@ export default function Formations() {
       console.error("Error submitting form:", error);
     }
   };
+  const toggleShowMore = (id) => {
+    setShowMore(prevState => ({
+      ...prevState,
+      [id]: !prevState[id]
+    }));
+  };
+  
 
   const indexOfLastFormation = currentPage * formationPerPage;
   const indexOfFirstFormation = indexOfLastFormation - formationPerPage;
@@ -66,7 +75,7 @@ export default function Formations() {
             <h1 className="text-[15px] font-bold text-blue-400">{profile.name}</h1>
           </div>
           <div className="user">
-            <img className="flex-1 " src={currentUser.profile_picture} alt="Profile Picture" />
+            <img className="flex-1  " src={currentUser.profile_picture} alt="Profile Picture" />
           </div>
         </div>
         <div className="relative">
@@ -95,7 +104,7 @@ export default function Formations() {
           Add Formation Type
         </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-10 ">
         {currentFormations.map((formationType, index) => (
           <div
             key={formationType.id}
@@ -106,34 +115,44 @@ export default function Formations() {
               <h3 className="font-semibold text-dark text-xl mb-4 hover:text-primary">
                 {formationType.name}
               </h3>
-              <p className="text-base text-body-color leading-relaxed mb-7">
-                {formationType.description}
-              </p>
+              <p className="text-base text-body-color leading-relaxed mb-7 ">
+            {showMore[formationType.id]
+              ? formationType.description
+              : formationType.description.substring(0, 100) + "..."}
+            <button
+              onClick={() => toggleShowMore(formationType.id)}
+              className="text-primary ml-1  text-[#41415A]"
+            >
+              {showMore[formationType.id] ? "Show Less" : "Show More"}
+            </button>
+          </p>
               <button
                 onClick={() => handleViewDetails(formationType)}
                 className="inline-block py-2 px-7 border border-[#E5E7EB] rounded-full text-base text-body-color font-medium hover:border-primary hover:bg-primary hover:text-white transition"
               >
-                View Details
+                Courses Acces
               </button>
             </div>
           </div>
         ))}
       </div>
       <div className="flex justify-center mt-4">
-        <ul className="flex">
-          {Array.from({ length: Math.ceil(formationTypes.length / formationPerPage) }, (_, index) => (
-            <li key={index}>
-              <button
-                className={`px-3 py-2 mx-1 ${
-                  index + 1 === currentPage ? "bg-[#41415A] text-white" : "bg-white text-gray-900"
-                }`}
-                onClick={() => paginate(index + 1)}
-              >
-                {index + 1}
-              </button>
-            </li>
-          ))}
-        </ul>
+  <ul className="flex">
+    {Array.from({ length: Math.ceil(formationTypes.length / formationPerPage) }, (_, index) => (
+      <li key={index}>
+        <button
+          className={`px-3 py-2 mx-1 ${
+            index + 1 === currentPage
+              ? "bg-[#41415A] text-white"
+              : "bg-white text-gray-900 hover:bg-gray-300 hover:text-gray-700"
+          } rounded-full focus:outline-none focus:ring focus:border-primary transition`}
+          onClick={() => paginate(index + 1)}
+        >
+          {index + 1}
+        </button>
+      </li>
+    ))}
+  </ul>
       </div>
       {isFormModalOpen && (
         <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-200 bg-opacity-50">
