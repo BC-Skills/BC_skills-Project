@@ -121,7 +121,7 @@ export default function DashboardUser() {
                         <span className="icon">
                             <img
                                 src={logo}
-                                className="w-full h-full object-contain"
+                                className="w-full h-full object-contain "
                                 alt="Logo"
                             />
                         </span>

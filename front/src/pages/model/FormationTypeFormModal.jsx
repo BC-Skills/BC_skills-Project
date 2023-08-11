@@ -66,7 +66,7 @@ const FormationTypeFormModal = ({ isOpen, onClose, onFormSubmit }) => {
 
     return (
         <div className={`modal ${isOpen ? "block" : "hidden"}`}>
-            <div className="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+            <div className=" flex modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
                 <div className="modal-content py-4 text-left px-6">
                     <div className="flex justify-between items-center pb-3">
                         <p className="text-2xl font-bold">Add Formation Type</p>
@@ -168,7 +168,7 @@ const FormationTypeFormModal = ({ isOpen, onClose, onFormSubmit }) => {
                         )}
                         <div className="flex items-center justify-between mt-4">
                             <button
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                className="bg-[#41415A] hover:bg-[#6C6D96] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                 type="submit"
                             >
                                 Add
