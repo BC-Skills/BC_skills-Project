@@ -62,6 +62,7 @@ export default function Profile() {
         axiosClient
             .get(`profiless/${role.id}/privileges`)
             .then((response) => {
+                
                 const privilegeIds = response.data.map(
                     (privilege) => privilege.id
                 );
@@ -128,13 +129,37 @@ export default function Profile() {
     };
     
     useEffect(() => {
-        // Call the function to group privileges by statusId when privileges change
         groupPrivilegesByStatusId();
     }, [privileges]);
 
+
+
+    const Delete = async (profileid) => {
+        const confirmed = window.confirm("Are you sure you want to delete this profile?");
+    
+        // If user confirms deletion, proceed with the API call
+        if (confirmed) {
+            axiosClient
+                .delete(`profiles/${profileid}`)
+                .then((response) => {
+                    if (response.status === 200 || response.status === 204) {
+                        console.log("Profile deleted successfully!");
+                        fetchData(); // Call the fetchData function to refresh the data
+                    } else {
+                        console.error("Error deleting the profile:", response.statusText);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error deleting the profile:", error);
+                });
+        } else {
+            // User canceled deletion, do nothing
+            console.log("Deletion canceled by the user.");
+        }
+    };
     return (
         <div className="flex-1 flex sm:flex-col lg:flex-row md:flex-row">
-            <div className=" m-10 rounded-xl shadow-xl bg-gray-100 flex flex-col">
+            <div className="m-10 w-[500px] rounded-xl shadow-xl bg-gray-100 flex flex-col">
                 <h1 className="text-[30px] mt-10 ml-10">Roles & Privilages</h1>
                 <div className="flex justify-end items-end mr-12">
                     <button
@@ -181,17 +206,37 @@ export default function Profile() {
                                                 <td className="py-4 px-6 border-b border-grey-light  font-bold text-xl">
                                                     {role.name}
                                                 </td>
-                                                <td className="py-4 px-6 border-b border-grey-light flex gap-3">
+                                                <td className="py-6 px-6 border-b border-grey-light flex gap-3">
                                                     <button
                                                         onClick={() =>
                                                             handleViewPrivileges(
                                                                 role
                                                             )
                                                         }
-                                                        className="bg-blue-500 text-white hover:text-black font-bold py-1 px-3 rounded text-xs hover:bg-blue-200"
+                                                        className="bg-blue-500 text-white hover:text-black font-bold py-3 px-5 rounded text-xs hover:bg-blue-200"
                                                     >
                                                         View
                                                     </button>
+                                                <button className="ml-5"
+                                                    onClick={() =>
+                                                        Delete(role.id)
+                                                    }
+                                                >
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        className="w-8 h-8"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke="currentColor"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="M14 5h-4m-4 0a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-4m-2 0V3h-4v2M3 9h18M12 12v4"
+                                                        />
+                                                    </svg>
+                                                </button>
                                                 </td>
                                             </tr>
                                         ))}

@@ -7,7 +7,6 @@ import EditModels from "../../model/EditModels";
 export default function Employe() {
     const [showModal, setShowModal] = useState(false);
     const [users, setUsers] = useState([]);
-    const [profileNames, setProfileNames] = useState({});
     const [loading, setLoading] = useState(true); // New loading state
     const [editModalOpen, setEditModalOpen] = useState(false); // New state variable for the EditModels modal
     const [selectedUserId, setSelectedUserId] = useState(null); // New state variable to store the ID of the selected user
@@ -32,22 +31,7 @@ export default function Employe() {
         setEditModalOpen(false); // Close the modal
     };
 
-    const fetchProfileData = (userId) => {
-        axiosClient
-            .get(`profiles/${userId}`)
-            .then((response) => {
-                setProfileNames((prevProfileNames) => ({
-                    ...prevProfileNames,
-                    [userId]: response.data.name,
-                }));
-            })
-            .catch((error) => {
-                console.error(
-                    `Error fetching profile data for user ${userId}:`,
-                    error
-                );
-            });
-    };
+ 
 
 
     useEffect(() => {
@@ -64,18 +48,15 @@ export default function Employe() {
 
     const fetchUsersData = async () => {
         try {
-          const response = await axiosClient.get("userss/admin");
+          const response = await axiosClient.get("users");
           const usersData = response.data;
           setUsers(usersData);
-      
+            console.log(usersData)
           // Store the user data in session storage
           sessionStorage.setItem("usersData", JSON.stringify(usersData));
       
           // Fetch profile data for each user
-          usersData.forEach((user) => {
-            fetchProfileData(user.profile_id);
-          });
-      
+          
           setLoading(false); // Set loading to false once the data is fetched
         } catch (error) {
           console.error("Error fetching users:", error);
@@ -250,15 +231,11 @@ export default function Employe() {
                                                     </td>
                                                     <td
                                                         className="p-4 text-base font-medium text-gray-900 whitespace-nowrap lg:p-5"
-                                                        id={`profile-${user.id}`}
+                                                        
                                                     >
                                                         <div className="flex gap-2">
                                                             <span className="inline-flex items-center gap-1 rounded-full bg-violet-500 px-2 py-1 text-xs font-semibold text-white">
-                                                                {profileNames[
-                                                                    user
-                                                                        .profile_id
-                                                                ] ||
-                                                                    "Loading..."}
+                                                            {user.profile_name}
                                                             </span>
                                                         </div>
                                                     </td>

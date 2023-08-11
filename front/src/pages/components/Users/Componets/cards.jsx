@@ -12,7 +12,7 @@ Cards.propTypes = {
             tel: PropTypes.string.isRequired,
             profile_picture: PropTypes.string.isRequired,
         }).isRequired,
-        projectManager: PropTypes.shape({
+        project_manager: PropTypes.shape({
             name: PropTypes.string.isRequired,
             email: PropTypes.string.isRequired,
             tel: PropTypes.string.isRequired,
@@ -21,10 +21,24 @@ Cards.propTypes = {
     }).isRequired,
 };
 
-export default function Cards({ project, onEditProject }) {
+export default function Cards({ project, onEditProject,  AddCollaboratorProject , AddSprintsProject}) {
+
+
     const handleEditClick = () => {
         onEditProject(project);
       };
+
+      const handleCollabora = () => {
+        AddCollaboratorProject(project);
+      };
+
+      const handleSprint = () => {
+        AddSprintsProject(project);
+      };
+
+
+
+
     return (
         <div
             className="bg-white flex flex-col  p-4 rounded-2xl shadow-2xl"
@@ -63,18 +77,18 @@ export default function Cards({ project, onEditProject }) {
                 <div className=" flex-1 flex flex-row-reverse gap-2 items-center">
                     <div className="flex-1">
                         <h1 className="text-[20px] font-bold">
-                            {project.projectManager?.name}
+                            {project.project_manager?.name}
                         </h1>
                         <h1 className="text-[15px] font-bold">
-                            Email: {project.projectManager?.email}
+                            Email: {project.project_manager?.email}
                         </h1>
                         <h1 className="text-[15px] font-bold">
-                            tele : {project.projectManager?.tel}
+                            tele : {project.project_manager?.tel}
                         </h1>
                     </div>
                     <div className="relative w-16 h-16">
                         <img
-                            src={project.projectManager?.profile_picture}
+                            src={project.project_manager?.profile_picture}
                             alt="Image"
                             className="absolute top-0 left-0 w-full h-full rounded-full object-cover"
                         />
@@ -87,6 +101,18 @@ export default function Cards({ project, onEditProject }) {
                        >
                         More Details
                     </button>
+                    <button className="rounded-full ml-2 bg-blue-500 px-5 py-3 text-base mb-3 font-medium text-white transition duration-200 hover:bg-blue-600 active:bg-blue-700"
+                               onClick={() => handleCollabora(project)}
+                       >
+                        Add Collaborator
+                    </button>
+                    <button className="rounded-full ml-2 bg-blue-500 px-5 py-3 text-base mb-3 font-medium text-white transition duration-200 hover:bg-blue-600 active:bg-blue-700"
+                               onClick={() =>  handleSprint(project)}
+                       >
+                        Add Sprints
+                    </button>
+
+                   
                 </div>
              
             </div>
@@ -94,22 +120,3 @@ export default function Cards({ project, onEditProject }) {
     );
 }
 
-// eslint-disable-next-line react/prop-types
-export function Header({ withValue }) {
-    return (
-        <div className="h-[50px] gap-3 flex relative rounded-xl overflow-hidden bg-violet-300 shadow-md shadow-gray-400">
-            <div
-                className={`h-full flex justify-center items-center bg-violet-900 ${withValue}`}
-            ></div>
-
-            <div className="absolute text-white inset-0 flex items-center justify-center text-sm font-medium">
-                <ion-icon
-                    size="large"
-                    name="checkmark-circle-outline"
-                ></ion-icon>
-                <h1 className="text-[25px] font-bold text-white">Start</h1>
-                <h1 className="font-bold ml-11 text-[25px] text-red">13/17</h1>
-            </div>
-        </div>
-    );
-}

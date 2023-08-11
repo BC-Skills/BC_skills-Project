@@ -6,6 +6,10 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
     // const [profiles, setProfiles] = useState([]);
 
     const [step, setStep] = useState(1); // Set initial step to 1
+    const [step1Data, setStep1Data] = useState({});
+    // const [step2Data, setStep2Data] = useState({});
+    const [proje, setProjet] = useState({});
+    // const [step4Data, setStep4Data] = useState({});
 
     const handleNextStep = () => {
         setStep((prevStep) => prevStep + 1);
@@ -39,44 +43,83 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
         fetchUsers();
     }, []);
 
-    const handleSubmit = (event) => {
-        // ... (Remaining handleSubmit logic)
-        event.preventDefault(); // Prevent form default submission
+    const handleSubmitStep1 = (event) => {
+        event.preventDefault();
 
         const formData = new FormData(event.target);
-        const payload = {};
+        const data = {};
         formData.forEach((value, key) => {
-            payload[key] = value;
+            data[key] = value;
         });
 
+        // Convert numeric fields to integers if needed
+        data.duree = parseInt(data.duree, 10);
+
+        setStep1Data(data);
+        handleNextStep();
+    };
+
+    const handleSubmitStep2 = (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+
+        // Convert numeric fields to integers if needed
+        data.client_id = parseInt(data.client_id, 10);
+        data.project_manager_id = parseInt(data.project_manager_id, 10);
+
+        // Merge project_type_id into the data object
+        const combinedData = {
+            ...step1Data,
+            ...data,
+        };
         axiosClient
-            .post("projects", payload) // POST to "projects" instead of "users"
-            // eslint-disable-next-line no-unused-vars
+            .post("projects", combinedData)
             .then((response) => {
-                window.location.reload();
-                sessionStorage.removeItem("projectsData"); // Remove "roles" from session storage
-                fetchUsersData();
+                setProjet(response.data);
+                handleNextStep();
             })
             .catch((error) => {
                 console.error("Error adding project:", error);
             });
     };
-    // const formArray = ['1', '2', '3'];
+
     const [showSprintForm, setShowSprintForm] = useState(false);
-
-    // Step 4: Define a function to handle showing the sprint form and hiding the "Add Sprints" button
     const handleAddSprint = () => {
-      // Here, you can perform any logic before showing the SprintForm
-      setShowSprintForm(true);
+        setShowSprintForm(true);
     };
-  
-    // Step 5: Define a function to handle hiding the sprint form and showing the "Add Sprints" button
+
+
     const handleCancelSprint = () => {
-      setShowSprintForm(false);
+        setShowSprintForm(false);
     };
 
-    const [sprints, setSprints] = useState([]); // Initialize sprints state as an empty array
 
+
+    const [sprints, setSprints] = useState([]);
+
+    const fetchSprints = async () => {
+        try {
+            const response = await axiosClient.get(`sprintss/${proje.id}`);
+            const sprintsData = response.data;
+            setSprints(sprintsData);
+        } catch (error) {
+            console.error("Error fetching sprints:", error);
+        }
+    };
+
+    // Update the useEffect to fetch sprints when proje.id changes
+    useEffect(() => {
+        if (proje) {
+            fetchSprints();
+        }
+    }, [proje]);
+
+    
 
     return (
         <>
@@ -121,7 +164,7 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                     className="space-y-6"
                                     action="#"
                                     id="addEmployeeForm"
-                                    onSubmit={handleSubmit}
+                                    onSubmit={handleSubmitStep1}
                                 >
                                     <div>
                                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
@@ -140,7 +183,7 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                             Duree
                                         </label>
                                         <input
-                                            type="text"
+                                            type="number"
                                             name="duree"
                                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-white dark:text-white"
                                             placeholder="Duree"
@@ -186,8 +229,7 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                             Cancel
                                         </button>
                                         <button
-                                            type="button"
-                                            onClick={handleNextStep}
+                                            type="submit"
                                             className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                         >
                                             Next
@@ -195,13 +237,12 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                     </div>
                                 </form>
                             )}
-
                             {step === 2 && (
                                 <form
                                     className="space-y-6"
                                     action="#"
                                     id="addEmployeeForm"
-                                    onSubmit={handleSubmit}
+                                    onSubmit={handleSubmitStep2}
                                 >
                                     <div>
                                         <label
@@ -285,8 +326,7 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                             Previous
                                         </button>
                                         <button
-                                            type="button"
-                                            onClick={handleNextStep}
+                                            type="submit"
                                             className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                         >
                                             Next
@@ -297,18 +337,24 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
 
                             {step === 3 && (
                                 <>
-                                {!showSprintForm && (
-                                            <div>
-                                                {/* Display the list of sprints in the desired order */}
-                                                {sprints.map((sprint) => (
-                                                <div key={sprint.id}>
-                                                    {/* Display sprint information here */}
-                                                    <p>{sprint.sprintName}</p>
-                                                    
+                                  
+                                        <div className="mb-4">
+                                            {sprints.map((sprint) => (
+                                                <div key={sprint.id} className="flex  flex-col items-center">
+                                                    <div className="flex flex-1 flex-row justify-between">
+                                                        {/* <p>{sprint.name}</p> */}
+                                                        <p>{sprint.status}</p>
+                                                    </div>
+                                                    <div className="flex flex-1 flex-row justify-between">
+                                                        <p>{sprint.date_debut}</p>
+                                                        <p>{sprint.date_fin}</p>
+                                                    </div>
+                                                    <div className="flex flex-1 flex-row justify-between">
+                                                        {/* <p>{sprint.description}</p> */}
+                                                    </div>
                                                 </div>
-                                                ))}
-                                            </div>
-                                            )}
+                                            ))}
+                                        </div>
                                     {showSprintForm && (
                                         <form
                                             className="space-y-6"
@@ -316,10 +362,6 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                             id="addSprintForm"
                                             onSubmit={(e) => {
                                                 e.preventDefault();
-
-                                                // Here, you can add the logic to send the sprint data to the server
-                                                // For example, you can use axiosClient.post() to make a POST request to add the sprint to the database
-
                                                 const formData = new FormData(
                                                     e.target
                                                 );
@@ -330,19 +372,18 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                                     }
                                                 );
 
+                                                sprintData.project_id =proje.id;
+
+                                                console.log(sprintData);
                                                 axiosClient
                                                     .post("sprints", sprintData)
                                                     .then((response) => {
-                                                        // Sprint added successfully, you can perform any actions needed
-                                                        // For example, show a success message or fetch updated data
                                                         console.log(
                                                             "Sprint added:",
                                                             response.data
                                                         );
-                                                        fetchUsersData();
-                                                        setShowSprintForm(
-                                                            false
-                                                        ); // Hide the sprint form after adding the sprint
+
+                                                        handleCancelSprint() // Hide the sprint form after adding the sprint
                                                     })
                                                     .catch((error) => {
                                                         console.error(
@@ -356,27 +397,42 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                                                     Sprint Name
                                                 </label>
-                                                <input
-                                                    type="text"
-                                                    name="sprintName"
-                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-white dark:text-white"
-                                                    placeholder="Sprint Name"
+                                                <select
+                                                    name="status"
+                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                                                     required
-                                                />
+                                                >
+                                                    {status.map((statu) => (
+                                                        <option
+                                                            key={statu.id}
+                                                            value={statu.id}
+                                                        >
+                                                            {statu.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
                                             </div>
                                             <div>
                                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                                                    Sprint Duration
+                                                    Start Date
                                                 </label>
                                                 <input
-                                                    type="text"
-                                                    name="sprintDuration"
-                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-white dark:text-white"
-                                                    placeholder="Sprint Duration"
-                                                    required
+                                                    type="date" // Use type 'date' for date input
+                                                    name="date_debut"
+                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                                                 />
+                                                <div>
+                                                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                                                        End Date
+                                                    </label>
+                                                    <input
+                                                        type="date" // Use type 'date' for date input
+                                                        name="date_fin"
+                                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                                    />
+                                                </div>
                                             </div>
-                                            <div>
+                                            {/* <div>
                                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                                                     Sprint Description
                                                 </label>
@@ -385,7 +441,7 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-white dark:text-white"
                                                     placeholder="Sprint Description"
                                                 />
-                                            </div>
+                                            </div> */}
                                             <div className="flex justify-end pt-4">
                                                 <button
                                                     type="button"
@@ -405,16 +461,15 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                             </div>
                                         </form>
                                     )}
-                                      {!showSprintForm && (
-                                            <button
+                                    {!showSprintForm && (
+                                        <button
                                             type="button"
                                             onClick={handleAddSprint}
                                             className="w-full mr-2 px-4 py-2 text-sm font-medium text-gray-600 bg-gray-200 border border-gray-300 rounded-md shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            >
+                                        >
                                             Add Sprints
-                                            </button>
-                                        )}
-
+                                        </button>
+                                    )}
 
                                     <div className="flex justify-end pt-4 mt-6">
                                         <button
@@ -425,7 +480,14 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                             Previous
                                         </button>
                                         <button
-                                            type="submit"
+                                            onClick={() => {
+                                                fetchUsersData();
+                                                window.location.reload();
+                                                sessionStorage.removeItem(
+                                                    "projectsData"
+                                                );
+                                                fetchUsersData();
+                                            }}
                                             className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                         >
                                             ADD

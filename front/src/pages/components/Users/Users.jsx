@@ -9,7 +9,6 @@ export default function Users() {
   useEffect(() => {
       const parsedLinkss = JSON.parse(storedLinks) || [];
       const hasProjectsLink = parsedLinkss.some((link) => link.name === 'users');
-      console.log(parsedLinkss)
       if (!hasProjectsLink) {
         navigate('/users');
       }

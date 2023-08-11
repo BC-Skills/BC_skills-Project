@@ -16,10 +16,12 @@ class SprintController extends Controller
 
     public function store(Request $request)
     {
+        // Log the request data for debugging
+        \Log::info('Sprint store request data:', $request->all());
+    
         $sprint = Sprint::create($request->all());
         return response()->json($sprint, 201);
     }
-
     public function show($id)
     {
         $sprint = Sprint::findOrFail($id);
@@ -38,5 +40,12 @@ class SprintController extends Controller
         $sprint = Sprint::findOrFail($id);
         $sprint->delete();
         return response()->json(null, 204);
+    }
+
+    public function getSprints($project_id)
+    {
+        // Fetch sprints for a specific project based on project_id
+        $sprints = Sprint::where('project_id', $project_id)->get();
+        return response()->json($sprints);
     }
 }

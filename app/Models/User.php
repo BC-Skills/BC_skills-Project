@@ -16,9 +16,8 @@ class User extends Authenticatable
 
     public function profile()
     {
-        return $this->hasOne(Profile::class);
+        return $this->belongsTo(Profile::class, 'profile_id');
     }
-
     public function managedProjects()
     {
         return $this->hasMany(Project::class, 'project_manager_id');
@@ -46,5 +45,15 @@ class User extends Authenticatable
     public function projects()
     {
         return $this->belongsToMany(Project::class, 'project_user');
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'user_id');
+    }
+
+    public function assignedTickets()
+    {
+        return $this->hasMany(Ticket::class, 'assign_to');
     }
 }

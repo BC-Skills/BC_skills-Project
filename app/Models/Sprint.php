@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Sprint extends Model
 {
     protected $fillable = [
-        'status', 'date_debut', 'date_fin', 'project_id'
+        'name', 'description', 'status', 'date_debut', 'date_fin', 'project_id'
     ];
 
     public function project()

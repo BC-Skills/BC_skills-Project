@@ -9,11 +9,11 @@ use App\Models\Profile;
 
 class UserController extends Controller
 {
-    public function index()
-    {
-        $users = User::all();
-        return response()->json($users);
-    }
+    // public function index()
+    // {
+    //     $users = User::all();
+    //     return response()->json($users);
+    // }
 
     public function store(Request $request)
     {
@@ -76,5 +76,30 @@ class UserController extends Controller
                   return response()->json(['error' => 'Internal server error'], 500);
               }
           }
+          public function index()
+          {
+              // Get all users with their profiles
+              $users = User::with('profile')->get();
+      
+              // Map each user to include the profile name
+              $usersData = $users->map(function ($user) {
+                  return [
+                      'id' => $user->id,
+                      'profile_picture'=> $user->profile_picture,
+                      'name' => $user->name,
+                      'email' => $user->email,
+                      'tel' => $user->tel,
+                      'profile_id' => $user->profile_id,
+                      'profile_name' => $user->profile ? $user->profile->name : 'Loading...', // Include the profile name
+                  ];
+              });
+      
+              return response()->json($usersData);
+          }
+
+
+       
+
+          
     
 }

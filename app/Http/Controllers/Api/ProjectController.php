@@ -10,26 +10,23 @@ class ProjectController extends Controller
 {
     public function index()
     {
-        $projects = Project::all();
+        $projects = Project::with('client', 'projectManager')->get();
         return response()->json($projects);
     }
 
     public function store(Request $request)
     {
-        // Ensure the request contains the required fields
+        // Ensure the request contains the required fields and add more validation rules as needed
         $request->validate([
             'nom' => 'required',
-            'status' => 'required',
-            'client_id' => 'required',
-            'project_manager_id' => 'required',
-            // Add other validation rules as needed for other fields
+            
         ]);
-    
+
         // Extract the validated data from the request
-        $validatedData = $request->only(['nom', 'duree', 'status', 'client_id', 'project_manager_id']);
-        
+        $validatedData = $request->all();
+
         $project = Project::create($validatedData);
-        return response()->json($project, 201);
+        return response()->json($project);
     }
 
     public function show($id)
@@ -41,6 +38,10 @@ class ProjectController extends Controller
     public function update(Request $request, $id)
     {
         $project = Project::findOrFail($id);
+
+        // Validate the incoming data before updating
+       
+
         $project->update($request->all());
         return response()->json($project, 200);
     }
@@ -52,21 +53,121 @@ class ProjectController extends Controller
         return response()->json(null, 204);
     }
 
-    public function countInProgressProjects(){
-        $count = Project::where("status","progress")->count();
-        return response()->json($count);
+    public function countByManagerId($managerId)
+    {
+        $countPending = Project::where('project_manager_id', $managerId)->where('status', 'Pending')->count();
+        $countCompleted = Project::where('project_manager_id', $managerId)->where('status', 'Completed')->count();
+        $countStart = Project::where('project_manager_id', $managerId)->where('status', 'Start')->count();
+        $count = Project::where('project_manager_id', $managerId)->count();
+    
+        return response()->json(['count' => $count, 'Pending' => $countPending, 'Completed' => $countCompleted, 'Start' => $countStart]);
     }
 
-    public function countCompletedProjects()
-    {
-        $count = Project::where('status', 'finished')->count();
-        return response()->json(['count' => $count]);
-    }
+
+
+
     public function getProjectsByManagerId($managerId)
-{
-    $projects = Project::where('project_manager_id', $managerId)->get();
-    return response()->json($projects);
+    {
+        $projects = Project::where('project_manager_id', $managerId)->with('client', 'projectManager')->get();
+        return response()->json($projects);
+    }
+
+    public function getUsersInProject($id)
+    {
+        $project = Project::findOrFail($id);
+        $users = $project->getAllUsers();
+        return response()->json($users);
+    }
+
+    public function getAllProjectsWithManagerAndClientNames()
+    {
+        $projects = Project::with('projectManager', 'client')->get();
+
+        $projectData = [];
+
+        foreach ($projects as $project) {
+            $managerName = $project->projectManager->name;
+            $clientName = $project->client->name;
+
+            $projectData[] = [
+                'project' => $project,
+                'manager_name' => $managerName,
+                'client_name' => $clientName,
+            ];
+        }
+
+        return response()->json($projectData);
+    }
+
+
+    
+                    public function attachUser(Request $request, $projectId)
+                {
+                    try {
+                        // Find the project by its ID
+                        $project = Project::find($projectId);
+
+                        if (!$project) {
+                            return response()->json(['error' => 'Project not found'], 404);
+                        }
+
+                        // Attach the user(s) to the project
+                        $userIds = $request->input('users');
+                        $project->users()->attach($userIds);
+
+                        // Respond with a success message or any other relevant data
+                        return response()->json(['message' => 'Users attached successfully'], 200);
+                    } catch (\Exception $e) {
+                        // Handle errors (e.g., database errors)
+                        \Log::error('Error attaching users: ' . $e->getMessage());
+                        return response()->json(['error' => 'Internal server error'], 500);
+                    }
+                }
+
+                public function detachUser(Request $request, $projectId)
+                {
+                    try {
+                        // Find the project by its ID
+                        $project = Project::find($projectId);
+
+                        if (!$project) {
+                            return response()->json(['error' => 'Project not found'], 404);
+                        }
+
+                        // Detach the user(s) from the project
+                        $userIds = $request->input('users');
+                        $project->users()->detach($userIds);
+
+                        // Respond with a success message or any other relevant data
+                        return response()->json(['message' => 'Users detached successfully'], 200);
+                    } catch (\Exception $e) {
+                        // Handle errors (e.g., database errors)
+                        \Log::error('Error detaching users: ' . $e->getMessage());
+                        return response()->json(['error' => 'Internal server error'], 500);
+                    }
+                }
+                public function getProjectUsers($projectId)
+                {
+                    try {
+                        // Find the project by its ID
+                        $project = Project::find($projectId);
+
+                        if (!$project) {
+                            return response()->json(['error' => 'Project not found'], 404);
+                        }
+
+                        // Get all users associated with the project
+                        $users = $project->users;
+
+                        // Respond with the users' data
+                        return response()->json($users, 200);
+                    } catch (\Exception $e) {
+                        // Handle errors (e.g., database errors)
+                        \Log::error('Error retrieving project users: ' . $e->getMessage());
+                        return response()->json(['error' => 'Internal server error'], 500);
+                    }
 }
+
 
 
 }

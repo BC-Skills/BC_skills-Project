@@ -25,5 +25,11 @@ class Project extends Model
     {
         return $this->belongsToMany(User::class, 'project_user');
     }
+
+    public function getAllUsers()
+    {
+        return $this->users()->get();
+    }
+
     
 }

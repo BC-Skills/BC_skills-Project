@@ -98,4 +98,62 @@ class TicketController extends Controller
     }
     
 
+    public function getTicketsByProjectId($projectId)
+    {
+        try {
+            // Query the database to find tickets with the given project ID
+            $tickets = Ticket::with('project', 'sprint', 'user', 'assignedToUser','sprint')
+                ->where('project_id', $projectId)
+                ->get();
+    
+            // Return the tickets with project, sprint, and user information in the response
+            return response()->json($tickets);
+        } catch (\Exception $e) {
+            // Handle any errors that might occur during the process
+            return response()->json(['error' => 'Internal Server Error'], 500);
+        }
+    }
+
+    public function getTicketsByProjectAndSprintIdd($projectId, $sprintId)
+    {
+        try {
+            // Query the database to find tickets with the given project ID and sprint ID
+            $tickets = Ticket::with('project', 'sprint', 'user', 'assignedToUser')
+                ->where('project_id', $projectId)
+                ->where('sprint_id', $sprintId)
+                ->get();
+    
+            // Return the tickets with project, sprint, and user information in the response
+            return response()->json($tickets);
+        } catch (\Exception $e) {
+            // Handle any errors that might occur during the process
+            return response()->json(['error' => 'An error occurred.'], 500);
+        }
+    }
+    
+    public function getTicketsByProjectWithoutSprint($projectId)
+    {
+        try {
+            // Query the database to find tickets with the given project ID and where sprint_id is null
+            $tickets = Ticket::with('project', 'sprint', 'user', 'assignedToUser')
+                ->where('project_id', $projectId)
+                ->whereNull('sprint_id')
+                ->get();
+    
+            // Return the tickets with project, sprint, and user information in the response
+            return response()->json($tickets);
+        } catch (\Exception $e) {
+            // Handle any errors that might occur during the process
+            return response()->json(['error' => 'An error occurred.'], 500);
+        }
+    }
+    
+    public function update2(Request $request, $id)
+    {
+        $ticket = Ticket::findOrFail($id);
+        $ticket->update($request->all());
+        return response()->json($ticket, 200);
+    }
+
+
 }

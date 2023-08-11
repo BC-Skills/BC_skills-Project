@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import axiosClient from "../../../axios";
-import '../../../assets/css/Switch.css'
+import "../../../assets/css/Switch.css";
 
 export default function Projet() {
     const [projects, setProjects] = useState([]);
@@ -8,14 +8,14 @@ export default function Projet() {
 
     function getStatusColorClass(status) {
         switch (status) {
-            case "progress":
-                return "text-black-400 bg-green-400 dark:bg-white-800";
-            case "pending":
-                return "text-black-500 bg-yellow-100 dark:bg-white-800";
-            case "finished":
-                return "text-black-500 bg-blue-100 dark:bg-white-800";
+            case "Start":
+                return "text-white bg-yellow-800 dark:bg-white-800";
+            case "Pending":
+                return "text-white bg-red-900 dark:bg-white-800";
+            case "Completed":
+                return "text-black-500 bg-blue-100 dark:bg-white";
             default:
-                return "text-black-500 bg-emerald-400 dark:bg-white-800";
+                return "text-black-500 bg-green-800 dark:bg-white-800";
         }
     }
 
@@ -25,26 +25,9 @@ export default function Projet() {
 
     const fetchProjects = async () => {
         try {
-            const response = await axiosClient.get("projects");
+            const response = await axiosClient.get("projectss");
             const projectsData = response.data;
-
-            const updatedProjects = await Promise.all(
-                projectsData.map(async (project) => {
-                    const clientResponse = await axiosClient.get(
-                        `users/${project.client_id}`
-                    );
-                    const projectManagerResponse = await axiosClient.get(
-                        `users/${project.project_manager_id}`
-                    );
-
-                    const client = clientResponse.data;
-                    const projectManager = projectManagerResponse.data;
-
-                    return { ...project, client, projectManager };
-                })
-            );
-
-            setProjects(updatedProjects);
+            setProjects(projectsData);
             setHeaderLoading(false);
         } catch (error) {
             console.error("Error fetching projects:", error);
@@ -126,21 +109,21 @@ export default function Projet() {
                 </div>
             </div>
             <div className="bg-gray-4 gap-10 p-10  rounded-xl flex-1 drop-shadow-xl shadow-gray-300">
-            {headerLoading ? (
-                                        // Display loading for table header while projects are being fetched
-                                        <div className="flex-1 flex justify-center items-center">
-                                            <div className=" w-16 h-16 border-4 border-t-transparent border-red-400 border-double rounded-full animate-spin"></div>
-                                        </div>
-                                    ) : (
-                <section className="container px-4 mx-auto rounded-xl overflow-hidden drop-shadow-xl shadow-gray-300">
-                    <div className="flex flex-col">
-                        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                            <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                                <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
-                                  
-                                        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
-                                         id="Project"
-                                         >
+                {headerLoading ? (
+                    // Display loading for table header while projects are being fetched
+                    <div className="flex-1 flex justify-center items-center">
+                        <div className=" w-16 h-16 border-4 border-t-transparent border-red-400 border-double rounded-full animate-spin"></div>
+                    </div>
+                ) : (
+                    <section className="container px-4 mx-auto rounded-xl overflow-hidden drop-shadow-xl shadow-gray-300">
+                        <div className="flex flex-col">
+                            <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                                <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                                    <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
+                                        <table
+                                            className="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
+                                            id="Project"
+                                        >
                                             <thead className="bg-gray-50 dark:bg-gray-800">
                                                 <tr>
                                                     <th
@@ -191,25 +174,43 @@ export default function Projet() {
                                                 id="project-table-body"
                                                 className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900"
                                             >
-                                                {projects.map((project) => (
-                                                    <tr key={project.id}>
+                                                {projects.map((projecte) => (
+                                                    <tr
+                                                        key={
+                                                            projecte.project?.id
+                                                        }
+                                                    >
+                                                        {" "}
+                                                        {/* Add a null check for 'project' */}
                                                         <td className="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
                                                             <div className="inline-flex items-center gap-x-3">
                                                                 <span className="text-white">
                                                                     #
-                                                                    {project.id}
+                                                                    {
+                                                                        projecte
+                                                                            .project
+                                                                            ?.id
+                                                                    }{" "}
+                                                                    {/* Add a null check for 'project.id' */}
                                                                 </span>
                                                             </div>
                                                         </td>
                                                         <td className="px-4 py-4 text-sm text-white whitespace-nowrap">
-                                                            {project.nom}
+                                                            {
+                                                                projecte.project
+                                                                    ?.nom
+                                                            }{" "}
+                                                            {/* Add a null check for 'project.nom' */}
                                                         </td>
                                                         <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
                                                             <div
                                                                 className={`inline-flex  items-center px-3 py-1 rounded-full gap-x-2 ${getStatusColorClass(
-                                                                    project.status
+                                                                    projecte
+                                                                        .project
+                                                                        ?.status
                                                                 )}`}
                                                             >
+                                                                {/* Add a null check for 'project.status' */}
                                                                 <svg
                                                                     width="12"
                                                                     height="12"
@@ -224,85 +225,90 @@ export default function Projet() {
                                                                 </svg>
                                                                 <h2 className="text-sm font-normal">
                                                                     {getStatusText(
-                                                                        project.status
-                                                                    )}
+                                                                        projecte
+                                                                            .project
+                                                                            ?.status
+                                                                    )}{" "}
+                                                                    {/* Add a null check for 'project.status' */}
                                                                 </h2>
                                                             </div>
                                                         </td>
                                                         <td
                                                             className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap"
-                                                            id={`profile-${project.id}`}
                                                         >
-                                                            <div className="flex items-center gap-x-2">
-                                                                <img
-                                                                    className="object-cover w-8 h-8 rounded-full"
-                                                                    src={
-                                                                        project
-                                                                            .client
-                                                                            ?.profile_picture
-                                                                    }
-                                                                    alt=""
-                                                                />
-                                                                <div>
-                                                                    <h2 className="text-sm font-medium text-gray-800 dark:text-white">
-                                                                        {
-                                                                            project
-                                                                                .client
-                                                                                ?.name
+                                                            {/* Add a null check for 'project.id' */}
+                                                            {projecte.project?.client && (
+                                                                <div className="flex items-center gap-x-2">
+                                                                    <img
+                                                                        className="object-cover w-8 h-8 rounded-full"
+                                                                        src={
+                                                                            projecte.project?.client
+                                                                                .profile_picture
                                                                         }
-                                                                    </h2>
-                                                                    <p className="text-xs font-normal text-gray-600 dark:text-gray-400">
-                                                                        {
-                                                                            project
-                                                                                .client
-                                                                                ?.email
-                                                                        }
-                                                                    </p>
+                                                                        alt=""
+                                                                    />
+                                                                    <div>
+                                                                        <h2 className="text-sm font-medium text-gray-800 dark:text-white">
+                                                                            {
+                                                                                projecte
+                                                                                .project?.client
+                                                                                    .name
+                                                                            }
+                                                                        </h2>
+                                                                        <p className="text-xs font-normal text-gray-600 dark:text-gray-400">
+                                                                            {
+                                                                                projecte
+                                                                                .project?.client
+                                                                                    .email
+                                                                            }
+                                                                        </p>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
+                                                            )}
                                                         </td>
                                                         <td
                                                             className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap"
-                                                            id={`employe-${project.id}`}
+                                                            
                                                         >
-                                                            <div className="flex items-center gap-x-2">
-                                                                <img
-                                                                    className="object-cover w-8 h-8 rounded-full"
-                                                                    src={
-                                                                        project
-                                                                            .projectManager
-                                                                            ?.profile_picture
-                                                                    }
-                                                                    alt=""
-                                                                />
-                                                                <div>
-                                                                    <h2 className="text-sm font-medium text-gray-800 dark:text-white">
-                                                                        {
-                                                                            project
-                                                                                .projectManager
-                                                                                ?.name
+                                                            {projecte.project?.project_manager && (
+                                                                <div className="flex items-center gap-x-2">
+                                                                    <img
+                                                                        className="object-cover w-8 h-8 rounded-full"
+                                                                        src={
+                                                                            projecte
+                                                                            .project?.project_manager
+                                                                                .profile_picture
                                                                         }
-                                                                    </h2>
-                                                                    <p className="text-xs font-normal text-gray-600 dark:text-gray-400">
-                                                                        {
-                                                                            project
-                                                                                .projectManager
-                                                                                ?.email
-                                                                        }
-                                                                    </p>
+                                                                        alt=""
+                                                                    />
+                                                                    <div>
+                                                                        <h2 className="text-sm font-medium text-gray-800 dark:text-white">
+                                                                            {
+                                                                                projecte
+                                                                                .project?.project_manager
+                                                                                    .name
+                                                                            }
+                                                                        </h2>
+                                                                        <p className="text-xs font-normal text-gray-600 dark:text-gray-400">
+                                                                            {
+                                                                                projecte
+                                                                                .project?.project_manager
+                                                                                    .email
+                                                                            }
+                                                                        </p>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
+                                                            )}
                                                         </td>
                                                     </tr>
                                                 ))}
                                             </tbody>
                                         </table>
-                                    
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
                 )}
             </div>
         </div>
