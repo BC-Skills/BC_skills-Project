@@ -11,6 +11,21 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
     const [proje, setProjet] = useState({});
     // const [step4Data, setStep4Data] = useState({});
 
+    const [projectTypes, setProjectTypes] = useState([]);
+
+useEffect(() => {
+    const fetchProjectTypes = async () => {
+        try {
+            const response = await axiosClient.get("project-types");
+            const projectTypesData = response.data;
+            setProjectTypes(projectTypesData);
+        } catch (error) {
+            console.error("Error fetching project types:", error);
+        }
+    };
+    fetchProjectTypes();
+}, []);
+
     const handleNextStep = () => {
         setStep((prevStep) => prevStep + 1);
     };
@@ -77,15 +92,15 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
             ...step1Data,
             ...data,
         };
-        axiosClient
-            .post("projects", combinedData)
-            .then((response) => {
-                setProjet(response.data);
-                handleNextStep();
-            })
-            .catch((error) => {
-                console.error("Error adding project:", error);
-            });
+        axiosClient.post("projects", combinedData)
+    .then((response) => {
+        setProjet(response.data);
+        handleNextStep();
+    })
+    .catch((error) => {
+        console.error("Error adding project:", error);
+        // Display an error message to the user or take other appropriate actions
+    });
     };
 
     const [showSprintForm, setShowSprintForm] = useState(false);
@@ -178,6 +193,24 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                             required
                                         />
                                     </div>
+                                    <div>
+    <label htmlFor="project_type_id" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+        Project Type
+    </label>
+    <select
+        name="project_type_id"
+        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+        required
+    >
+        <option value="">Select Project Type</option>
+        {projectTypes.map((type) => (
+            <option key={type.id} value={type.id}>
+                {type.name}
+            </option>
+        ))}
+    </select>
+</div>
+
                                     <div>
                                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                                             Duree

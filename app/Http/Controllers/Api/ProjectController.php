@@ -19,15 +19,24 @@ class ProjectController extends Controller
         // Ensure the request contains the required fields and add more validation rules as needed
         $request->validate([
             'nom' => 'required',
-            
+            'duree' => 'required|integer',
+            'status' => 'required',
+            'project_manager_id' => 'required|exists:users,id', // Assuming 'users' is the users table name
+            'client_id' => 'required|exists:users,id',
+            'project_type_id' => 'nullable|exists:project_types,id',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after:start_date', // Add validation to ensure end date is after start date
         ]);
-
+    
         // Extract the validated data from the request
         $validatedData = $request->all();
-
+    
+        // Create the project record
         $project = Project::create($validatedData);
+    
         return response()->json($project);
     }
+    
 
     public function show($id)
     {

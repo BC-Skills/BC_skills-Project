@@ -82,7 +82,7 @@ export default function Dashboard({children}) {
         <div className="container">
             <div className={`navigation  ${isSidebarActive ? "active" : ""}`}>
                 <ul className="mt-[10%]">
-                    <li className="flex justify-center items-center">
+                    <li className="flex justify-center items-center animate-pulse">
                         <span className="icon">
                             <img
                                 src={logo}
