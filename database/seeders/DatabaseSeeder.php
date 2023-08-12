@@ -14,6 +14,10 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(ProfilSeeder::class); // Add this line to call your ProfilSeeder
 
+        $this->call(statusseeder::class); // Add this line to call your ProfilSeeder
+        $this->call(privilagesseeder::class); // Add this line to call your ProfilSeeder
+
+        
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([
