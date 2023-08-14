@@ -26,7 +26,6 @@ const ProfilePage = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    // You can handle file upload logic here
   };
 
   return (

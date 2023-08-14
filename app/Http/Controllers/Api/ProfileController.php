@@ -55,7 +55,6 @@ class ProfileController extends Controller
     {
         $profile = Profile::findOrFail($profileId);
         $privileges = $profile->privileges;
-
         return response()->json($privileges, 200);
     }
 

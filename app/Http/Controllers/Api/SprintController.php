@@ -10,7 +10,7 @@ class SprintController extends Controller
 {
     public function index()
     {
-        $sprints = Sprint::all();
+        $sprints = Sprint::with('project')->get();
         return response()->json($sprints);
     }
 

@@ -7,6 +7,7 @@ import { useStateContext } from "../../../contexts/contextProvider";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { CSSTransition } from "react-transition-group";
 import "../../../assets/css/animation.css";
+import Sprints from "./tickets/sprints";
 
 const Tickets = () => {
     const storedLinks = localStorage.getItem("links");
@@ -627,9 +628,7 @@ const Tickets = () => {
                         classNames="slide"
                         unmountOnExit
                     >
-                        <div className="additional-content flex-1 bg-black">
-                            
-                        </div>
+                            <Sprints projectid={selectedProject} />
                     </CSSTransition>
                 </div>
             </div>

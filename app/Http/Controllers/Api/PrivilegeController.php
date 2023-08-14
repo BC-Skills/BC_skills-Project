@@ -11,7 +11,6 @@ class PrivilegeController extends Controller
     public function index()
     {
         $privileges = Privilege::all();
-
         return response()->json($privileges);
     }
 
@@ -51,5 +50,13 @@ class PrivilegeController extends Controller
         $privilege->delete();
 
         return response()->json(null, 204);
+    }
+
+
+    public function getByStatusId($statusId)
+    {
+        $privileges = Privilege::where('status_id', $statusId)->get();
+
+        return response()->json($privileges);
     }
 }

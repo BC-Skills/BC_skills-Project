@@ -44,60 +44,68 @@ export default function DashboardUser() {
   
 
     const getPrivilages = async () => {
-      try {
-        const response = await axiosClient.get(
-          `profiless/${profile.id}/privileges`
-        );
-        const privilegeIds = response.data.map((privilege) => privilege.status_id);
-        const promises = privilegeIds.map((id) =>
-          axiosClient.get(`statuses/${id}`)
-        );
-    
-        const responses = await Promise.all(promises);
-        const statusNames = responses.map((response) => response.data.name);
-        const uniqueStatusNames = Array.from(new Set(statusNames));
+        try {
+            const response = await axiosClient.get(
+                `profiless/${profile.id}/privileges`
+            );
+            const privilegeIds = response.data.map((privilege) => privilege.status_id);
+            const promises = privilegeIds.map((id) =>
+                axiosClient.get(`statuses/${id}`)
+            );
+            
+            const responses = await Promise.all(promises);
+            
+            const statusNames = responses.map((response) => response.data.name);
+            const sttausid = responses.map((response) => response.data.id);
+            const uniqueStatusNames = Array.from(new Set(statusNames));
+            const uniquesttausid = Array.from(new Set(sttausid));
 
-        const linksArray = uniqueStatusNames.map((statusName, index) => {
-          const url = "/users/" + statusName.toLowerCase().replace(/\s/g, "-");
-          const logo = statusName.toLowerCase(); // Assuming the logo name follows this pattern
+            const linksArray = uniqueStatusNames.map((statusName, index) => {
+
+
+                   if (statusName.toLowerCase() === "sprints") {
+                    return null;
+                }
+                
+                const url = "/users/" + statusName.toLowerCase().replace(/\s/g, "-");
+                const logo = statusName.toLowerCase(); // Assuming the logo name follows this pattern
+                let attribute = "";
     
-          let attribute = "";
+                // Compare the status name with the static const variables
+                if (statusName === "projets") {
+                    attribute = "code-outline";
+                } else if (statusName === "formation") {
+                    attribute = "newspaper-outline";
+                } else if (statusName === "schedules") {
+                    attribute = "calendar-outline";
+                } else if (statusName === "tickets") {
+                    attribute = "ticket-outline";
+                } else if (statusName === "users") {
+                    attribute = "people-outline";
+                }
+                return {
+                    name: statusName,
+                    url,
+                    logo,
+                    attribute,
+                    id: index,
+                    uniquesttausid
+                };
+            }).filter(Boolean); 
     
-          // Compare the status name with the static const variables
-          if (statusName === 'projets') {
-            attribute = "code-outline";
-          } else if (statusName === 'formation') {
-            attribute = "newspaper-outline";
-          } else if (statusName === 'schedules') {
-            attribute = "calendar-outline";
-          } else if (statusName === 'tickets') {
-            attribute = 'ticket-outline';
-          } else if (statusName === 'users') {
-            attribute = 'people-outline';
-          }
-    
-          return {
-            name: statusName,
-            url,
-            logo,
-            attribute,
-            id: index,
-          };
-        });
-    
-        setLinks(linksArray);
-        setPrivilegeSettings(response.data[0].status_id);
-        setLoading(false);
-        localStorage.setItem("links", JSON.stringify(linksArray));
-      } catch (error) {
-        if (error.response && error.response.status === 429) {
-          await new Promise((resolve) => setTimeout(resolve, 5000));
-          getPrivilages();
-        } else {
-          console.error("Error fetching data:", error);
-          setLoading(false); // Set loading to false in case of an error
+            setLinks(linksArray);
+            setPrivilegeSettings(response.data[0].status_id);
+            setLoading(false);
+            localStorage.setItem("links", JSON.stringify(linksArray));
+        } catch (error) {
+            if (error.response && error.response.status === 429) {
+                await new Promise((resolve) => setTimeout(resolve, 5000));
+                getPrivilages();
+            } else {
+                console.error("Error fetching data:", error);
+                setLoading(false);
+            }
         }
-      }
     };
 
     const logout = async () => {
