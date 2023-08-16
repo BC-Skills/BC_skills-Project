@@ -81,19 +81,33 @@ export default function Projects() {
         setSprints(false);
     };
 
+    const [shouldShowAddButton, setShouldShowAddButton] = useState(false);
+    const [shouldEnableDragDrop, setShouldEnableDragDrop] = useState(true);
+    const [show, setshow] = useState(false);
 
-    
 
     useEffect(() => {
-        const parsedLinkss = JSON.parse(storedLinks) || [];
-        const hasProjectsLink = parsedLinkss.some(
-            (link) => link.name === "projets"
-        );
+        const storedLinks = localStorage.getItem("links");
+        const parsedLinks = JSON.parse(storedLinks) || [];
+    
+        const hasProjectsLink = parsedLinks.some(link => link.name === "projets");
+    
         if (!hasProjectsLink) {
             navigate("/users");
-        }
-    }, [storedLinks]);
+        } else {
+            parsedLinks.forEach(link => {
+                if (link.name === "projets") {
+                    const hasAddPrivilege = link.privilegeNames.includes("add");
+                    const hasEditPrivilege = link.privilegeNames.includes("edit");
+                    const shows = link.privilegeNames.includes("show");
 
+                    setShouldShowAddButton(hasAddPrivilege);
+                    setShouldEnableDragDrop(hasEditPrivilege);
+                    setshow(shows)
+                }
+            });
+        }
+    }, []);
   
     const fetchProjects = async () => {
         try {
@@ -309,6 +323,7 @@ export default function Projects() {
                     </span>
                 </div>
                 <div className="">
+                {shouldShowAddButton && (
                     <button
                         type="button"
                         onClick={handleShowModal}
@@ -324,6 +339,7 @@ export default function Projects() {
                         </svg>
                         Add Project
                     </button>
+                )}
                 </div>
                 <div className="flex flex-row gap-6 justify-center items-center">
                     <div className="flex-1">
@@ -343,6 +359,7 @@ export default function Projects() {
                     </div>
                 </div>
             </div>
+            {show ? (
             <DragDropContext onDragEnd={onDragEnd}>
                 <div className="flex-1 flex flex-row justify-around gap-6">
                     <div className="flex-1 bg-white gap-10 flex flex-col">
@@ -368,7 +385,9 @@ export default function Projects() {
                         {loading ? (
                             <div>Loading...</div>
                         ) : (
-                            <Droppable droppableId="startProjects">
+                            <Droppable droppableId="startProjects"
+                            isDropDisabled={!shouldEnableDragDrop} // Disable drag-and-drop based on privilege
+                            >
                                 {(provided) => (
                                     <div
                                         {...provided.droppableProps}
@@ -439,7 +458,10 @@ export default function Projects() {
                             // Loading indicator or message while data is being fetched
                             <div>Loading...</div>
                         ) : (
-                            <Droppable droppableId="pendingProjects">
+                            <Droppable droppableId="pendingProjects"
+                            isDropDisabled={!shouldEnableDragDrop} // Disable drag-and-drop based on privilege
+
+                            >
                                 {(provided) => (
                                     <div
                                         {...provided.droppableProps}
@@ -510,7 +532,10 @@ export default function Projects() {
                             // Loading indicator or message while data is being fetched
                             <div>Loading...</div>
                         ) : (
-                            <Droppable droppableId="completedProjects">
+                            <Droppable droppableId="completedProjects"
+                            isDropDisabled={!shouldEnableDragDrop} // Disable drag-and-drop based on privilege
+
+                            >
                                 {(provided) => (
                                     <div
                                         {...provided.droppableProps}
@@ -560,6 +585,12 @@ export default function Projects() {
                     </div>
                 </div>
             </DragDropContext>
+              ) : (
+                // If `show` is false, render this content
+                <div className="flex-1 text-[20px] font-bold flex justify-center items-center">
+                    <p>Content to display not available</p>
+                </div>
+            )}
             {showModal && (
                 <AddProject
                     onCloseModal={handleCloseModal}

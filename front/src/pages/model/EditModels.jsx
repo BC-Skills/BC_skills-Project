@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import axiosClient from "../../axios";
+import { useStateContext } from "../../contexts/contextProvider";
 
 // eslint-disable-next-line no-unused-vars
 export default function EditModels({ userId, onCloseModal, fetchUsersData }) {
@@ -62,6 +63,8 @@ export default function EditModels({ userId, onCloseModal, fetchUsersData }) {
                 console.error("Error updating user:", error);
             });
     };
+    const { profile } = useStateContext();
+    const [profilesid, setProfilesid] = useState({});
 
     const [profiles, setProfiles] = useState([]);
 
@@ -75,6 +78,20 @@ export default function EditModels({ userId, onCloseModal, fetchUsersData }) {
                 console.error("Error fetching data:", error);
             });
     }, []);
+
+    
+    useEffect(() => {
+        if (profile.name !== "admin") {
+            axiosClient
+                .get("profiless/get-profile-id?profile_name=Client")
+                .then((response) => {
+                    setProfilesid(response.data.profile_id);
+                })
+                .catch((error) => {
+                    console.error("Error fetching data:", error);
+                });
+        }
+    }, [profile.name]);
 
     return (
         <div
@@ -166,25 +183,38 @@ export default function EditModels({ userId, onCloseModal, fetchUsersData }) {
                             />
                         </div>
                         <div className="mb-4">
-                            <label
+                          
+                            {profile.name === "admin" ? (
+                                        <>
+                                    <label
                                 htmlFor="profil"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
                             >
                                 Profile
-                            </label>
-                            <select
-                                name="profile_id"
-                                value={editedUser.profile_id}
-                                onChange={handleInputChange} // Add this onChange event
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                required
-                            >
-                                {profiles.map((profile) => (
-                                    <option key={profile.id} value={profile.id}>
-                                        {profile.name}
-                                    </option>
-                                ))}
-                            </select>
+                            </label>  
+                                <div>
+                                   
+                                    <select
+                                        name="profile_id"
+                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                        required
+                                    >
+                                        {profiles.map((profile) => (
+                                            <option key={profile.id} value={profile.id}>
+                                                {profile.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div></>
+                            ) : (
+                                <div className="text-gray-900 text-[30px] dark:text-white">
+                                      <input
+                                    type="hidden"
+                                    name="profile_id"
+                                    value={profilesid}
+                                />
+                                </div>
+                            )}
                         </div>
                         <div className="mb-4">
                             <label

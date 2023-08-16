@@ -1,9 +1,11 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import axiosClient from "../../axios";
+import { useStateContext } from "../../contexts/contextProvider";
 
 export default function Models({ onCloseModal, fetchUsersData }) {
     const [profiles, setProfiles] = useState([]);
+    const [profilesid, setProfilesid] = useState({});
 
     useEffect(() => {
         axiosClient
@@ -15,7 +17,21 @@ export default function Models({ onCloseModal, fetchUsersData }) {
                 console.error("Error fetching data:", error);
             });
     }, []);
+    const { profile } = useStateContext();
 
+
+    useEffect(() => {
+        if (profile.name !== "admin") {
+            axiosClient
+                .get("profiless/get-profile-id?profile_name=Client")
+                .then((response) => {
+                    setProfilesid(response.data.profile_id);
+                })
+                .catch((error) => {
+                    console.error("Error fetching data:", error);
+                });
+        }
+    }, [profile.name]);
 
 
     const handleSubmit = (event) => {
@@ -25,6 +41,7 @@ export default function Models({ onCloseModal, fetchUsersData }) {
         formData.forEach((value, key) => {
             payload[key] = value;
         });
+        console.log(payload)
         axiosClient
             .post("users", payload)
             .then((response) => {
@@ -149,27 +166,38 @@ export default function Models({ onCloseModal, fetchUsersData }) {
                                         required
                                     />
                                 </div>
-                                <div>
+                                <div> 
+                                     {profile.name === "admin" ? (
+                                        <>
                                     <label
                                         htmlFor="profil"
                                         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                                     >
                                         Profile
-                                    </label>
+                                    </label>     
+                                <div>
+                                   
                                     <select
                                         name="profile_id"
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                                         required
                                     >
                                         {profiles.map((profile) => (
-                                            <option
-                                                key={profile.id}
-                                                value={profile.id}
-                                            >
+                                            <option key={profile.id} value={profile.id}>
                                                 {profile.name}
                                             </option>
                                         ))}
                                     </select>
+                                </div></>
+                            ) : (
+                                <div className="text-gray-900 text-[30px] dark:text-white">
+                                      <input
+                                    type="hidden"
+                                    name="profile_id"
+                                    value={profilesid}
+                                />
+                                </div>
+                            )}
                                 </div>
                                 <div className="flex justify-end pt-4">
                                     <button

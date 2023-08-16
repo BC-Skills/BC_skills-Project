@@ -117,6 +117,12 @@ Route::get('/statuss/{statusId}', [PrivilegeController::class, 'getByStatusId'])
 
 //images
 
+Route::get('/userss/clients', [UserController::class, 'getClients']);
+
+
+Route::get('/profiless/get-profile-id', [ProfileController::class, 'getProfileIdByName']);
+
+
 Route::get('/storage/{path}', function ($path) {
     return response()->file(storage_path('app/public/' . $path));
 })->where('path', '.*');

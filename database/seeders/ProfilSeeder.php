@@ -40,6 +40,9 @@ class ProfilSeeder extends Seeder
             [
                 'name' => 'ControlleF',
                 // Add other attributes here
+            ],  [
+                'name' => 'Client',
+                // Add other attributes here
             ],
         ];
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axiosClient from "../../../../axios";
 
 // eslint-disable-next-line react/prop-types
-export default function Sprints({ projectid }) {
+export default function Sprints({ projectid ,shouldEnableDragDropSprints }) {
     const [sprints, setSprints] = useState([]);
     const [selectedStatus, setSelectedStatus] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
@@ -139,6 +139,7 @@ export default function Sprints({ projectid }) {
                                     const newStatus = e.target.value;
                                     handleStatusChange(sprint.id, newStatus);
                                 }}
+                                disabled={!shouldEnableDragDropSprints}
                                 required
                             >
                                 {status.map((statu) => (
