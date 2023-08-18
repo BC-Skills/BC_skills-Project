@@ -54,15 +54,15 @@ export default function Login() {
             </h1>
             <div className="flex xl:flex-row xl:justify-center xl:items-start md:flex-col md:justify-center md:items-start">
               <h1 className="text-[30px]">Welcome to our Company </h1>
-              <div className="flex-1">
-                <img src={image} className="w-full h-full object-contain" alt="Logo" />
+              <div className="flex-1 ">
+                <img src={image} className=" w-full h-full object-contain " alt="Logo" />
               </div>
             </div>
           </div>
         </div>
         <div className="min-w-[550px] flex justify-around flex-col items-center h-[80vh] bg-slate-100 shadow-md rounded-lg p-10">
           <div className="h-[250px]">
-            <img src={logo} className="w-full h-full object-contain" alt="Logo" />
+            <img src={logo} className=" animate-pulse w-full h-full object-contain" alt="Logo" />
           </div>
           <form onSubmit={handleSubmit} className="flex flex-col gap-10 items-center">
           {loginError && (
