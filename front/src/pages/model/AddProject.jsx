@@ -13,18 +13,18 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
 
     const [projectTypes, setProjectTypes] = useState([]);
 
-useEffect(() => {
-    const fetchProjectTypes = async () => {
-        try {
-            const response = await axiosClient.get("project-types");
-            const projectTypesData = response.data;
-            setProjectTypes(projectTypesData);
-        } catch (error) {
-            console.error("Error fetching project types:", error);
-        }
-    };
-    fetchProjectTypes();
-}, []);
+    useEffect(() => {
+        const fetchProjectTypes = async () => {
+            try {
+                const response = await axiosClient.get("project-types");
+                const projectTypesData = response.data;
+                setProjectTypes(projectTypesData);
+            } catch (error) {
+                console.error("Error fetching project types:", error);
+            }
+        };
+        fetchProjectTypes();
+    }, []);
 
     const handleNextStep = () => {
         setStep((prevStep) => prevStep + 1);
@@ -47,9 +47,8 @@ useEffect(() => {
         // Fetch all users
         const fetchUsers = async () => {
             try {
-                const response = await axiosClient.get("users");
+                const response = await axiosClient.get("userss/clients");
                 const users = response.data;
-                // Here, users will contain an array of all users
                 setUsers(users);
             } catch (error) {
                 console.error("Error fetching users:", error);
@@ -92,15 +91,16 @@ useEffect(() => {
             ...step1Data,
             ...data,
         };
-        axiosClient.post("projects", combinedData)
-    .then((response) => {
-        setProjet(response.data);
-        handleNextStep();
-    })
-    .catch((error) => {
-        console.error("Error adding project:", error);
-        // Display an error message to the user or take other appropriate actions
-    });
+        axiosClient
+            .post("projects", combinedData)
+            .then((response) => {
+                setProjet(response.data);
+                handleNextStep();
+            })
+            .catch((error) => {
+                console.error("Error adding project:", error);
+                // Display an error message to the user or take other appropriate actions
+            });
     };
 
     const [showSprintForm, setShowSprintForm] = useState(false);
@@ -108,12 +108,9 @@ useEffect(() => {
         setShowSprintForm(true);
     };
 
-
     const handleCancelSprint = () => {
         setShowSprintForm(false);
     };
-
-
 
     const [sprints, setSprints] = useState([]);
 
@@ -134,7 +131,8 @@ useEffect(() => {
         }
     }, [proje]);
 
-    
+    const totalSteps = 3; // Total number of steps in the process
+    const progress = ((step - 1) / (totalSteps - 1)) * 100; // Calculate progress as a percentage
 
     return (
         <>
@@ -148,8 +146,10 @@ useEffect(() => {
                         <div className="px-6 py-6 lg:px-8">
                             <div className="flex items-center justify-between pb-3">
                                 <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-black">
-                                    Add Employee
+                                    Add Project
                                 </h3>
+                                {/* bar progresse */}
+
                                 <button
                                     type="button"
                                     onClick={onCloseModal}
@@ -173,7 +173,26 @@ useEffect(() => {
                                     </svg>
                                 </button>
                             </div>
-
+                            <div className="flex-1 pt-1">
+                                <div className="flex mb-2  items-center justify-between">
+                                    <div>
+                                        <span className="text-[25px]  font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-200">
+                                            Step {step} of {totalSteps}
+                                        </span>
+                                    </div>
+                                    <div className="text-right ">
+                                        <span className="text-[25px] font-semibold inline-block text-blue-600">
+                                            {progress.toFixed(0)}%
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="overflow-hidden h-5 mb-4 text-xs flex rounded bg-blue-200">
+                                    <div
+                                        style={{ width: `${progress}%` }}
+                                        className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-teal-500"
+                                    ></div>
+                                </div>
+                            </div>
                             {step === 1 && (
                                 <form
                                     className="space-y-6"
@@ -194,28 +213,37 @@ useEffect(() => {
                                         />
                                     </div>
                                     <div>
-    <label htmlFor="project_type_id" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-        Project Type
-    </label>
-    <select
-        name="project_type_id"
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-        required
-    >
-        <option value="">Select Project Type</option>
-        {projectTypes.map((type) => (
-            <option key={type.id} value={type.id}>
-                {type.name}
-            </option>
-        ))}
-    </select>
-</div>
+                                        <label
+                                            htmlFor="project_type_id"
+                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                                        >
+                                            Project Type
+                                        </label>
+                                        <select
+                                            name="project_type_id"
+                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                            required
+                                        >
+                                            <option value="">
+                                                Select Project Type
+                                            </option>
+                                            {projectTypes.map((type) => (
+                                                <option
+                                                    key={type.id}
+                                                    value={type.id}
+                                                >
+                                                    {type.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
 
                                     <div>
                                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                                             Duree
                                         </label>
                                         <input
+                                        min={0}
                                             type="number"
                                             name="duree"
                                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-white dark:text-white"
@@ -367,27 +395,28 @@ useEffect(() => {
                                     </div>
                                 </form>
                             )}
-
                             {step === 3 && (
                                 <>
-                                  
-                                        <div className="mb-4">
-                                            {sprints.map((sprint) => (
-                                                <div key={sprint.id} className="flex  flex-col items-center">
-                                                    <div className="flex flex-1 flex-row justify-between">
-                                                        {/* <p>{sprint.name}</p> */}
-                                                        <p>{sprint.status}</p>
-                                                    </div>
-                                                    <div className="flex flex-1 flex-row justify-between">
-                                                        <p>{sprint.date_debut}</p>
-                                                        <p>{sprint.date_fin}</p>
-                                                    </div>
-                                                    <div className="flex flex-1 flex-row justify-between">
-                                                        {/* <p>{sprint.description}</p> */}
-                                                    </div>
+                                    <div className="mb-4">
+                                        {sprints.map((sprint) => (
+                                            <div
+                                                key={sprint.id}
+                                                className="flex  flex-col items-center"
+                                            >
+                                                <div className="flex flex-1 flex-row justify-between">
+                                                    {/* <p>{sprint.name}</p> */}
+                                                    <p>{sprint.status}</p>
                                                 </div>
-                                            ))}
-                                        </div>
+                                                <div className="flex flex-1 flex-row justify-between">
+                                                    <p>{sprint.date_debut}</p>
+                                                    <p>{sprint.date_fin}</p>
+                                                </div>
+                                                <div className="flex flex-1 flex-row justify-between">
+                                                    {/* <p>{sprint.description}</p> */}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                     {showSprintForm && (
                                         <form
                                             className="space-y-6"
@@ -405,7 +434,8 @@ useEffect(() => {
                                                     }
                                                 );
 
-                                                sprintData.project_id =proje.id;
+                                                sprintData.project_id =
+                                                    proje.id;
 
                                                 console.log(sprintData);
                                                 axiosClient
@@ -416,7 +446,7 @@ useEffect(() => {
                                                             response.data
                                                         );
 
-                                                        handleCancelSprint() // Hide the sprint form after adding the sprint
+                                                        handleCancelSprint(); // Hide the sprint form after adding the sprint
                                                     })
                                                     .catch((error) => {
                                                         console.error(

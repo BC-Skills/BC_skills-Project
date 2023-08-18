@@ -55,7 +55,6 @@ class ProfileController extends Controller
     {
         $profile = Profile::findOrFail($profileId);
         $privileges = $profile->privileges;
-
         return response()->json($privileges, 200);
     }
 
@@ -73,4 +72,18 @@ class ProfileController extends Controller
             return response()->json(['message' => $privilegeId ], 404);
         }
     }
+
+    public function getProfileIdByName(Request $request)
+    {
+        $profileName = $request->input('profile_name');
+    
+        $profile = Profile::where('name', $profileName)->first();
+    
+        if (!$profile) {
+            return response()->json(['error' => 'Profile not found'], 404);
+        }
+    
+        return response()->json(['profile_id' => $profile->id], 200);
+    }
+
 }

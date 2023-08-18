@@ -18,13 +18,27 @@ export default function Projects() {
     const storedLinks = localStorage.getItem("links");
     const { currentUser, profile } = useStateContext();
     const [projects, setProjects] = useState([]);
-    const [loading, setLoading] = useState(true); // Step 1: Add the loading state
+    const [loading, setLoading] = useState(true); 
     const [showModal, setShowModal] = useState(false);
-    const [editModalOpen, setEditModalOpen] = useState(false); // New state variable for the EditModels modal
-    const [Collaborateur, setCollaborateur] = useState(false); // New state variable for the EditModels modal
+    const [editModalOpen, setEditModalOpen] = useState(false); 
+    const [Collaborateur, setCollaborateur] = useState(false); 
     const [selectedUserId, setSelectedProject] = useState({});
     const navigate = useNavigate();
     const [sprints, setSprints] = useState(false); // New state variable for the EditModels modal
+    const [completedProjectscount, setCompletedProjectscount] = useState(0);
+    const [inProgressProjectscount, setInProgressProjectscount] = useState(0);
+    const [startProjectscount, setStartProjectscount] = useState(0);
+    const [allProjectscount, setAllProjectscount] = useState(0);
+
+    const [withValuecompleted, setWithValuecompleted] = useState(0);
+    const [withValuePending, setWithValuePending] = useState(0);
+    const [withValueStart, setWithValueStart] = useState(0);
+
+    const [completedProjects, setCompletedProjects] = useState([]);
+    const [pendingProjects, setPendingProjects] = useState([]);
+    const [startProjects, setStartProjects] = useState([]);
+
+    const [searchQuery, setSearchQuery] = useState('');
 
     const handleShowModal = () => {
         setShowModal(true);
@@ -67,138 +81,72 @@ export default function Projects() {
         setSprints(false);
     };
 
+    const [shouldShowAddButton, setShouldShowAddButton] = useState(false);
+    const [shouldEnableDragDrop, setShouldEnableDragDrop] = useState(true);
+    const [show, setshow] = useState(false);
+
+
     useEffect(() => {
-        const parsedLinkss = JSON.parse(storedLinks) || [];
-        const hasProjectsLink = parsedLinkss.some(
-            (link) => link.name === "projets"
-        );
-        console.log(parsedLinkss);
+        const storedLinks = localStorage.getItem("links");
+        const parsedLinks = JSON.parse(storedLinks) || [];
+    
+        const hasProjectsLink = parsedLinks.some(link => link.name === "projets");
+    
         if (!hasProjectsLink) {
             navigate("/users");
+        } else {
+            parsedLinks.forEach(link => {
+                if (link.name === "projets") {
+                    const hasAddPrivilege = link.privilegeNames.includes("add");
+                    const hasEditPrivilege = link.privilegeNames.includes("edit");
+                    const shows = link.privilegeNames.includes("show");
+
+                    setShouldShowAddButton(hasAddPrivilege);
+                    setShouldEnableDragDrop(hasEditPrivilege);
+                    setshow(shows)
+                }
+            });
         }
-    }, [storedLinks]);
-
-    const [completedProjects, setCompletedProjects] = useState([]);
-    const [pendingProjects, setPendingProjects] = useState([]);
-    const [startProjects, setStartProjects] = useState([]);
-
+    }, []);
+  
     const fetchProjects = async () => {
         try {
-            const storedProjectsData = sessionStorage.getItem(localStorageKey);
-            if (storedProjectsData) {
-                // Data is available in sessionStorage, parse and set them in state
-                const projectsData = JSON.parse(storedProjectsData);
-                setProjects(projectsData);
+            const response = await axiosClient.get(
+                `projects/manager/${currentUser.id}`
+            );
+            const projectsData = response.data;
 
-                // Categorize projects based on their status
-                const completedProjects = projectsData.filter(
-                    (project) => project.status === "Completed"
-                );
-                const pendingProjects = projectsData.filter(
-                    (project) => project.status === "Pending"
-                );
-                const startProjects = projectsData.filter(
-                    (project) => project.status === "Start"
-                );
+            // Categorize projects based on their status
+            const completedProjects = projectsData.filter(
+                (project) => project.status === "Completed"
+            );
+            const pendingProjects = projectsData.filter(
+                (project) => project.status === "Pending"
+            );
+            const startProjects = projectsData.filter(
+                (project) => project.status === "Start"
+            );
 
-                // Set the state with the categorized projects
-                setCompletedProjects(completedProjects);
-                setPendingProjects(pendingProjects);
-                setStartProjects(startProjects);
+            setProjects(projectsData);
+            setCompletedProjects(completedProjects);
+            setPendingProjects(pendingProjects);
+            setStartProjects(startProjects);
 
-                // Set loading to false after successful data fetching
-                setLoading(false);
-            } else {
-                // Data is not available in sessionStorage, fetch the projects from the API
-                const response = await axiosClient.get(
-                    `projects/manager/${currentUser.id}`
-                );
-                const projectsData = response.data;
-
-                // Store the original projects data in sessionStorage
-                sessionStorage.setItem(
-                    localStorageKey,
-                    JSON.stringify(projectsData)
-                );
-
-                // Categorize projects based on their status
-                const completedProjects = projectsData.filter(
-                    (project) => project.status === "Completed"
-                );
-                const pendingProjects = projectsData.filter(
-                    (project) => project.status === "Pending"
-                );
-                const startProjects = projectsData.filter(
-                    (project) => project.status === "Start"
-                );
-
-                sessionStorage.setItem(
-                    localStorageKey,
-                    JSON.stringify(projectsData)
-                );
-
-                sessionStorage.setItem(
-                    completedProjectsKey,
-                    JSON.stringify(completedProjects)
-                );
-
-                sessionStorage.setItem(
-                    pendingProjectsKey,
-                    JSON.stringify(pendingProjects)
-                );
-                
-                sessionStorage.setItem(
-                    startProjectsKey,
-                    JSON.stringify(startProjects)
-                );
-
-                // Set the state with the categorized projects
-                setProjects(projectsData);
-                setCompletedProjects(completedProjects);
-                setPendingProjects(pendingProjects);
-                setStartProjects(startProjects);
-
-                // Set loading to false after successful data fetching
-                setLoading(false);
-            }
+            setLoading(false);
         } catch (error) {
             console.error("Error fetching projects:", error);
-            // Handle error if needed and set loading to false here as well
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        getCount();
-
-        // Check if the projects data is already stored in localStorage to avoid fetching again
-        const storedProjectsData = sessionStorage.getItem(localStorageKey);
-        if (storedProjectsData) {
-            // Data is available, parse and set them in state
-            const projectsData = JSON.parse(storedProjectsData);
-            setProjects(projectsData);
-
-            // Parse and set categorized projects in state
-            const storedCompletedProjects =
-                sessionStorage.getItem(completedProjectsKey);
-            const storedPendingProjects =
-                sessionStorage.getItem(pendingProjectsKey);
-            const storedStartProjects =
-                sessionStorage.getItem(startProjectsKey);
-            if (storedCompletedProjects)
-                setCompletedProjects(JSON.parse(storedCompletedProjects));
-            if (storedPendingProjects)
-                setPendingProjects(JSON.parse(storedPendingProjects));
-            if (storedStartProjects)
-                setStartProjects(JSON.parse(storedStartProjects));
-
-            // Set loading to false as the data is available
-            setLoading(false);
-        } else {
-            // Data is not available in sessionStorage, fetch the projects
             fetchProjects();
-        }
     }, []);
+
+    useEffect(() => {
+        getCount();
+    }, [projects]);
+
 
     const onDragEnd = async (result) => {
         if (!result.destination) {
@@ -294,14 +242,7 @@ export default function Projects() {
         }
     };
 
-    const [completedProjectscount, setCompletedProjectscount] = useState(0);
-    const [inProgressProjectscount, setInProgressProjectscount] = useState(0);
-    const [startProjectscount, setStartProjectscount] = useState(0);
-    const [allProjectscount, setAllProjectscount] = useState(0);
-
-    const [withValuecompleted, setWithValuecompleted] = useState(0);
-    const [withValuePending, setWithValuePending] = useState(0);
-    const [withValueStart, setWithValueStart] = useState(0);
+   
 
     const getCount = async () => {
         try {
@@ -335,7 +276,6 @@ export default function Projects() {
         }
     };
 
-    const [searchQuery, setSearchQuery] = useState('');
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
@@ -383,6 +323,7 @@ export default function Projects() {
                     </span>
                 </div>
                 <div className="">
+                {shouldShowAddButton && (
                     <button
                         type="button"
                         onClick={handleShowModal}
@@ -398,6 +339,7 @@ export default function Projects() {
                         </svg>
                         Add Project
                     </button>
+                )}
                 </div>
                 <div className="flex flex-row gap-6 justify-center items-center">
                     <div className="flex-1">
@@ -417,6 +359,7 @@ export default function Projects() {
                     </div>
                 </div>
             </div>
+            {show ? (
             <DragDropContext onDragEnd={onDragEnd}>
                 <div className="flex-1 flex flex-row justify-around gap-6">
                     <div className="flex-1 bg-white gap-10 flex flex-col">
@@ -442,7 +385,9 @@ export default function Projects() {
                         {loading ? (
                             <div>Loading...</div>
                         ) : (
-                            <Droppable droppableId="startProjects">
+                            <Droppable droppableId="startProjects"
+                            isDropDisabled={!shouldEnableDragDrop} // Disable drag-and-drop based on privilege
+                            >
                                 {(provided) => (
                                     <div
                                         {...provided.droppableProps}
@@ -513,7 +458,10 @@ export default function Projects() {
                             // Loading indicator or message while data is being fetched
                             <div>Loading...</div>
                         ) : (
-                            <Droppable droppableId="pendingProjects">
+                            <Droppable droppableId="pendingProjects"
+                            isDropDisabled={!shouldEnableDragDrop} // Disable drag-and-drop based on privilege
+
+                            >
                                 {(provided) => (
                                     <div
                                         {...provided.droppableProps}
@@ -584,7 +532,10 @@ export default function Projects() {
                             // Loading indicator or message while data is being fetched
                             <div>Loading...</div>
                         ) : (
-                            <Droppable droppableId="completedProjects">
+                            <Droppable droppableId="completedProjects"
+                            isDropDisabled={!shouldEnableDragDrop} // Disable drag-and-drop based on privilege
+
+                            >
                                 {(provided) => (
                                     <div
                                         {...provided.droppableProps}
@@ -634,6 +585,12 @@ export default function Projects() {
                     </div>
                 </div>
             </DragDropContext>
+              ) : (
+                // If `show` is false, render this content
+                <div className="flex-1 text-[20px] font-bold flex justify-center items-center">
+                    <p>Content to display not available</p>
+                </div>
+            )}
             {showModal && (
                 <AddProject
                     onCloseModal={handleCloseModal}

@@ -12,7 +12,6 @@ export default function Dashboard({children}) {
         setUserToken,
         currentUser,
         setCurrentUser,
-        setprofile,
         profile,
     } = useStateContext();
     // eslint-disable-next-line no-unused-vars
@@ -30,16 +29,12 @@ export default function Dashboard({children}) {
     const logout = async () => {
         try {
           // Clear user-related state variables
-          setCurrentUser(null); // Assuming this sets the current user to null
-          setprofile(null); // Assuming this sets the profile to null
-          setUserToken(null); // Assuming this sets the user token to null
-      
-          // Remove specific items from session storage
-          sessionStorage.removeItem("privileges"); // Remove "privileges" from session storage
-          sessionStorage.removeItem("roles"); // Remove "roles" from session storage
+          setCurrentUser(null); 
+          setUserToken(null)
+          sessionStorage.removeItem("privileges");
+          sessionStorage.removeItem("roles"); 
           sessionStorage.removeItem("usersData");
-          // Navigate to the home page or the desired route after logging out
-          navigate("/"); // Assuming this navigates to the home page ("/") using a router/navigation library
+          navigate("/");
         } catch (error) {
           console.error("Error logging out:", error);
         }
@@ -108,14 +103,14 @@ export default function Dashboard({children}) {
                         </a>
                     </li>
                    
-                    <li>
+                    {/* <li>
                         <a href="/dashboard/client">
                             <span className="icon">
                                 <ion-icon name="people-outline"></ion-icon>
                             </span>
                             <span className="title">Client</span>
                         </a>
-                    </li>
+                    </li> */}
                     <li>
                         <a href="/dashboard/projet">
                             <span className="icon">
@@ -125,14 +120,14 @@ export default function Dashboard({children}) {
                         </a>
                     </li>
 
-                    <li>
+                    {/* <li>
                         <a href="/dashboard/formation">
                             <span className="icon">
                                 <ion-icon name="school-outline"></ion-icon>
                             </span>
                             <span className="title">Formation</span>
                         </a>
-                    </li>
+                    </li> */}
 
                     <li>
                         <a href="/dashboard/profil">
@@ -152,7 +147,7 @@ export default function Dashboard({children}) {
                         </a>
                     </li>
 
-                    <li>
+                    <li className="pt-[30%]">
                         <a href="#" onClick={logout}>
                             <span className="icon">
                                 <ion-icon name="log-out-outline"></ion-icon>

@@ -106,6 +106,7 @@ Route::get('/ticketss/projectss/{projectId}/sprintss/{sprintId}', [TicketControl
 Route::get('projects/{projectId}/tickets-without-sprint', [TicketController::class, 'getTicketsByProjectWithoutSprint']);
 
 
+
 Route::get('projects/manager/{managerId}', [ProjectController::class, 'getProjectsByManagerId']);
 
 Route::get('/projects/{id}/users', [ProjectController::class, 'getUsersInProject']);
@@ -113,7 +114,16 @@ Route::get('/projects/{id}/users', [ProjectController::class, 'getUsersInProject
 
 Route::get('/projectss', [ProjectController::class, 'getAllProjectsWithManagerAndClientNames']);
 
+
+Route::get('/statuss/{statusId}', [PrivilegeController::class, 'getByStatusId']);
+
 //images
+
+Route::get('/userss/clients', [UserController::class, 'getClients']);
+
+
+Route::get('/profiless/get-profile-id', [ProfileController::class, 'getProfileIdByName']);
+
 
 Route::get('/storage/{path}', function ($path) {
     return response()->file(storage_path('app/public/' . $path));

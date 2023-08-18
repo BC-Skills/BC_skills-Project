@@ -11,8 +11,7 @@ export default function DashboardUser() {
     const [links, setLinks] = useState([]);
     // eslint-disable-next-line no-unused-vars
     const [loading, setLoading] = useState(false);
-    const { userToken, setUserToken, setCurrentUser, setprofile, profile } =
-        useStateContext();
+    const { userToken, profile } = useStateContext();
 
     // eslint-disable-next-line no-unused-vars
     const [activeLinkIndex, setActiveLinkIndex] = useState(-1);
@@ -41,73 +40,98 @@ export default function DashboardUser() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-  
-
     const getPrivilages = async () => {
-      try {
-        const response = await axiosClient.get(
-          `profiless/${profile.id}/privileges`
-        );
-        const privilegeIds = response.data.map((privilege) => privilege.status_id);
-        const promises = privilegeIds.map((id) =>
-          axiosClient.get(`statuses/${id}`)
-        );
-    
-        const responses = await Promise.all(promises);
-        const statusNames = responses.map((response) => response.data.name);
-        const uniqueStatusNames = Array.from(new Set(statusNames));
+        try {
+            const response = await axiosClient.get(
+                `profiless/${profile.id}/privileges`
+            );
 
-        const linksArray = uniqueStatusNames.map((statusName, index) => {
-          const url = "/users/" + statusName.toLowerCase().replace(/\s/g, "-");
-          const logo = statusName.toLowerCase(); // Assuming the logo name follows this pattern
-    
-          let attribute = "";
-    
-          // Compare the status name with the static const variables
-          if (statusName === 'projets') {
-            attribute = "code-outline";
-          } else if (statusName === 'formation') {
-            attribute = "newspaper-outline";
-          } else if (statusName === 'schedules') {
-            attribute = "calendar-outline";
-          } else if (statusName === 'tickets') {
-            attribute = 'ticket-outline';
-          } else if (statusName === 'users') {
-            attribute = 'people-outline';
-          }
-    
-          return {
-            name: statusName,
-            url,
-            logo,
-            attribute,
-            id: index,
-          };
-        });
-    
-        setLinks(linksArray);
-        setPrivilegeSettings(response.data[0].status_id);
-        setLoading(false);
-        localStorage.setItem("links", JSON.stringify(linksArray));
-      } catch (error) {
-        if (error.response && error.response.status === 429) {
-          await new Promise((resolve) => setTimeout(resolve, 5000));
-          getPrivilages();
-        } else {
-          console.error("Error fetching data:", error);
-          setLoading(false); // Set loading to false in case of an error
+            const privilegeStatusMap = {}; // To store privilege names for each status
+
+            const privilegeIds = response.data.map(
+                (privilege) => privilege.status_id
+            );
+            const promises = privilegeIds.map((id) =>
+                axiosClient.get(`statuses/${id}`)
+            );
+            const responses = await Promise.all(promises);
+
+            // Build the privilegeStatusMap object
+            responses.forEach((statusResponse, index) => {
+                const statusName = statusResponse.data.name;
+                const privilegeName = response.data[index].name;
+
+                if (!privilegeStatusMap[statusName]) {
+                    privilegeStatusMap[statusName] = [];
+                }
+
+                privilegeStatusMap[statusName].push(privilegeName);
+            });
+
+            const statusNames = responses.map((response) => response.data.name);
+            const uniqueStatusNames = Array.from(new Set(statusNames));
+
+            const linksArray = uniqueStatusNames
+                .map((statusName) => {
+                   
+
+                    const url =
+                        "/users/" +
+                        statusName.toLowerCase().replace(/\s/g, "-");
+                    const logo = statusName.toLowerCase(); // Assuming the logo name follows this pattern
+                    let attribute = "";
+
+                    // Compare the status name with the static const variables
+                    if (statusName === "projets") {
+                        attribute = "code-outline";
+                    } else if (statusName === "formation") {
+                        attribute = "newspaper-outline";
+                    } else if (statusName === "schedules") {
+                        attribute = "calendar-outline";
+                    } else if (statusName === "tickets") {
+                        attribute = "ticket-outline";
+                    } else if (statusName === "users") {
+                        attribute = "people-outline";
+                    }
+
+                    const matchingResponse = responses.find(
+                        (response) => response.data.name === statusName
+                    );
+                    const id = matchingResponse
+                        ? matchingResponse.data.id
+                        : null;
+
+                    return {
+                        name: statusName,
+                        url,
+                        logo,
+                        attribute,
+                        id,
+                        privilegeNames: privilegeStatusMap[statusName] || [],
+                    };
+                })
+                .filter(Boolean);
+
+            setLinks(linksArray);
+            setPrivilegeSettings(response.data[0].status_id);
+            setLoading(false);
+            localStorage.setItem("links", JSON.stringify(linksArray));
+        } catch (error) {
+            if (error.response && error.response.status === 429) {
+                await new Promise((resolve) => setTimeout(resolve, 5000));
+                getPrivilages();
+            } else {
+                console.error("Error fetching data:", error);
+                setLoading(false);
+            }
         }
-      }
     };
 
     const logout = async () => {
         try {
-            setCurrentUser(null);
-            setprofile(null);
-            setUserToken(null);
             sessionStorage.clear();
             localStorage.clear();
-                    navigate("/");
+            navigate("/");
         } catch (error) {
             console.error("Error logging out:", error);
         }
@@ -126,16 +150,20 @@ export default function DashboardUser() {
                             />
                         </span>
                     </li>
-                    {links.map((link) => (
-                        <li key={link.id}>
-                            <a href={link.url}>
-                                <span className="icon">
-                                    <ion-icon name={link.attribute}></ion-icon>
-                                </span>
-                                <span className="title">{link.name}</span>
-                            </a>
-                        </li>
-                    ))}
+                    {links
+                        .filter((link) => link.name.toLowerCase() !== "sprints")
+                        .map((link) => (
+                            <li key={link.id}>
+                                <a href={link.url}>
+                                    <span className="icon">
+                                        <ion-icon
+                                            name={link.attribute}
+                                        ></ion-icon>
+                                    </span>
+                                    <span className="title">{link.name}</span>
+                                </a>
+                            </li>
+                        ))}
                 </ul>
                 <ul className="pt-8">
                     <li></li>
@@ -166,8 +194,7 @@ export default function DashboardUser() {
                     <div className="toggle" onClick={handleToggleClick}>
                         <ion-icon name="menu-outline"></ion-icon>
                     </div>
-                    <div className="flex flex-row gap-6 justify-center items-center">
-                    </div>
+                    <div className="flex flex-row gap-6 justify-center items-center"></div>
                 </div>
                 <div className="flex-1 p-2 flex  gap-10 flex-row justify-between flex-wrap">
                     <Outlet />

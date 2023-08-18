@@ -98,8 +98,22 @@ class UserController extends Controller
           }
 
 
-       
-
+          public function getClients()
+          {
+              // Find the profile with the name "Client"
+              $clientProfile = Profile::where('name', 'Client')->first();
+          
+              if (!$clientProfile) {
+                  return response()->json(['error' => 'Client profile not found'], 404);
+              }
+          
+              // Get users with the "Client" profile along with their profile info
+              $clients = User::where('profile_id', $clientProfile->id)
+                             ->with('profile') // Eager load the profile relationship
+                             ->get();
+          
+              return response()->json($clients);
+          }
           
     
 }
