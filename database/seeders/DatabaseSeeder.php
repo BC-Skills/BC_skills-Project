@@ -12,12 +12,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(ProfilSeeder::class); // Add this line to call your ProfilSeeder
+        $this->call(ProfilSeeder::class);
+        $this->call(statusseeder::class);
+        $this->call(privilagesseeder::class); 
+        $this->call(UserSeeder::class); 
 
-        $this->call(statusseeder::class); // Add this line to call your ProfilSeeder
-        $this->call(privilagesseeder::class); // Add this line to call your ProfilSeeder
-
-        
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([

@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\DevelopperController;
 use App\Http\Controllers\Api\PrivilegeController;
 use App\Http\Controllers\Api\StatusController;
 use App\Http\Controllers\Api\ScheduleController;
+use App\Http\Controllers\Api\ChatController;
 
 
 
@@ -40,6 +41,7 @@ Route::apiResource('formationdevelopers', FormationDeveloperController::class);
 Route::apiResource('formation-types', FormationTypeController::class);
 Route::apiResource('profiles', ProfileController::class);
 Route::apiResource('projects', ProjectController::class);
+Route::apiResource('chat', ChatController::class);
 Route::apiResource('project-types', ProjectTypeController::class);
 Route::apiResource('sprints', SprintController::class);
 Route::apiResource('tickets', TicketController::class);
@@ -69,6 +71,7 @@ Route::get('/projects/{projectId}/users', [ProjectController::class, 'getProject
 
 
 
+
 Route::get('/projects/count/manager/{managerId}', [ProjectController::class, 'countByManagerId']);
 
 Route::get('/clients/{clientId}/projects', [ClientController::class, 'getProjects']);
@@ -76,11 +79,13 @@ Route::get('/projectmanagers/{projectmanagerId}/projects', [ProjectManagerContro
 Route::get('users/{user}/schedule', [TicketController::class, 'showScheduleForUser'])->name('tickets.schedule');
 Route::get('/userss/admin', [UserController::class, 'getAdmin']);
 
+Route::get('userss/except/{id}', [UserController::class, 'getUsersExcept']);
 
 
 
 Route::apiResource('schedules', ScheduleController::class);
 
+Route::post('/chats/getOrCreateChat', [ChatController::class, 'getOrCreateChat']);
 
 //Route::post('/schedules', [ScheduleController::class, 'store']);
 Route::get('schedules/download/{id}', [ScheduleController::class, 'downloadFile']);

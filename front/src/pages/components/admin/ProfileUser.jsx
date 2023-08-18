@@ -3,7 +3,7 @@ import { useStateContext } from '../../../contexts/contextProvider';
 import axiosClient from '../../../axios';
 import { Transition } from '@headlessui/react';
 
-const ProfilePage = () => {
+const Setting = () => {
   const { currentUser, profile } = useStateContext();
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
   const [newPassword, setNewPassword] = useState('');
@@ -144,4 +144,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default Setting;

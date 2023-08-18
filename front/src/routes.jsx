@@ -16,6 +16,7 @@ import Formations from "./pages/components/Users/Formations";
 import Users from "./pages/components/Users/Users";
 import Sprints from "./pages/components/Users/Sprints";
 import Chat from "./pages/components/Chat/chat";
+import Setting from "./pages/components/admin/ProfileUser";
 
 const router = createBrowserRouter([
     {
@@ -89,6 +90,10 @@ const router = createBrowserRouter([
             {
                 path: "profil",
                 element: <Profile />,
+            },
+             {
+                path: "setting",
+                element: <Setting />,
             },
         ],
     },

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axiosClient from "../../axios";
 import "../../assets/css/dashboard.css";
 import logo from "../../assets/images/logo.png";
+import Chat from "./Chat/chat";
 
 export default function DashboardUser() {
     // eslint-disable-next-line no-unused-vars
@@ -12,6 +13,7 @@ export default function DashboardUser() {
     // eslint-disable-next-line no-unused-vars
     const [loading, setLoading] = useState(false);
     const { userToken, profile } = useStateContext();
+    const [blackDivVisible, setBlackDivVisible] = useState(false);
 
     // eslint-disable-next-line no-unused-vars
     const [activeLinkIndex, setActiveLinkIndex] = useState(-1);
@@ -137,6 +139,13 @@ export default function DashboardUser() {
         }
     };
 
+
+    // Function to toggle the visibility of the black div
+    const toggleBlackDiv = () => {
+        setBlackDivVisible(!blackDivVisible);
+    };
+    
+
     return (
         <div className="container">
             <div className={`navigation  ${isSidebarActive ? "active" : ""}`}>
@@ -200,6 +209,20 @@ export default function DashboardUser() {
                     <Outlet />
                 </div>
             </div>
+            <div
+                className="fixed bottom-14 right-14 z-10 bg-purple-500 text-white p-2 rounded-full flex items-center justify-center cursor-pointer"
+                onClick={toggleBlackDiv}
+            >
+                <ion-icon name="chatbox-outline" class="text-4xl"></ion-icon>
+            </div>
+
+            {/* Black div displayed on top */}
+            {blackDivVisible && (
+                <div className="fixed bottom-25 right-1 flex z-20 h-[90vh]    text-white px-2 py-2 rounded">
+                        <Chat />
+                </div>
+            )}
+      
         </div>
     );
 }

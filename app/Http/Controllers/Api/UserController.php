@@ -115,5 +115,24 @@ class UserController extends Controller
               return response()->json($clients);
           }
           
-    
+          public function getUsersExcept($id)
+          {
+              // Get all users except the one with the provided ID
+              $users = User::where('id', '!=', $id)->with('profile')->get();
+          
+              // Map each user to include the profile name
+              $usersData = $users->map(function ($user) {
+                  return [
+                      'id' => $user->id,
+                      'profile_picture' => $user->profile_picture,
+                      'name' => $user->name,
+                      'email' => $user->email,
+                      'tel' => $user->tel,
+                      'profile_id' => $user->profile_id,
+                      'profile_name' => $user->profile ? $user->profile->name : 'Loading...', // Include the profile name
+                  ];
+              });
+          
+              return response()->json($usersData);
+          }
 }

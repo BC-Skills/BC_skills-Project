@@ -38,10 +38,9 @@ class User extends Authenticatable
     }
 
     // Relationship: User has many messages received (messages where the user is the 'to' receiver)
-    public function receivedMessages()
-    {
-        return $this->hasMany(Message::class, 'to', 'id');
-    }
+    
+
+    
     public function projects()
     {
         return $this->belongsToMany(Project::class, 'project_user');
@@ -56,4 +55,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(Ticket::class, 'assign_to');
     }
+
+    //test
+
+    public function chats()
+{
+    return $this->hasMany(Chat::class);
+}
+public function otherChats()
+{
+    return $this->hasMany(Chat::class, 'other_user_id');
+}
+
 }
