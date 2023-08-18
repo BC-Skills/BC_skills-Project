@@ -39,4 +39,5 @@ class FormationController extends Controller
         $formation->delete();
         return response()->json(null, 204);
     }
+   
 }

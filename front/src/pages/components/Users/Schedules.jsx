@@ -59,7 +59,7 @@ const ScheduleTable = () => {
         const uniqueDates = Object.keys(filteredSchedulesByDate).sort((a, b) => new Date(a) - new Date(b));
 
         setFilteredSchedulesByDate(filteredSchedulesByDate);
-        setUniqueDates(uniqueDates);
+        // setUniqueDates(uniqueDates);
       })
       .catch((error) => {
         console.error('Error fetching schedules:', error);
