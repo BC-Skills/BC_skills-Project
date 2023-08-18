@@ -133,3 +133,7 @@ Route::get('/profiless/get-profile-id', [ProfileController::class, 'getProfileId
 Route::get('/storage/{path}', function ($path) {
     return response()->file(storage_path('app/public/' . $path));
 })->where('path', '.*');
+
+
+Route::get('/scheduless/last-7-days/{userId}', [ScheduleController::class, 'getLast7DaysSchedulesForUser']);
+
