@@ -103,14 +103,14 @@ export default function Dashboard({children}) {
                         </a>
                     </li>
                    
-                    <li>
+                    {/* <li>
                         <a href="/dashboard/client">
                             <span className="icon">
                                 <ion-icon name="people-outline"></ion-icon>
                             </span>
                             <span className="title">Client</span>
                         </a>
-                    </li>
+                    </li> */}
                     <li>
                         <a href="/dashboard/projet">
                             <span className="icon">
@@ -120,14 +120,14 @@ export default function Dashboard({children}) {
                         </a>
                     </li>
 
-                    <li>
+                    {/* <li>
                         <a href="/dashboard/formation">
                             <span className="icon">
                                 <ion-icon name="school-outline"></ion-icon>
                             </span>
                             <span className="title">Formation</span>
                         </a>
-                    </li>
+                    </li> */}
 
                     <li>
                         <a href="/dashboard/profil">
@@ -147,7 +147,7 @@ export default function Dashboard({children}) {
                         </a>
                     </li>
 
-                    <li>
+                    <li className="pt-[30%]">
                         <a href="#" onClick={logout}>
                             <span className="icon">
                                 <ion-icon name="log-out-outline"></ion-icon>
