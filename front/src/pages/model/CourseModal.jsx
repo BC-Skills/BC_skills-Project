@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 // eslint-disable-next-line react/prop-types
-const CourseModal = ({ isOpen, courses, onClose, onFileUpload }) => {
+const CourseModal = ({ isOpen, formationType, onClose, onFileUpload }) => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileChange = (e) => {
@@ -17,10 +17,11 @@ const CourseModal = ({ isOpen, courses, onClose, onFileUpload }) => {
 
   return (
     <div className={`course-modal ${isOpen ? "visible" : "hidden"}`}>
+        <div className=" flex modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
       <div className="modal-content">
         <h2>Courses</h2>
         <ul>
-          {courses.map((course) => (
+          {formationType.map((course) => (
             <li key={course.id}>
               {course.name} - {course.description}
             </li>
@@ -30,6 +31,7 @@ const CourseModal = ({ isOpen, courses, onClose, onFileUpload }) => {
         <input type="file" onChange={handleFileChange} />
         <button onClick={handleUpload}>Upload</button>
         <button onClick={onClose}>Close</button>
+      </div>
       </div>
     </div>
   );

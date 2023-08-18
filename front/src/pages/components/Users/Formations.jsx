@@ -60,8 +60,7 @@ export default function Formations() {
 
   const handleViewDetails = async (formationType) => {
     try {
-      const response = await axiosClient.get(`formation-types/${formationType.id}/courses`);
-      setSelectedFormationType({ ...formationType, courses: response.data });
+      setSelectedFormationType(formationType.formations);
     } catch (error) {
       console.error("Error fetching courses:", error);
     }
@@ -179,12 +178,14 @@ export default function Formations() {
         </div>
       )}
       {selectedFormationType && (
+        <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-200 bg-opacity-50">
         <CourseModal
           isOpen={Boolean(selectedFormationType)}
           onClose={() => setSelectedFormationType(null)}
           formationType={selectedFormationType}
           onFileUpload={handleFileUpload}
         />
+         </div>
       )}
     </div>
   );
