@@ -9,11 +9,7 @@ use App\Models\Profile;
 
 class UserController extends Controller
 {
-    // public function index()
-    // {
-    //     $users = User::all();
-    //     return response()->json($users);
-    // }
+    
 
     public function store(Request $request)
     {
@@ -135,4 +131,45 @@ class UserController extends Controller
           
               return response()->json($usersData);
           }
+
+
+
+
+          public function getUsersWithoutAdminProfileAndLastMessagesExcept($userId)
+          {
+              // Find the profile with the name "Admin"
+              $adminProfile = Profile::where('name', 'Admin')->first();
+          
+              if (!$adminProfile) {
+                  return response()->json(['error' => 'Admin profile not found'], 404);
+              }
+          
+              $users = User::where('profile_id', '!=', $adminProfile->id)
+                           ->where('id', '!=', $userId) 
+                           ->with(['profile', 'receivedMessages' => function ($query) {
+                               $query->orderBy('datemessage', 'desc')->limit(1);
+                           }, 'sentMessages' => function ($query) {
+                               $query->orderBy('datemessage', 'desc')->limit(1);
+                           }])
+                           ->get();
+          
+              $usersData = $users->map(function ($user) {
+                  return [
+                      'id' => $user->id,
+                      'profile_picture' => $user->profile_picture,
+                      'name' => $user->name,
+                      'email' => $user->email,
+                      'tel' => $user->tel,
+                      'profile_id' => $user->profile_id,
+                      'profile_name' => $user->profile ? $user->profile->name : 'Loading...',
+                      'last_message' => [
+                          'received' => $user->receivedMessages->first(),
+                          'sent' => $user->sentMessages->first(),
+                      ],
+                  ];
+              });
+          
+              return response()->json($usersData);
+          }
+          
 }

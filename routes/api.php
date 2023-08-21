@@ -21,10 +21,11 @@ use App\Http\Controllers\Api\StatusController;
 use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\ChatController;
 
+use App\Http\Controllers\Api\MessageController;
 
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
-
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 
@@ -137,3 +138,7 @@ Route::get('/storage/{path}', function ($path) {
 
 Route::get('/scheduless/last-7-days/{userId}', [ScheduleController::class, 'getLast7DaysSchedulesForUser']);
 
+Route::get('/without-admin-profile-and-last-messages-except/{user}', [UserController::class, 'getUsersWithoutAdminProfileAndLastMessagesExcept']);
+
+
+Route::put('messagess/{message}/update-notify', [MessageController::class, 'updateNotifyStatus']);

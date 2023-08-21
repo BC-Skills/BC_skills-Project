@@ -21,7 +21,7 @@ export default function Login() {
         email,
         password,
       };
-      const response = await axiosClient.post('http://localhost:8000/api/login', formData)
+      const response = await axiosClient.post('login', formData)
       setUserToken(response.data.token)
       setCurrentUser(response.data.user);
       setprofile(response.data.profile)
