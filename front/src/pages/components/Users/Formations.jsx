@@ -60,11 +60,15 @@ export default function Formations() {
 
   const handleViewDetails = async (formationType) => {
     try {
-      setSelectedFormationType(formationType.formations);
+      setSelectedFormationType({
+        formationTypeId: formationType.id,
+        formations: formationType.formations,
+      });
     } catch (error) {
       console.error("Error fetching courses:", error);
     }
   };
+
 
   const handleFileUpload = (file) => {
     console.log("Uploading file:", file);
@@ -179,12 +183,12 @@ export default function Formations() {
       )}
       {selectedFormationType && (
         <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-200 bg-opacity-50">
-        <CourseModal
-          isOpen={Boolean(selectedFormationType)}
-          onClose={() => setSelectedFormationType(null)}
-          formationType={selectedFormationType}
-          onFileUpload={handleFileUpload}
-        />
+          <CourseModal
+            isOpen={Boolean(selectedFormationType)}
+            onClose={() => setSelectedFormationType(null)}
+            formationType={selectedFormationType}
+            onFileUpload={handleFileUpload}
+          />
          </div>
       )}
     </div>

@@ -37,6 +37,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::apiResource('formations', FormationController::class);
 Route::get('formation-types/{formationType}/formations', [FormationTypeController::class, 'getFormations']);
+Route::get('formations/{id}/download', [FormationController::class, 'downloadFile']);
+
 
 Route::apiResource('formationdevelopers', FormationDeveloperController::class);
 Route::apiResource('formation-types', FormationTypeController::class);
