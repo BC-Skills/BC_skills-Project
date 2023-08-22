@@ -102,6 +102,7 @@ export default function Collaborator({ project, onCloseModal }) {
         try {
           const response = await axiosClient.get(`projects/${project.id}/users`);
           const projectUsers = response.data;
+          // eslint-disable-next-line no-unused-vars
           setSelectedUserIds((prevSelectedUserIds) => {
             return projectUsers.map((user) => user.id); // Update selectedUserIds with project users
           });

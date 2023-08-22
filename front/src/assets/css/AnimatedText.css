@@ -1,0 +1,13 @@
+@keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  .letter-animation {
+    display: inline-block;
+    animation: bounce 0.5s infinite;
+  }
