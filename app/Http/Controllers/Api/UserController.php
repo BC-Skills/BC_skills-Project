@@ -119,25 +119,25 @@ class UserController extends Controller
 
           public function getUsersAndUserById($id)
           {
-              // If an ID is provided, retrieve a specific user by ID
-              if ($id !== null) {
-                  $user = User::findOrFail($id);
-                  return response()->json($user);
-              }
-      
               // Find the profile IDs for "Admin" and "Client"
               $adminProfile = Profile::where('name', 'Admin')->first();
               $clientProfile = Profile::where('name', 'Client')->first();
-      
+          
               if (!$adminProfile || !$clientProfile) {
                   return response()->json(['error' => 'Profiles not found'], 404);
               }
-      
+          
               // Get users with profiles other than "Admin" and "Client"
-              $users = User::where('profile_id', '!=', $adminProfile->id)
-                           ->where('profile_id', '!=', $clientProfile->id)
-                           ->get();
-      
+              $usersQuery = User::where('profile_id', '!=', $adminProfile->id)
+                                ->where('profile_id', '!=', $clientProfile->id);
+          
+              // If an ID is provided, exclude that user too
+              if ($id !== null) {
+                  $usersQuery->where('id', '!=', $id);
+              }
+          
+              $users = $usersQuery->get();
+          
               return response()->json($users);
           }
     
