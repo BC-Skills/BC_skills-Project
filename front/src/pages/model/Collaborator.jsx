@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import axiosClient from "../../axios";
+import { useStateContext } from "../../contexts/contextProvider";
 
 // eslint-disable-next-line no-unused-vars
 export default function Collaborator({ project, onCloseModal }) {
@@ -12,6 +13,7 @@ export default function Collaborator({ project, onCloseModal }) {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedUserIds, setSelectedUserIds] = useState([]); // Step 1: State for selected user IDs
 
+    const { currentUser } = useStateContext();
 
 
     const handleSearch = () => {
@@ -20,22 +22,16 @@ export default function Collaborator({ project, onCloseModal }) {
     };
 
     useEffect(() => {
-        const storedUsersData = sessionStorage.getItem("usersData");
-
-        if (storedUsersData) {
-            setUsers(JSON.parse(storedUsersData));
-            setLoading(false);
-        } else {
-            fetchUsersData();
-        }
+       
+            fetchUsersData(currentUser.id);
+        
     }, []);
 
-    const fetchUsersData = async () => {
+    const fetchUsersData = async (currentUserid) => {
         try {
-            const response = await axiosClient.get("users");
+            const response = await axiosClient.get(`userss/exadminclient/${currentUserid}`);
             const usersData = response.data;
             setUsers(usersData);
-            sessionStorage.setItem("usersData", JSON.stringify(usersData));
             setLoading(false);
         } catch (error) {
             console.error("Error fetching users:", error);
