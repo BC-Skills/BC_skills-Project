@@ -15,17 +15,12 @@ import Schedules from "./pages/components/Users/Schedules";
 import Formations from "./pages/components/Users/Formations";
 import Users from "./pages/components/Users/Users";
 import Sprints from "./pages/components/Users/Sprints";
-import Chat from "./pages/components/Chat/chat";
 import Setting from "./pages/components/admin/ProfileUser";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <Login />,
-    },
-    {
-        path: "/chat",
-        element: <Chat />, // Add the ChatComponent here
     },
     {
         path: "/users",

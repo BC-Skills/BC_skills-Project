@@ -1,9 +1,9 @@
-/* eslint-disable no-undef */
-import  { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../../../axios";
 import { useStateContext } from '../../../contexts/contextProvider';
 import FormationTypeFormModal from "../../model/FormationTypeFormModal";
+import CourseModal from "../../model/CourseModal"; // Update this import to match your file structure
 
 export default function Formations() {
   const [formationTypes, setFormationTypes] = useState([]);
@@ -15,7 +15,7 @@ export default function Formations() {
   const navigate = useNavigate();
   const { profile, currentUser } = useStateContext();
   const [showMore, setShowMore] = useState({});
-
+  const [selectedFormationType, setSelectedFormationType] = useState(null);
 
   useEffect(() => {
     const parsedLinks = JSON.parse(storedLinks) || [];
@@ -49,13 +49,27 @@ export default function Formations() {
       console.error("Error submitting form:", error);
     }
   };
+
   const toggleShowMore = (id) => {
     setShowMore(prevState => ({
       ...prevState,
       [id]: !prevState[id]
     }));
   };
-  
+
+
+  const handleViewDetails = async (formationType) => {
+    try {
+      const response = await axiosClient.get(`formation-types/${formationType.id}/courses`);
+      setSelectedFormationType({ ...formationType, courses: response.data });
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    }
+  };
+
+  const handleFileUpload = (file) => {
+    console.log("Uploading file:", file);
+  };
 
   const indexOfLastFormation = currentPage * formationPerPage;
   const indexOfFirstFormation = indexOfLastFormation - formationPerPage;
@@ -117,43 +131,43 @@ export default function Formations() {
                 {formationType.name}
               </h3>
               <p className="text-base text-body-color leading-relaxed mb-7 ">
-            {showMore[formationType.id]
-              ? formationType.description
-              : formationType.description.substring(0, 100) + "..."}
-            <button
-              onClick={() => toggleShowMore(formationType.id)}
-              className="text-primary ml-1  text-[#41415A]"
-            >
-              {showMore[formationType.id] ? "Show Less" : "Show More"}
-            </button>
-          </p>
+                {showMore[formationType.id]
+                  ? formationType.description
+                  : formationType.description.substring(0, 100) + "..."}
+                <button
+                  onClick={() => toggleShowMore(formationType.id)}
+                  className="text-primary ml-1  text-[#41415A]"
+                >
+                  {showMore[formationType.id] ? "Show Less" : "Show More"}
+                </button>
+              </p>
               <button
                 onClick={() => handleViewDetails(formationType)}
                 className="inline-block py-2 px-7 border border-[#E5E7EB] rounded-full text-base text-body-color font-medium hover:border-primary hover:bg-primary hover:text-white transition"
               >
-                Courses Acces
+                Courses Access
               </button>
             </div>
           </div>
         ))}
       </div>
       <div className="flex justify-center mt-4">
-  <ul className="flex">
-    {Array.from({ length: Math.ceil(formationTypes.length / formationPerPage) }, (_, index) => (
-      <li key={index}>
-        <button
-          className={`px-3 py-2 mx-1 ${
-            index + 1 === currentPage
-              ? "bg-[#41415A] text-white"
-              : "bg-white text-gray-900 hover:bg-gray-300 hover:text-gray-700"
-          } rounded-full focus:outline-none focus:ring focus:border-primary transition`}
-          onClick={() => paginate(index + 1)}
-        >
-          {index + 1}
-        </button>
-      </li>
-    ))}
-  </ul>
+        <ul className="flex">
+          {Array.from({ length: Math.ceil(formationTypes.length / formationPerPage) }, (_, index) => (
+            <li key={index}>
+              <button
+                className={`px-3 py-2 mx-1 ${
+                  index + 1 === currentPage
+                    ? "bg-[#41415A] text-white"
+                    : "bg-white text-gray-900 hover:bg-gray-300 hover:text-gray-700"
+                } rounded-full focus:outline-none focus:ring focus:border-primary transition`}
+                onClick={() => paginate(index + 1)}
+              >
+                {index + 1}
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
       {isFormModalOpen && (
         <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-200 bg-opacity-50">
@@ -163,6 +177,14 @@ export default function Formations() {
             onFormSubmit={handleFormSubmit}
           />
         </div>
+      )}
+      {selectedFormationType && (
+        <CourseModal
+          isOpen={Boolean(selectedFormationType)}
+          onClose={() => setSelectedFormationType(null)}
+          formationType={selectedFormationType}
+          onFileUpload={handleFileUpload}
+        />
       )}
     </div>
   );
