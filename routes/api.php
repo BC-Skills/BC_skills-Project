@@ -143,3 +143,6 @@ Route::get('/dashboard/projects/{projectId}/sprints', [DashboardController::clas
 Route::get('/dashboard/projects/{projectId}/sprint-status', [DashboardController::class, 'getSprintStatusCounts']);
 
 Route::get('/dashboard/projects/{projectId}/sprints/{sprintId}/ticket-status', [DashboardController::class, 'getSprintTicketStatusCounts']);
+
+
+Route::get('userss/exadminclient/{id}',  [UserController::class, 'getUsersAndUserById']);

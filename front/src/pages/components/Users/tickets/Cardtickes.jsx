@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import axiosClient from "../../../../axios";
 import PropTypes from "prop-types";
+import { useStateContext } from "../../../../contexts/contextProvider"
 
 Cardtickes.propTypes = {
     tickets: PropTypes.shape({
@@ -46,15 +48,16 @@ Cardtickes.propTypes = {
     }),
 };
 // eslint-disable-next-line react/prop-types
-export default function Cardtickes({ tickets, fetchticketsData }) {
+export default function Cardtickes({ tickets, fetchticketsData , selectedProject }) {
     const [showUserList, setShowUserList] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
+    const { currentUser } = useStateContext();
 
     const handleImageClick = (user) => {
         setSelectedUser(user);
-        fetchUsersData();
+        fetchUsersData(currentUser.id);
 
         setShowUserList(true);
     };
@@ -64,11 +67,11 @@ export default function Cardtickes({ tickets, fetchticketsData }) {
         setSelectedUser(null);
     };
 
-   
 
-    const fetchUsersData = async () => {
+
+    const fetchUsersData = async (currentUserid) => {
         try {
-            const response = await axiosClient.get("users");
+            const response = await axiosClient.get(`userss/exadminclient/${currentUserid}`);
             const usersData = response.data;
             setUsers(usersData);
         } catch (error) {
@@ -86,6 +89,7 @@ export default function Cardtickes({ tickets, fetchticketsData }) {
                 await axiosClient.put(`ticketss/${tickets.id}`, {
                     assign_to: selectedUser.id,
                 });
+                
                 fetchticketsData();
                 console.log("Ticket updated successfully.");
                 setShowUserList(false);
@@ -152,7 +156,7 @@ export default function Cardtickes({ tickets, fetchticketsData }) {
     const [sprints, setSprints] = useState([]);
     const fetchSprintsData = async () => {
         try {
-            const response = await axiosClient.get("sprints");
+            const response = await axiosClient.get(`sprintss/${selectedProject}`);
             const sprintsData = response.data;
             setSprints(sprintsData);
         } catch (error) {
