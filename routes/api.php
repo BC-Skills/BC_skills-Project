@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\PrivilegeController;
 use App\Http\Controllers\Api\StatusController;
 use App\Http\Controllers\Api\ScheduleController;
 
+use App\Http\Controllers\Api\DashboardController;
 
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
@@ -132,3 +133,13 @@ Route::get('/storage/{path}', function ($path) {
 
 Route::get('/scheduless/last-7-days/{userId}', [ScheduleController::class, 'getLast7DaysSchedulesForUser']);
 
+
+Route::get('/dashboard', [DashboardController::class, 'getDashboardData']);
+
+
+Route::get('/dashboard/projects', [DashboardController::class, 'getAllProjects']);
+Route::get('/dashboard/projects/{projectId}/sprints', [DashboardController::class, 'getProjectSprints']);
+
+Route::get('/dashboard/projects/{projectId}/sprint-status', [DashboardController::class, 'getSprintStatusCounts']);
+
+Route::get('/dashboard/projects/{projectId}/sprints/{sprintId}/ticket-status', [DashboardController::class, 'getSprintTicketStatusCounts']);
