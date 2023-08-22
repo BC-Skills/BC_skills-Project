@@ -86,11 +86,10 @@ const router = createBrowserRouter([
                 path: "profil",
                 element: <Profile />,
             },
-            {
+             {
                 path: "setting",
                 element: <Setting />,
             },
-            
         ],
     },
 ]);

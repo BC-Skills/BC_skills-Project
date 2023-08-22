@@ -8,12 +8,16 @@ class User extends Authenticatable
 {
     use HasApiTokens;
     
-    protected $fillable = ['name', 'email', 'password', 'tel', 'profile_picture', 'profile_id'];
+    protected $fillable = ['name', 'email', 'password', 'tel', 'profile_picture', 'profile_id', 'is_connected']; // Add 'is_connected'
 
     protected $hidden = ['password', 'remember_token'];
 
-    protected $casts = ['email_verified_at' => 'datetime', 'password' => 'hashed'];
-
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'is_connected' => 'boolean', // Add casting for 'is_connected'
+    ];
+    
     public function profile()
     {
         return $this->belongsTo(Profile::class, 'profile_id');
@@ -38,10 +42,9 @@ class User extends Authenticatable
     }
 
     // Relationship: User has many messages received (messages where the user is the 'to' receiver)
-    public function receivedMessages()
-    {
-        return $this->hasMany(Message::class, 'to', 'id');
-    }
+    
+
+    
     public function projects()
     {
         return $this->belongsToMany(Project::class, 'project_user');
@@ -56,4 +59,21 @@ class User extends Authenticatable
     {
         return $this->hasMany(Ticket::class, 'assign_to');
     }
+
+    //test
+
+    public function chats()
+{
+    return $this->hasMany(Chat::class);
+}
+public function otherChats()
+{
+    return $this->hasMany(Chat::class, 'other_user_id');
+}
+
+public function receivedMessages()
+{
+    return $this->hasMany(Message::class, 'to', 'id');
+}
+
 }
