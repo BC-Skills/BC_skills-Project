@@ -51,6 +51,16 @@ export default function DetailsProject({ project, onCloseModal }) {
         }
     }, [project]);
 
+    const [showDescriptionId, setShowDescriptionId] = useState(null);
+
+    const toggleDescription = (id) => {
+        if (showDescriptionId === id) {
+            setShowDescriptionId(null);
+        } else {
+            setShowDescriptionId(id);
+        }
+    };
+
     return (
         <>
             <div
@@ -200,33 +210,74 @@ export default function DetailsProject({ project, onCloseModal }) {
                                     </h1>
                                 </div>
                                 <div className="flex-1">
-                                {sprints.map((sprint) => (
-                                        <div
-                                            key={sprint.id}
-                                            className="flex flex-col flex-1 "
-                                        >
-                                            <div className="flex flex-1 flex-row  justify-between  items-center">
-                                                <div className="flex-1 font-bold text-[25px]">
-                                                    <p>Name          :  {sprint.status}</p>
-                                                </div>
-                                                <div className="flex-1 font-bold text-[25px]">
-                                                    <p>status        :  {sprint.status}</p>
-                                                </div>
-                                            </div>
-                                            <div className="flex flex-1 flex-row items-center justify-between">
-                                                <div className="flex-1 font-bold  text-[25px]">
-                                                    <h1>Start date   :   {project.start_date}</h1>
-                                                   
-                                                </div>
-                                                <div className="flex-1 font-bold  text-[25px]">
-                                                    <h1>End date  : {project.end_date}</h1>
-                                                </div>
-                                            </div>
-                                            <div className="flex flex-1 flex-row   text-[25px] justify-between">
-                                            description : {/* <p>{sprint.description}</p> */}yjhuy
+                                <div className="max-w-[1200px] flex overflow-x-auto">
+                                        <div className="mb-4 flex overflow-x-auto">
+                                            <div className="flex flex-1 gap-4">
+                                                {sprints.map((sprint) => (
+                                                    <div
+                                                        key={sprint.id}
+                                                        className={`flex flex-col items-start min-w-[150px]   p-4 border rounded-lg ${
+                                                            sprint.status ===
+                                                            "Completed"
+                                                                ? "bg-green-200"
+                                                                : sprint.status ===
+                                                                  "Start"
+                                                                ? "bg-blue-200"
+                                                                : sprint.status ===
+                                                                  "Pending"
+                                                                ? "bg-yellow-200"
+                                                                : ""
+                                                        }`}
+                                                    >
+                                                        <div>
+                                                            <div>
+                                                                name:{" "}
+                                                                {sprint.name}
+                                                            </div>
+                                                            <div>
+                                                                status:{" "}
+                                                                {sprint.status}
+                                                            </div>
+                                                            <div>
+                                                                date_debut:{" "}
+                                                                {
+                                                                    sprint.date_debut
+                                                                }
+                                                            </div>
+                                                            <div>
+                                                                date_fin:{" "}
+                                                                {
+                                                                    sprint.date_fin
+                                                                }
+                                                            </div>
+                                                            <button
+                                                                className="text-blue-500 mt-2 cursor-pointer"
+                                                                onClick={() =>
+                                                                    toggleDescription(
+                                                                        sprint.id
+                                                                    )
+                                                                }
+                                                            >
+                                                                {showDescriptionId ===
+                                                                sprint.id
+                                                                    ? "Hide Description"
+                                                                    : "Show Description"}
+                                                            </button>
+                                                            {showDescriptionId ===
+                                                                sprint.id && (
+                                                                <div className="max-h-32 overflow-y-auto">
+                                                                    description:{" "}
+                                                                    {
+                                                                        sprint.description
+                                                                    }
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                ))}
                                             </div>
                                         </div>
-                                    ))}
+                                    </div>
                                 </div>
                                 
                             </div>

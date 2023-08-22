@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import axiosClient from "../../axios";
+import { useStateContext } from "../../contexts/contextProvider";
 
 export default function AddProject({ onCloseModal, fetchUsersData }) {
     // const [profiles, setProfiles] = useState([]);
@@ -72,6 +73,7 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
         setStep1Data(data);
         handleNextStep();
     };
+    const { currentUser } = useStateContext();
 
     const handleSubmitStep2 = (event) => {
         event.preventDefault();
@@ -82,11 +84,9 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
             data[key] = value;
         });
 
-        // Convert numeric fields to integers if needed
         data.client_id = parseInt(data.client_id, 10);
-        data.project_manager_id = parseInt(data.project_manager_id, 10);
+        data.project_manager_id = currentUser.id;
 
-        // Merge project_type_id into the data object
         const combinedData = {
             ...step1Data,
             ...data,
@@ -133,6 +133,17 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
 
     const totalSteps = 3; // Total number of steps in the process
     const progress = ((step - 1) / (totalSteps - 1)) * 100; // Calculate progress as a percentage
+    
+
+    const [showDescriptionId, setShowDescriptionId] = useState(null);
+
+    const toggleDescription = (id) => {
+        if (showDescriptionId === id) {
+            setShowDescriptionId(null);
+        } else {
+            setShowDescriptionId(id);
+        }
+    };
 
     return (
         <>
@@ -148,7 +159,6 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                 <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-black">
                                     Add Project
                                 </h3>
-                                {/* bar progresse */}
 
                                 <button
                                     type="button"
@@ -243,7 +253,7 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                             Duree
                                         </label>
                                         <input
-                                        min={0}
+                                            min={0}
                                             type="number"
                                             name="duree"
                                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-white dark:text-white"
@@ -330,31 +340,6 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                             ))}
                                         </select>
                                     </div>
-                                    <div>
-                                        <label
-                                            htmlFor="project_manager_id"
-                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
-                                        >
-                                            Project Manager
-                                        </label>
-                                        <select
-                                            name="project_manager_id"
-                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                            required
-                                        >
-                                            <option value="">
-                                                Select Project Manager
-                                            </option>
-                                            {users.map((manager) => (
-                                                <option
-                                                    key={manager.id}
-                                                    value={manager.id}
-                                                >
-                                                    {manager.name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
 
                                     <div>
                                         <label
@@ -397,26 +382,75 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                             )}
                             {step === 3 && (
                                 <>
-                                    <div className="mb-4">
-                                        {sprints.map((sprint) => (
-                                            <div
-                                                key={sprint.id}
-                                                className="flex  flex-col items-center"
-                                            >
-                                                <div className="flex flex-1 flex-row justify-between">
-                                                    {/* <p>{sprint.name}</p> */}
-                                                    <p>{sprint.status}</p>
-                                                </div>
-                                                <div className="flex flex-1 flex-row justify-between">
-                                                    <p>{sprint.date_debut}</p>
-                                                    <p>{sprint.date_fin}</p>
-                                                </div>
-                                                <div className="flex flex-1 flex-row justify-between">
-                                                    {/* <p>{sprint.description}</p> */}
-                                                </div>
+                                    <div className="max-w-[600px] flex overflow-x-auto">
+                                        <div className="mb-4 flex overflow-x-auto">
+                                            <div className="flex flex-1 gap-4">
+                                                {sprints.map((sprint) => (
+                                                    <div
+                                                        key={sprint.id}
+                                                        className={`flex flex-col items-start min-w-[150px]   p-4 border rounded-lg ${
+                                                            sprint.status ===
+                                                            "Completed"
+                                                                ? "bg-green-200"
+                                                                : sprint.status ===
+                                                                  "Start"
+                                                                ? "bg-blue-200"
+                                                                : sprint.status ===
+                                                                  "Pending"
+                                                                ? "bg-yellow-200"
+                                                                : ""
+                                                        }`}
+                                                    >
+                                                        <div>
+                                                            <div>
+                                                                name:{" "}
+                                                                {sprint.name}
+                                                            </div>
+                                                            <div>
+                                                                status:{" "}
+                                                                {sprint.status}
+                                                            </div>
+                                                            <div>
+                                                                date_debut:{" "}
+                                                                {
+                                                                    sprint.date_debut
+                                                                }
+                                                            </div>
+                                                            <div>
+                                                                date_fin:{" "}
+                                                                {
+                                                                    sprint.date_fin
+                                                                }
+                                                            </div>
+                                                            <button
+                                                                className="text-blue-500 mt-2 cursor-pointer"
+                                                                onClick={() =>
+                                                                    toggleDescription(
+                                                                        sprint.id
+                                                                    )
+                                                                }
+                                                            >
+                                                                {showDescriptionId ===
+                                                                sprint.id
+                                                                    ? "Hide Description"
+                                                                    : "Show Description"}
+                                                            </button>
+                                                            {showDescriptionId ===
+                                                                sprint.id && (
+                                                                <div className="max-h-32 overflow-y-auto">
+                                                                    description:{" "}
+                                                                    {
+                                                                        sprint.description
+                                                                    }
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                ))}
                                             </div>
-                                        ))}
+                                        </div>
                                     </div>
+
                                     {showSprintForm && (
                                         <form
                                             className="space-y-6"
@@ -445,7 +479,8 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                                             "Sprint added:",
                                                             response.data
                                                         );
-
+                                                        fetchUsersData();
+                                                        fetchSprints();
                                                         handleCancelSprint(); // Hide the sprint form after adding the sprint
                                                     })
                                                     .catch((error) => {
@@ -458,7 +493,19 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                         >
                                             <div>
                                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                                                    Sprint Name
+                                                    Nom
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="name"
+                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-white dark:text-white"
+                                                    placeholder="nom"
+                                                    required
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
+                                                    Sprint status
                                                 </label>
                                                 <select
                                                     name="status"
@@ -495,16 +542,16 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                                     />
                                                 </div>
                                             </div>
-                                            {/* <div>
+                                            <div>
                                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
                                                     Sprint Description
                                                 </label>
                                                 <textarea
-                                                    name="sprintDescription"
+                                                    name="description"
                                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-white dark:text-white"
                                                     placeholder="Sprint Description"
                                                 />
-                                            </div> */}
+                                            </div>
                                             <div className="flex justify-end pt-4">
                                                 <button
                                                     type="button"
