@@ -48,12 +48,16 @@ Cardtickes.propTypes = {
     }),
 };
 // eslint-disable-next-line react/prop-types
-export default function Cardtickes({ tickets, fetchticketsData , selectedProject }) {
+export default function Cardtickes({ tickets, fetchticketsData , selectedProject , modifuy}) {
     const [showUserList, setShowUserList] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const { currentUser } = useStateContext();
+
+
+
+
 
     const handleImageClick = (user) => {
         setSelectedUser(user);
@@ -69,6 +73,8 @@ export default function Cardtickes({ tickets, fetchticketsData , selectedProject
 
 
 
+
+
     const fetchUsersData = async (currentUserid) => {
         try {
             const response = await axiosClient.get(`userss/exadminclient/${currentUserid}`);
@@ -80,8 +86,8 @@ export default function Cardtickes({ tickets, fetchticketsData , selectedProject
     };
 
     const filteredUsers = users.filter((user) =>
-        user.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    user.name.toLowerCase().includes(searchQuery.toLowerCase())
+);
 
     const updateTicketWithUser = async () => {
         try {
@@ -191,13 +197,15 @@ export default function Cardtickes({ tickets, fetchticketsData , selectedProject
                         <div className="absolute top-0 left-0 mt-12  bg-white rounded-md shadow-md">
                             <button
                                 className="p-2 w-full text-left border border-gray-300 bg-purple-100"
-                                onClick={deleteTicket}
+                                onClick={modifuy ? deleteTicket : undefined} 
+
                             >
                                 Supprimer
                             </button>
                             <button
                                 className="p-2 w-full text-left border border-gray-300 bg-orange-100"
-                                onClick={handleSprintClick}
+                                onClick={modifuy ? handleSprintClick : undefined} 
+
                             >
                                 Assign To Sprint
                             </button>
@@ -237,8 +245,8 @@ export default function Cardtickes({ tickets, fetchticketsData , selectedProject
                         }
                         alt={tickets?.assigned_to_user?.name}
                         className="cursor-pointer absolute top-0 left-0 w-full h-full rounded-full object-cover"
-                        onClick={handleImageClick}
-                    />
+                        onClick={modifuy ? handleImageClick : undefined} // Disable the onClick if modifuy is false
+                        />
                     {showUserList && (
                         <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-70 z-50">
                             <div className="bg-white rounded-lg p-4">
@@ -308,6 +316,7 @@ export default function Cardtickes({ tickets, fetchticketsData , selectedProject
                             <h2 className="text-xl font-semibold">Sprints</h2>
                             <button
                                 className="text-gray-500"
+                                
                                 onClick={handleCloseSprintList}
                             >
                                 Close

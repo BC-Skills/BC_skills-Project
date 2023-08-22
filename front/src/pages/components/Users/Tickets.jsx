@@ -35,6 +35,8 @@ const Tickets = () => {
     const [shouldEnableDragDropSprints, setShouldEnableDragDropSprints] =
         useState(false);
     const [showSprints, setshowSprints] = useState(false);
+    const [modifuy,setShouldmodify]=useState(false)
+
 
     useEffect(() => {
         const parsedLinks = JSON.parse(storedLinks) || [];
@@ -59,6 +61,7 @@ const Tickets = () => {
 
                         setShouldShowAddButton(hasAddPrivilege);
                         setShouldEnableDragDrop(hasEditPrivilege);
+                        setShouldmodify(hasEditPrivilege)
                         setshow(shows);
                     }
                 }
@@ -377,6 +380,8 @@ const Tickets = () => {
                                                                                 selectedProject={
                                                                                     selectedProject
                                                                                 }
+                                                                                modifuy={modifuy}
+
                                                                             />
                                                                         </div>
                                                                     )}
@@ -506,6 +511,8 @@ const Tickets = () => {
                                                                                 selectedProject={
                                                                                     selectedProject
                                                                                 }
+                                                                                modifuy={modifuy}
+
                                                                             />
                                                                         </div>
                                                                     )}
@@ -636,6 +643,7 @@ const Tickets = () => {
                                                                                 selectedProject={
                                                                                     selectedProject
                                                                                 }
+                                                                                modifuy={modifuy}
                                                                             />
                                                                         </div>
                                                                     )}
