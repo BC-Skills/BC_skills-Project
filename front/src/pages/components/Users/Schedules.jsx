@@ -1,5 +1,4 @@
-/* eslint-disable no-undef */
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import ScheduleForm from '../../model/ScheduleForm';
 import { useStateContext } from '../../../contexts/contextProvider';
 import axiosClient from '../../../axios';
@@ -7,8 +6,9 @@ import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import { Transition } from '@headlessui/react';
 
 const ScheduleTable = () => {
-  // eslint-disable-next-line no-unused-vars
   const [schedules, setSchedules] = useState([]);
+  const [scheduless, setScheduless] = useState([]);
+
   const [tickets, setTickets] = useState([]);
   const [projects, setProjects] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -21,14 +21,67 @@ const ScheduleTable = () => {
 
   const [filteredSchedulesByDate, setFilteredSchedulesByDate] = useState({});
   const [currentDate] = useState(new Date().toISOString().slice(0, 10));
+  const [isLoadingSchedules, setIsLoadingSchedules] = useState(true);
 
   useEffect(() => {
-    axiosClient
+    fetchsechu(currentUser, searchDate, searchProject, searchTicket);
+  }, [currentUser, searchDate, searchProject, searchTicket]);
+  
+  const fetchsechu = async (currentUser, searchDate, searchProject, searchTicket) => {
+    try {
+      // Fetch schedules
+      const schedulesResponse = await axiosClient.get(`scheduless/last-7-days/${currentUser.id}`);
+      const schedulesData = schedulesResponse.data;
+      setSchedules(schedulesData)
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+ useEffect(() => {
+  // Check if schedules has data
+  if (schedules) {
+
+  console.log(schedules)
+
+    const filteredSchedules = schedules.filter((schedule) => {
+      const dateMatch = schedule.date.toLowerCase().includes(searchDate.toLowerCase());
+      const ticket = tickets.find((ticket) => ticket.id === schedule.ticket_id);
+      const project = projects.find((project) => project.id === schedule.project_id);
+      const projectMatch = project ? project.nom.toLowerCase().includes(searchProject.toLowerCase()) : true;
+      const ticketMatch = ticket ? ticket.nom.toLowerCase().includes(searchTicket.toLowerCase()) : true;
+      return dateMatch && projectMatch && ticketMatch;
+    });
+    const filteredSchedulesByDate = filteredSchedules.reduce((acc, schedule) => {
+      const date = schedule.date.split('T')[0];
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(schedule);
+      return acc;
+    }, {});
+    const uniqueDates = Object.keys(filteredSchedulesByDate).sort((a, b) => new Date(a) - new Date(b));
+
+    setFilteredSchedulesByDate(filteredSchedulesByDate);
+    
+  }
+
+  // Fetch tickets, projects, and scheduless data
+  
+}, [schedules, searchDate, searchProject, searchTicket]);
+
+
+
+  useEffect(() => {
+    if (searchDate || searchProject || searchTicket) {
+
+      axiosClient
       .get(`schedules/user/${currentUser.id}`)
       .then((response) => {
         setSchedules(response.data);
+        setIsLoadingSchedules(false);
+        //schedules/user/${currentUser.id}
 
-        // eslint-disable-next-line no-unused-vars
         const schedulesByDate = response.data.reduce((acc, schedule) => {
           const date = schedule.date.split('T')[0];
           if (!acc[date]) {
@@ -59,10 +112,11 @@ const ScheduleTable = () => {
         const uniqueDates = Object.keys(filteredSchedulesByDate).sort((a, b) => new Date(a) - new Date(b));
 
         setFilteredSchedulesByDate(filteredSchedulesByDate);
-        // setUniqueDates(uniqueDates);
+        setUniqueDates(uniqueDates);
       })
       .catch((error) => {
         console.error('Error fetching schedules:', error);
+        setIsLoadingSchedules(false);
       });
 
     axiosClient
@@ -81,7 +135,20 @@ const ScheduleTable = () => {
       })
       .catch((error) => {
         console.error('Error fetching projects:', error);
+
       });
+
+      axiosClient
+      .get('schedules/')
+      .then((response) => {
+        setScheduless(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching tickets:', error);
+      });
+
+    }
+    
   }, [currentUser.id, searchDate, searchProject, searchTicket]);
 
   const handleAddSchedule = () => {
@@ -113,6 +180,7 @@ const ScheduleTable = () => {
 
   const handleSearch = (searchValue) => {
     if (searchOption === 'date') {
+      console.log(searchValue);
       setSearchDate(searchValue);
     } else if (searchOption === 'project') {
       setSearchProject(searchValue);
@@ -122,10 +190,13 @@ const ScheduleTable = () => {
   };
 
   const allSchedules = Object.values(filteredSchedulesByDate).reduce((acc, schedules) => [...acc, ...schedules], []);
-
+  const paginatedSchedules = [];
+  for (let i = 0; i < allSchedules.length; i += 7) {
+    paginatedSchedules.push(allSchedules.slice(i, i + 7));
+  }
 
   return (
-    <div className="flex flex-1 flex-col ">
+    <div className="flex flex-1 flex-col">
       <div className="flex flex-row-reverse items-center justify-between">
         <div className="flex flex-row gap-6 justify-center items-center">
           <div className="flex-1">
@@ -145,16 +216,6 @@ const ScheduleTable = () => {
                 value={searchDate}
                 onChange={(e) => handleSearch(e.target.value)}
               />
-              {/* <svg
-                className="absolute top-3 right-3 w-4 h-4 text-gray-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a4 4 0 11-8 0 4 4 0 018 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 19l-4.35-4.35" />
-              </svg> */}
             </div>
           ) : (
             <div className="relative">
@@ -196,7 +257,8 @@ const ScheduleTable = () => {
           Add Schedule
         </button>
       </div>
-      <div d="table-ex" className="w-full">
+
+      <div className="w-full">
         {Object.entries(filteredSchedulesByDate)
           .reverse()
           .map(([date, schedulesForDate]) => {
@@ -208,7 +270,7 @@ const ScheduleTable = () => {
             });
 
             return (
-              <div key={date} className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5 ">
+              <div key={date} className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
                 <h1 className="text-3xl font-bold mb-4 px-6 py-4 bg-gray-50 text-center text-[#41415A]">
                   {formattedDate.toUpperCase()}
                 </h1>
@@ -239,41 +301,43 @@ const ScheduleTable = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 border-t border-gray-100">
-                    {schedulesForDate.map((schedule) => {
-                      const ticket = tickets.find((ticket) => ticket.id === schedule.ticket_id);
-                      const project = projects.find((project) => project.id === schedule.project_id);
+ 
+    {schedulesForDate.map((schedule) => {
+    
 
-                      return (
-                        <tr key={schedule.id} className="hover:bg-gray-50">
-                          <td className="px-6 py-4 border-b border-gray-200">{schedule.date}</td>
-                          <td className="px-6 py-4 border-b border-gray-200">{schedule.start_hour}</td>
-                          <td className="px-6 py-4 border-b border-gray-200">{schedule.end_hour}</td>
-                          <td className="px-6 py-4 border-b border-gray-200">
-                            <span className="inline-flex items-center gap-1 rounded-full bg-[#FF9300] px-2 py-1 text-xs font-semibold text-white">
-                              {ticket ? ticket.nom : '-'}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 border-b border-gray-200">
-                            <span className="inline-flex items-center gap-1 rounded-full bg-[#0096FF] px-2 py-1 text-xs font-semibold text-white">
-                              {project ? project.nom : '-'}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 border-b border-gray-200">{schedule.description}</td>
-                          <td className="px-6 py-4 border-b border-gray-200">
-                            {schedule.file_path ? (
-                              <div>
-                                <button className="bg-[#9437FF] hover:bg-[#B779FF] text-white font-bold py-1 px-2 rounded" onClick={() => handleFileDownload(schedule.id, schedule.file_name)}>
-                                  Download File
-                                </button>
-                              </div>
-                            ) : (
-                              <p>No File Uploaded</p>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
+      return (
+        <tr key={schedule.id} className="hover:bg-gray-50">
+          <td className="px-6 py-4 border-b border-gray-200">{schedule.date}</td>
+          <td className="px-6 py-4 border-b border-gray-200">{schedule.start_hour}</td>
+          <td className="px-6 py-4 border-b border-gray-200">{schedule.end_hour}</td>
+          <td className="px-6 py-4 border-b border-gray-200">
+            <span className="inline-flex items-center gap-1 rounded-full bg-[#FF9300] px-2 py-1 text-xs font-semibold text-white">
+              {schedule.ticket.nom}
+            </span>
+          </td>
+          <td className="px-6 py-4 border-b border-gray-200">
+            <span className="inline-flex items-center gap-1 rounded-full bg-[#0096FF] px-2 py-1 text-xs font-semibold text-white">
+            {schedule.project.nom}
+            </span>
+          </td>
+          <td className="px-6 py-4 border-b border-gray-200">{schedule.description}</td>
+          <td className="px-6 py-4 border-b border-gray-200">
+            {schedule.file_path ? (
+              <div>
+                <button className="bg-[#9437FF] hover:bg-[#B779FF] text-white font-bold py-1 px-2 rounded" onClick={() => handleFileDownload(schedule.id, schedule.file_name)}>
+                  Download File
+                </button>
+              </div>
+            ) : (
+              <p>No File Uploaded</p>
+            )}
+          </td>
+        </tr>
+      );
+    })}
+
+</tbody>
+
                 </table>
               </div>
             );
@@ -341,7 +405,6 @@ const ScheduleTable = () => {
         </tbody>
       </table>
 
-     
       <Transition
         show={showForm}
         enter="transition-opacity duration-300"

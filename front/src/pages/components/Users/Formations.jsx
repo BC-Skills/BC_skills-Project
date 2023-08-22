@@ -56,20 +56,7 @@ export default function Formations() {
       [id]: !prevState[id]
     }));
   };
-
-
-  const handleViewDetails = async (formationType) => {
-    try {
-      const response = await axiosClient.get(`formation-types/${formationType.id}/courses`);
-      setSelectedFormationType({ ...formationType, courses: response.data });
-    } catch (error) {
-      console.error("Error fetching courses:", error);
-    }
-  };
-
-  const handleFileUpload = (file) => {
-    console.log("Uploading file:", file);
-  };
+  
 
   const indexOfLastFormation = currentPage * formationPerPage;
   const indexOfFirstFormation = indexOfLastFormation - formationPerPage;
@@ -177,14 +164,6 @@ export default function Formations() {
             onFormSubmit={handleFormSubmit}
           />
         </div>
-      )}
-      {selectedFormationType && (
-        <CourseModal
-          isOpen={Boolean(selectedFormationType)}
-          onClose={() => setSelectedFormationType(null)}
-          formationType={selectedFormationType}
-          onFileUpload={handleFileUpload}
-        />
       )}
     </div>
   );

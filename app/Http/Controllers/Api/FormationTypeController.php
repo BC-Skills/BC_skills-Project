@@ -5,20 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\FormationType;
 use Illuminate\Http\Request;
+use App\Models\Formation;
 
 class FormationTypeController extends Controller
 {
     public function index()
     {
-        $formationTypes = FormationType::all();
+        $formationTypes = FormationType::with('formations')->get();
         return response()->json($formationTypes);
-    }
-
-    public function getFormations(FormationType $formationType)
-    {
-        $formations = $formationType->formations()->get();
-
-        return response()->json($formations);
     }
 
     // public function store(Request $request)

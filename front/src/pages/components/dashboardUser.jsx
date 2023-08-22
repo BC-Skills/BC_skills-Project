@@ -1,10 +1,14 @@
 import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useStateContext } from "../../contexts/contextProvider";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axiosClient from "../../axios";
 import "../../assets/css/dashboard.css";
 import logo from "../../assets/images/logo.png";
 import Chat from "./Chat/chat";
+import { io } from "socket.io-client";
+import NotificationAlert from 'react-notification-alert';
+
+
 
 export default function DashboardUser() {
     // eslint-disable-next-line no-unused-vars
@@ -12,13 +16,38 @@ export default function DashboardUser() {
     const [links, setLinks] = useState([]);
     // eslint-disable-next-line no-unused-vars
     const [loading, setLoading] = useState(false);
-    const { userToken, profile } = useStateContext();
+    const { userToken, profile, unreadMessageCount , handleUnreadMessageCountChange} = useStateContext();
     const [blackDivVisible, setBlackDivVisible] = useState(false);
+    const { currentUser } = useStateContext();
 
     // eslint-disable-next-line no-unused-vars
     const [activeLinkIndex, setActiveLinkIndex] = useState(-1);
     const [isSidebarActive, setIsSidebarActive] = useState(false);
 
+  
+    useEffect(() => {
+    
+        const socket = io("http://localhost:3001", { transports: ["websocket"] });
+    
+        socket.on("unreadMessageCount", (count) => {
+            console.log("Received unreadMessageCount event");
+            handleUnreadMessageCountChange(count);
+        });
+    
+        if (currentUser) {
+            console.log("Emitting getUnreadMessageCount event");
+            socket.emit("getUnreadMessageCount", currentUser.id);
+        }
+    
+        return () => {
+            console.log("Effect cleanup");
+            socket.disconnect();
+        };
+    }, [currentUser]);
+
+
+
+      
     const handleToggleClick = () => {
         setIsSidebarActive(!isSidebarActive);
     };
@@ -28,6 +57,8 @@ export default function DashboardUser() {
     if (!userToken || profile.name === "admin") {
         return <Navigate to="/" />;
     }
+
+    
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
@@ -39,8 +70,10 @@ export default function DashboardUser() {
             setLoading(true);
             getPrivilages();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+
+ 
 
     const getPrivilages = async () => {
         try {
@@ -131,21 +164,31 @@ export default function DashboardUser() {
 
     const logout = async () => {
         try {
-            sessionStorage.clear();
-            localStorage.clear();
-            navigate("/");
+            const response = await axiosClient.post('logout', currentUser );
+    
+
+            if (response.status === 200) {
+                sessionStorage.clear();
+                localStorage.clear();
+                navigate("/");
+            } else {
+                console.error('Logout failed:', response.statusText);
+            }
         } catch (error) {
             console.error("Error logging out:", error);
         }
     };
-
-
+    
     // Function to toggle the visibility of the black div
     const toggleBlackDiv = () => {
         setBlackDivVisible(!blackDivVisible);
     };
-    
 
+  
+ 
+
+
+    
     return (
         <div className="container">
             <div className={`navigation  ${isSidebarActive ? "active" : ""}`}>
@@ -185,7 +228,7 @@ export default function DashboardUser() {
                         </Link>
                     </li>
                     <li>
-                        <a href="/" onClick={logout}>
+                        <a  onClick={logout}>
                             <span className="icon">
                                 <ion-icon name="log-out-outline"></ion-icon>
                             </span>
@@ -198,7 +241,7 @@ export default function DashboardUser() {
                 className={`main flex flex-col flex-1   ${
                     isSidebarActive ? "active" : ""
                 }`}
-            >
+            >     
                 <div className="topbar mt-4 ">
                     <div className="toggle" onClick={handleToggleClick}>
                         <ion-icon name="menu-outline"></ion-icon>
@@ -206,23 +249,26 @@ export default function DashboardUser() {
                     <div className="flex flex-row gap-6 justify-center items-center"></div>
                 </div>
                 <div className="flex-1 p-2 flex  gap-10 flex-row justify-between flex-wrap">
-                    <Outlet />
+                    <Outlet  />
                 </div>
             </div>
             <div
-                className="fixed bottom-14 right-14 z-10 bg-purple-500 text-white p-2 rounded-full flex items-center justify-center cursor-pointer"
+                className="fixed bottom-14 right-14 z-10 bg-purple-50 text-white p-2 rounded-full flex items-center justify-center cursor-pointer"
                 onClick={toggleBlackDiv}
             >
-                <ion-icon name="chatbox-outline" class="text-4xl"></ion-icon>
-            </div>
+                      <span className="relative inline-block ">
+                    <svg className="w-20 h-20 text-gray-700 fill-current" viewBox="0 0 20 20"><path d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clipRule="evenodd" fillRule="evenodd"></path></svg>
+                    <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-lg font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">{unreadMessageCount}</span>
+                    </span>
 
-            {/* Black div displayed on top */}
+            </div>
             {blackDivVisible && (
                 <div className="fixed bottom-25 right-1 flex z-20 h-[90vh]    text-white px-2 py-2 rounded">
                         <Chat />
                 </div>
             )}
-      
+             
+
         </div>
     );
 }

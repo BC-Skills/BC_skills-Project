@@ -147,7 +147,7 @@ export default function Dashboard({children}) {
                         </a>
                     </li>
 
-                    <li className="pt-[20%]">
+                    <li >
                         <a href="#" onClick={logout}>
                             <span className="icon">
                                 <ion-icon name="log-out-outline"></ion-icon>

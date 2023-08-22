@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 use Illuminate\Support\Facades\Storage;
 
@@ -16,6 +17,18 @@ class ScheduleController extends Controller
         return response()->json($schedules);
     }
 
+    public function getLast7DaysSchedulesForUser($userId)
+    {
+        $endDate = Carbon::now();
+        $startDate = $endDate->copy()->subDays(6); // Get the start date 7 days ago
+
+        $schedules = Schedule::where('user_id', $userId)->with('project','ticket')
+            ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
+            ->orderBy('date', 'asc')
+            ->get();
+
+        return response()->json($schedules);
+    }
 
     public function store(Request $request)
     {
@@ -110,7 +123,7 @@ class ScheduleController extends Controller
     public function getSchedulesByUser($userId)
     {
         // Fetch schedules for the given user ID
-        $schedules = Schedule::where('user_id', $userId)->get();
+        $schedules = Schedule::where('user_id', $userId)->with('project','ticket')->get();
 
         // Return the schedules as a JSON response
         return response()->json($schedules);
