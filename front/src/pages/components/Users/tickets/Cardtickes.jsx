@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import axiosClient from "../../../../axios";
 import PropTypes from "prop-types";
@@ -87,7 +86,6 @@ export default function Cardtickes({ tickets, fetchticketsData }) {
                 await axiosClient.put(`ticketss/${tickets.id}`, {
                     assign_to: selectedUser.id,
                 });
-                
                 fetchticketsData();
                 console.log("Ticket updated successfully.");
                 setShowUserList(false);
