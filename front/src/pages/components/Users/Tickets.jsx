@@ -9,6 +9,7 @@ import { CSSTransition } from "react-transition-group";
 import "../../../assets/css/animation.css";
 import Sprints from "./tickets/sprints";
 
+
 const Tickets = () => {
     const storedLinks = localStorage.getItem("links");
     const navigate = useNavigate();
@@ -38,43 +39,32 @@ const Tickets = () => {
 
     useEffect(() => {
         const parsedLinks = JSON.parse(storedLinks) || [];
-        const hasProjectsLink = parsedLinks.some(
-            (link) => link.name === "tickets"
-        );
-
+        const hasProjectsLink = parsedLinks.some((link) => link.name === "tickets");
+    
         if (!hasProjectsLink) {
             navigate("/users");
         } else {
             parsedLinks.forEach((link) => {
                 if (link.name === "tickets") {
-                    if (
-                        link.privilegeNames &&
-                        Array.isArray(link.privilegeNames)
-                    ) {
-                        const hasAddPrivilege =
-                            link.privilegeNames.includes("add");
-                        const hasEditPrivilege =
-                            link.privilegeNames.includes("edit");
+                    if (link.privilegeNames && Array.isArray(link.privilegeNames)) {
+                        const hasAddPrivilege = link.privilegeNames.includes("add");
+                        const hasEditPrivilege = link.privilegeNames.includes("edit");
                         const shows = link.privilegeNames.includes("show");
-
+    
                         setShouldShowAddButton(hasAddPrivilege);
                         setShouldEnableDragDrop(hasEditPrivilege);
                         setshow(shows);
                     }
                 }
             });
-
+    
             parsedLinks.forEach((link) => {
                 if (link.name === "sprints") {
-                    if (
-                        link.privilegeNames &&
-                        Array.isArray(link.privilegeNames)
-                    ) {
+                    if (link.privilegeNames && Array.isArray(link.privilegeNames)) {
                         // const hasAddPrivilege = link.privilegeNames.includes("add");
-                        const hasEditPrivilege =
-                            link.privilegeNames.includes("edit");
+                        const hasEditPrivilege = link.privilegeNames.includes("edit");
                         const shows = link.privilegeNames.includes("show");
-
+    
                         setShouldEnableDragDropSprints(hasEditPrivilege);
                         setshowSprints(shows);
                     }
@@ -82,6 +72,12 @@ const Tickets = () => {
             });
         }
     }, [storedLinks, navigate]);
+
+    
+    
+    
+    
+    
 
     useEffect(() => {
         if (selectedProject !== null) {
