@@ -69,12 +69,12 @@ const ScheduleForm = ({ onClose, userId }) => {
       if (formData.file) {
         formDataToSend.append('file', formData.file);
       }
-
       const response = await axiosClient.post('schedules', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-      });
+      }
+      );
 
       console.log(response.data); // Response from the server
 
@@ -82,6 +82,13 @@ const ScheduleForm = ({ onClose, userId }) => {
     } catch (error) {
       console.error('Error submitting schedule:', error);
     }
+    try {
+      await axiosClient.put(`ticketss/${formData.ticket_id}`, {
+          status: "En Cours",
+      });
+  } catch (error) {
+      console.log("Error updating ticket status:", error);
+  }
   };
 
   return (

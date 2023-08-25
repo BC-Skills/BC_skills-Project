@@ -108,18 +108,18 @@ const CourseModal = ({ isOpen, formationType, onClose }) => {
                         {formationType?.map((formation, index) => (
                             <div
                                 key={index}
-                                className="bg-gray-100 p-4 shadow-md rounded-md "
+                                className="bg-gray-100 flex flex-col  p-4 shadow-md rounded-md "
                             >
                                 <h3 className="text-lg font-semibold">
                                     {formation.name}
                                 </h3>
                                 <p
-                        className={`text-gray-600 ${
+                        className={`text-gray-600 max-w-[300px] ${
                             showDescriptions[index] ? 'block' : 'hidden'
                         }`}
                     >
                         {formation.description} xswcwxsd cwdsxcwsdxc
-                    </p>
+                               </p>
                 
                     <button
                         className="mt-2 text-gray-600 underline"
