@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useRef, useState } from "react";
 import axiosClient from "../../axios";
 
@@ -51,7 +53,6 @@ const CourseModal = ({ isOpen, formationType, onClose }) => {
                 }
             );
 
-            console.log(response.data);
             onClose();
         } catch (error) {
             console.error("Error submitting formation:", error);
@@ -63,10 +64,9 @@ const CourseModal = ({ isOpen, formationType, onClose }) => {
             const response = await axiosClient.get(
                 `formations/${formationId}/download`,
                 {
-                    responseType: "blob", // Set the response type to 'blob'
+                    responseType: "blob",
                 }
             );
-
             const blob = new Blob([response.data]);
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement("a");
@@ -142,7 +142,7 @@ const CourseModal = ({ isOpen, formationType, onClose }) => {
                         ))}
                     </div>
                 </div>
-                <div className="modal-content flex h-[1OOpx] justify-center items-start">
+                <div className="modal-content flex h-[1OOpx] px-4 justify-center items-start border-[2px] p-1 border-black pb-4 ">
                     {showInputs ? (
                         <div className="flex-1 flex flex-col">
                             <div className="flex justify-center gap-24 flex-1">
