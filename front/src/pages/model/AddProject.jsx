@@ -388,7 +388,7 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                                 {sprints.map((sprint) => (
                                                     <div
                                                         key={sprint.id}
-                                                        className={`flex flex-col items-start min-w-[150px]   p-4 border rounded-lg ${
+                                                        className={`flex flex-row items-start min-w-[150px]  overflow-auto   p-4 border rounded-lg ${
                                                             sprint.status ===
                                                             "Completed"
                                                                 ? "bg-green-200"

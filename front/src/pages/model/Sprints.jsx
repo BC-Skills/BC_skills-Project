@@ -238,7 +238,7 @@ export default function Sprints({ project, onCloseModal }) {
                                         Add Sprints
                                     </button>
                                 )}
-                                <div className="grid grid-cols-1 mt-8  sm:grid-cols-2   lg:grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 mt-8  sm:grid-cols-2 max-h-[50vh] overflow-auto lg:grid-cols-2 gap-4">
                                     {sprints.map((sprint) => (
                                         <div
                                             key={sprint.id}
