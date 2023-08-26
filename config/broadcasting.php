@@ -69,6 +69,11 @@ return [
         'null' => [
             'driver' => 'null',
         ],
+        'websocket' => [
+            'driver' => 'websocket',
+            'route_prefix' => 'api/websocket',
+            'middleware' => [],
+        ],
 
     ],
 

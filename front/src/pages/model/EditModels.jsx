@@ -79,7 +79,6 @@ export default function EditModels({ userId, onCloseModal, fetchUsersData }) {
             });
     }, []);
 
-    
     useEffect(() => {
         if (profile.name !== "admin") {
             axiosClient
@@ -183,36 +182,40 @@ export default function EditModels({ userId, onCloseModal, fetchUsersData }) {
                             />
                         </div>
                         <div className="mb-4">
-                          
                             {profile.name === "admin" ? (
-                                        <>
+                                <>
                                     <label
-                                htmlFor="profil"
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
-                            >
-                                Profile
-                            </label>  
-                                <div>
-                                   
-                                    <select
-                                        name="profile_id"
-                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                        required
+                                        htmlFor="profil"
+                                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
                                     >
-                                        {profiles.map((profile) => (
-                                            <option key={profile.id} value={profile.id}>
-                                                {profile.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div></>
+                                        Profile
+                                    </label>
+                                    <div>
+                                        <select
+                                            name="profile_id"
+                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                            required
+                                            value={editedUser.profile_id}
+                                            onChange={handleInputChange}
+                                        >
+                                            {profiles.map((profile) => (
+                                                <option
+                                                    key={profile.id}
+                                                    value={profile.id}
+                                                >
+                                                    {profile.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </>
                             ) : (
                                 <div className="text-gray-900 text-[30px] dark:text-white">
-                                      <input
-                                    type="hidden"
-                                    name="profile_id"
-                                    value={profilesid}
-                                />
+                                    <input
+                                        type="hidden"
+                                        name="profile_id"
+                                        value={profilesid}
+                                    />
                                 </div>
                             )}
                         </div>

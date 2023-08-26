@@ -4,6 +4,7 @@ import image from '../assets/images/image.png';
 import axiosClient from '../axios';
 import { useStateContext } from '../contexts/contextProvider';
 import {  useNavigate } from 'react-router-dom';
+import AnimatedText from './anime';
 
 export default function Login() {
   const { setCurrentUser, setprofile, setUserToken  } = useStateContext();
@@ -21,7 +22,7 @@ export default function Login() {
         email,
         password,
       };
-      const response = await axiosClient.post('http://localhost:8000/api/login', formData)
+      const response = await axiosClient.post('login', formData)
       setUserToken(response.data.token)
       setCurrentUser(response.data.user);
       setprofile(response.data.profile)
@@ -45,14 +46,14 @@ export default function Login() {
   };
 
   return (
-    <div className="h-[100vh] mt-10 overflow-hidden">
-      <div className="bg-white p-10 flex flex-row justify-center gap-10 rounded-b-lg">
+    <div className="h-[90vh] w-full mt-10 overflow-hidden">
+      <div className="bg-white p-10 w-full flex flex-row justify-evenly gap-10 rounded-b-lg">
         <div className="xl:flex-1 xl:p-10 xl:h-[80vh] flex xl:flex-row xl:overflow-hidden sm:hidden">
           <div className="flex flex-1 flex-col justify-center xl:ml-[150px] items-start">
             <h1 className="text-[40px] max-w-[500px] font-bold">
-              Welcome to our Company <span className="text-[50px] text-[#1d4ed8]">BCSKILLS</span>
+                <AnimatedText text="BCSKILLS" />
             </h1>
-            <div className="flex xl:flex-row xl:justify-center xl:items-start md:flex-col md:justify-center md:items-start">
+            <div className="flex lg:flex-col xl:justify-center xl:items-start md:flex-col md:justify-center md:items-start">
               <h1 className="text-[30px]">Welcome to our Company </h1>
               <div className="flex-1 ">
                 <img src={image} className=" w-full h-full object-contain " alt="Logo" />

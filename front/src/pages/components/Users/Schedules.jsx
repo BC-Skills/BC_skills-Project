@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
 import ScheduleForm from '../../model/ScheduleForm';
 import { useStateContext } from '../../../contexts/contextProvider';
@@ -112,6 +113,8 @@ const ScheduleTable = () => {
         const uniqueDates = Object.keys(filteredSchedulesByDate).sort((a, b) => new Date(a) - new Date(b));
 
         setFilteredSchedulesByDate(filteredSchedulesByDate);
+        // eslint-disable-next-line no-undef
+        setUniqueDates(uniqueDates);
       })
       .catch((error) => {
         console.error('Error fetching schedules:', error);

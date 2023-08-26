@@ -15,13 +15,6 @@ class FormationTypeController extends Controller
         return response()->json($formationTypes);
     }
 
-    public function getFormations(FormationType $formationType)
-    {
-        $formations = $formationType->formations()->get();
-        
-        return response()->json($formations);
-    }
-
     // public function store(Request $request)
     // {
     //     $request->validate([
