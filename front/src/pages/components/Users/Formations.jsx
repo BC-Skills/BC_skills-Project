@@ -16,6 +16,7 @@ export default function Formations() {
   const { profile, currentUser } = useStateContext();
   const [showMore, setShowMore] = useState({});
   const [selectedFormationType, setSelectedFormationType] = useState(null);
+  const [selectedFormationTypeid, setSelectedFormationTypeid] = useState(null);
 
   useEffect(() => {
     const parsedLinks = JSON.parse(storedLinks) || [];
@@ -57,14 +58,20 @@ export default function Formations() {
     }));
   };
 
+  
+// In Formations component
+const handleViewDetails = async (formationType) => {
+  try {
+    setSelectedFormationType(formationType.formations); // Pass the courses array
+    setSelectedFormationTypeid(formationType.id)
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+  }
+};
 
-  const handleViewDetails = async (formationType) => {
-    try {
-      setSelectedFormationType(formationType.formations);
-    } catch (error) {
-      console.error("Error fetching courses:", error);
-    }
-  };
+  
+  
+  
 
   const handleFileUpload = (file) => {
     console.log("Uploading file:", file);
@@ -177,16 +184,19 @@ export default function Formations() {
           />
         </div>
       )}
-      {selectedFormationType && (
-        <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-200 bg-opacity-50">
-        <CourseModal
-          isOpen={Boolean(selectedFormationType)}
-          onClose={() => setSelectedFormationType(null)}
-          formationType={selectedFormationType}
-          onFileUpload={handleFileUpload}
-        />
-         </div>
-      )}
+    {selectedFormationType && (
+  <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-200 bg-opacity-50">
+   <CourseModal
+  isOpen={Boolean(selectedFormationType)}
+  onClose={() => setSelectedFormationType(null)}
+  formationType={selectedFormationType} // This is an array of formation objects
+  formationTypeid={selectedFormationTypeid}
+  onFileUpload={handleFileUpload}
+/>
+
+  </div>
+)}
+
     </div>
   );
 }

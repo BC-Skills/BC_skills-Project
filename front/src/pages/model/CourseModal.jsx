@@ -3,7 +3,7 @@
 import React, { useRef, useState } from "react";
 import axiosClient from "../../axios";
 
-const CourseModal = ({ isOpen, formationType, onClose }) => {
+const CourseModal = ({ isOpen, formationType,formationTypeid, onClose }) => {
     const [showInputs, setShowInputs] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
@@ -11,6 +11,7 @@ const CourseModal = ({ isOpen, formationType, onClose }) => {
         file: null,
     });
 
+    console.log(formationType);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -27,17 +28,47 @@ const CourseModal = ({ isOpen, formationType, onClose }) => {
         }));
     };
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     try {
+    //         const requestData = {
+    //             name: formData.name,
+    //             description: formData.description,
+    //             formation_type_id: formationTypeid, // formationTypeId doesn't exist
+    //           };
+              
+    //       console.log(requestData)
+    //       console.log(formationTypeid)
+      
+    //       const response = await axiosClient.post(
+    //         "formations",
+    //         requestData,
+    //         {
+    //           headers: {
+    //             "Content-Type": "application/json",
+    //           },
+    //         }
+    //       );
+      
+    //       onClose();
+    //     } catch (error) {
+    //       console.error("Error submitting formation:", error);
+    //     }
+    //   };
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const formDataToSend = new FormData();
             formDataToSend.append("name", formData.name);
             formDataToSend.append("description", formData.description);
-            formDataToSend.append( "formation_type_id", formationType.formationTypeId );
+            formDataToSend.append(
+                "formation_type_id",
+                formationType.formationTypeId
+            );
             if (formData.file) {
                 formDataToSend.append("file", formData.file);
             }
-            console.log(formDataToSend)
+
             const response = await axiosClient.post(
                 "formations",
                 formDataToSend,
@@ -53,6 +84,7 @@ const CourseModal = ({ isOpen, formationType, onClose }) => {
             console.error("Error submitting formation:", error);
         }
     };
+      
 
     const handleDownload = async (formationId, fileName) => {
         try {
@@ -100,41 +132,34 @@ const CourseModal = ({ isOpen, formationType, onClose }) => {
                 </div>
                 <div className="modal-content flex max-h-[800px] flex-1 p-5 gap-3 overflow-auto">
                     <div className="grid grid-cols-2 gap-4">
-                        {formationType?.map((formation, index) => (
-                            <div
-                                key={index}
-                                className="bg-gray-100 flex flex-col  p-4 shadow-md rounded-md "
-                            >
-                                <h3 className="text-lg font-semibold">
-                                    {formation.name}
-                                </h3>
-                                <p
-                        className={`text-gray-600 max-w-[300px] ${
-                            showDescriptions[index] ? 'block' : 'hidden'
-                        }`}
-                    >
-                        {formation.description} xswcwxsd cwdsxcwsdxc
-                               </p>
-                
-                    <button
-                        className="mt-2 text-gray-600 underline"
-                        onClick={() => toggleDescription(index)}
-                    >
-                        {showDescriptions[index] ? 'Hide' : 'Show'} Description
-                    </button>
-                                <button
-                                    className="mt-2 bg-[#9437FF] hover:bg-[#B779FF] text-white font-bold py-1 px-2 rounded"
-                                    onClick={() =>
-                                        handleDownload(
-                                            formation.id,
-                                            formation.file_path
-                                        )
-                                    }
-                                >
-                                    Download
-                                </button>
-                            </div>
-                        ))}
+                    {formationType?.map((formation, index) => (
+  <div
+    key={index}
+    className="bg-gray-100 flex flex-col p-4 shadow-md rounded-md"
+  >
+    <h3 className="text-lg font-semibold">{formation.name}</h3>
+    <p
+      className={`text-gray-600 max-w-[300px] ${
+        showDescriptions[index] ? 'block' : 'hidden'
+      }`}
+    >
+      {formation.description}
+    </p>
+    <button
+      className="mt-2 text-gray-600 underline"
+      onClick={() => toggleDescription(index)}
+    >
+      {showDescriptions[index] ? 'Hide' : 'Show'} Description
+    </button>
+    <button
+      className="mt-2 bg-[#9437FF] hover:bg-[#B779FF] text-white font-bold py-1 px-2 rounded"
+      onClick={() => handleDownload(formation.id, formation.file_path)}
+    >
+      Download
+    </button>
+  </div>
+))}
+
                     </div>
                 </div>
                 <div className="modal-content flex h-[1OOpx] px-4 justify-center items-start border-[2px] p-1 border-black pb-4 ">
@@ -176,6 +201,8 @@ const CourseModal = ({ isOpen, formationType, onClose }) => {
                                         type="file"
                                         onChange={handleFileChange}
                                         hidden
+                                        id="file"
+                                        name="file"
                                         ref={filePicker}
                                     />
                                 </div>
