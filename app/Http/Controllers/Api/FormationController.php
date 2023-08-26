@@ -18,12 +18,12 @@ class FormationController extends Controller
 
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'name' => 'required|string',
-        //     'description' => 'required|string',
-        //     'formation_type_id' => 'required|exists:formation_types,id',
-        //     'file_path' => 'required|string', // Update validation rule for file path
-        // ]);
+        $request->validate([
+            // 'name' => 'required|string',
+            // 'description' => 'required|string',
+            // 'formation_type_id' => 'required|exists:formation_types,id',
+            // 'file_path' => 'required|string', 
+        ]);
 
        
     
@@ -33,6 +33,7 @@ class FormationController extends Controller
             'formation_type_id' => $request->formation_type_id,
             'file_path' => $request->file_path, // Store the file path
         ]);
+        dd($formation);
     
         if ($request->hasFile('file')) {
         $file = $request->file('file');
@@ -40,9 +41,11 @@ class FormationController extends Controller
         $formation->file_path = $filePath;
     }
         $formation->save();
-        
         return response()->json($formation, 201);
     }
+
+
+
     public function downloadFile($id)
     {
         $formation = Formation::findOrFail($id);

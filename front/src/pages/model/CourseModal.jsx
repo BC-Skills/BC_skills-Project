@@ -8,54 +8,48 @@ const CourseModal = ({ isOpen, formationType, onClose }) => {
         description: "",
         file: null,
     });
-
-    console.log(formationType);
-
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+      const { name, value } = e.target;
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
     };
-
+    
     const handleFileChange = (e) => {
-        setFormData((prevData) => ({
-            ...prevData,
-            file: e.target.files[0],
-        }));
+      const file = e.target.files[0];
+      setFormData((prevData) => ({
+        ...prevData,
+        file: file,
+      }));
     };
+    
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        try {
-            const formDataToSend = new FormData();
-            formDataToSend.append("name", formData.name);
-            formDataToSend.append("description", formData.description);
-            formDataToSend.append(
-                "formation_type_id",
-                formationType.formationTypeId
-            );
-            if (formData.file) {
-                formDataToSend.append("file", formData.file);
-            }
-
-            const response = await axiosClient.post(
-                "formations",
-                formDataToSend,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                }
-            );
-
-            console.log(response.data);
-            onClose();
-        } catch (error) {
-            console.error("Error submitting formation:", error);
+      e.preventDefault();
+  
+      try {
+        const formDataToSend = new FormData();
+        formDataToSend.append("name", formData.name);
+        formDataToSend.append("description", formData.description);
+        formDataToSend.append("formation_type_id", formationType.formationTypeId);
+        console.log(formDataToSend);
+        if (formData.file) {
+          formDataToSend.append("file", formData.file);
         }
+  
+        const response = await axiosClient.post("formations", formDataToSend, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+       
+        console.log(response.data);
+        onClose();
+      } catch (error) {
+        console.error("Error submitting formation:", error);
+        console.log(error); // Add this line
+      }
     };
 
     const handleDownload = async (formationId, fileName) => {
@@ -145,6 +139,7 @@ const CourseModal = ({ isOpen, formationType, onClose }) => {
                 <div className="modal-content flex h-[1OOpx] justify-center items-start">
                     {showInputs ? (
                         <div className="flex-1 flex flex-col">
+                           <form onSubmit={handleSubmit}>
                             <div className="flex justify-center gap-24 flex-1">
                                 <div className="mb-4">
                                     <label
@@ -209,11 +204,12 @@ const CourseModal = ({ isOpen, formationType, onClose }) => {
                                 </div>
                             </div>
                             <button
-                                onClick={handleSubmit}
+              
                                 className="bg-[#9437FF] flex-1 hover:bg-[#B779FF] text-white font-bold py-1 px-2 rounded"
                             >
                                 Upload and Submit
                             </button>
+                            </form>
                         </div>
                     ) : (
                         <button
