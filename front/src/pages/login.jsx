@@ -14,15 +14,6 @@ export default function Login() {
   const [loginError, setLoginError] = useState(false);
   const { userToken, profile } = useStateContext();
 
-  useEffect(() => {
-    if (userToken!==null) {
-    if (profile.name === 'admin') {
-      navigate("/dashboard"); 
-    } else {
-      navigate("/users"); 
-    }
-}
-}, [userToken]);
 
 
 

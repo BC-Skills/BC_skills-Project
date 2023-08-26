@@ -148,3 +148,6 @@ Route::get('/dashboard/projects/{projectId}/sprints/{sprintId}/ticket-status', [
 
 
 Route::get('userss/exadminclient/{id}',  [UserController::class, 'getUsersAndUserById']);
+
+Route::get('ticketsss/{assign}', [TicketController::class, 'getTicketsByAssignToId']);
+
