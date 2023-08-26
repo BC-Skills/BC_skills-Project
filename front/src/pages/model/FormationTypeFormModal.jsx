@@ -42,7 +42,6 @@ const FormationTypeFormModal = ({ isOpen, onClose, onFormSubmit }) => {
         if (formData.imagePath) {
             formDataToSend.append("imagePath", formData.imagePath);
         }
-
         axiosClient
             .post("formation-types", formDataToSend, {
                 headers: {
@@ -85,8 +84,8 @@ const FormationTypeFormModal = ({ isOpen, onClose, onFormSubmit }) => {
                             </svg>
                         </div>
                     </div>
-                    <form onSubmit={handleSubmit}>
-                        <div className="mb-4">
+                    <form  onSubmit={handleSubmit}>
+                        <div className="mb-4 p-10 ">
                             <label
                                 className="block text-gray-700 text-sm font-bold mb-2"
                                 htmlFor="name"

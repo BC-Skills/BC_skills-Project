@@ -16,14 +16,39 @@ class FormationController extends Controller
         return response()->json($formations);
     }
 
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => 'required|string',
+    //         'description' => 'required|string',
+    //         'formation_type_id' => 'required|exists:formation_types,id',
+    //     ]);
+    
+    //     $formation = new Formation([
+    //         'name' => $request->input('name'),
+    //         'description' => $request->input('description'),
+    //         'formation_type_id' => $request->input('formation_type_id'),
+    //         // You can remove the 'file_path' assignment if not needed
+    //     ]);
+    
+    //     // Handle file upload and storage as needed (if applicable)
+    //     if ($request->hasFile('file')) {
+    //         $file = $request->file('file');
+    //         $filePath = $file->store('public/formations'); // Store the file in the 'public/formations' directory
+    //         $formation->file_path = $filePath;
+    //     }
+    
+    //     $formation->save();
+    //     return response()->json($formation, 201);
+    // }
     public function store(Request $request)
     {
-        $request->validate([
-            // 'name' => 'required|string',
-            // 'description' => 'required|string',
-            // 'formation_type_id' => 'required|exists:formation_types,id',
-            // 'file_path' => 'required|string', 
-        ]);
+        // $request->validate([
+        //     'name' => 'required|string',
+        //     'description' => 'required|string',
+        //     'formation_type_id' => 'required|exists:formation_types,id',
+        //     'file_path' => 'required|string', // Update validation rule for file path
+        // ]);
 
        
     
@@ -33,7 +58,6 @@ class FormationController extends Controller
             'formation_type_id' => $request->formation_type_id,
             'file_path' => $request->file_path, // Store the file path
         ]);
-        dd($formation);
     
         if ($request->hasFile('file')) {
         $file = $request->file('file');
@@ -41,9 +65,11 @@ class FormationController extends Controller
         $formation->file_path = $filePath;
     }
         $formation->save();
+        
         return response()->json($formation, 201);
     }
-
+    
+    
 
 
     public function downloadFile($id)
