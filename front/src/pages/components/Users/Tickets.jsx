@@ -116,7 +116,7 @@ const Tickets = () => {
 
     const fetchTicketData = async () => {
         try {
-            const response = await axiosClient.get(`ticketsss/${3}`);
+            const response = await axiosClient.get(`ticketsss/${currentUser.id}`);
             const allTicketsData = response.data;
             setTicketss(allTicketsData);
             console.log(allTicketsData);
@@ -184,7 +184,6 @@ const Tickets = () => {
                             (ticket) => ticket.status === "Fini"
                         );
 
-                        // Set the filtered tickets in the state
                         setTickets({
                             todo: ticketsTodo,
                             inProgress: ticketsInProgress,
@@ -398,22 +397,9 @@ const Tickets = () => {
                                 </div>
                             </div>
                             <div className="flex-1 m-10 bg-gray-100 shadow-2xl ">
-                            <div className=" flex max-h-[80vh] flex-wrap overflow-auto p-5">
+                            <div className="flex max-h-[80vh] flex-wrap overflow-auto  p-5">
                                 {filteredTickets.map((tick) => (
-                                    <>
                                     <Cardticket2 key={tick.id} tick={tick} />
-                                    <Cardticket2 key={tick.id} tick={tick} />
-                                    <Cardticket2 key={tick.id} tick={tick} />
-                                    <Cardticket2 key={tick.id} tick={tick} />
-                                    <Cardticket2 key={tick.id} tick={tick} />
-                                    <Cardticket2 key={tick.id} tick={tick} />
-                                    <Cardticket2 key={tick.id} tick={tick} />
-                                    <Cardticket2 key={tick.id} tick={tick} />  <Cardticket2 key={tick.id} tick={tick} />
-                                    <Cardticket2 key={tick.id} tick={tick} />
-                                    <Cardticket2 key={tick.id} tick={tick} />
-                                    <Cardticket2 key={tick.id} tick={tick} />
-
-                                    </>
                                 ))}
                             </div>
                             </div>

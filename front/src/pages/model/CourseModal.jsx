@@ -13,6 +13,8 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose }) => {
 
     console.log(formationType);
 
+
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -61,14 +63,12 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose }) => {
             const formDataToSend = new FormData();
             formDataToSend.append("name", formData.name);
             formDataToSend.append("description", formData.description);
-            formDataToSend.append(
-                "formation_type_id",
-                formationType.formationTypeId
-            );
+            formDataToSend.append( "formation_type_id",formationTypeid);
             if (formData.file) {
                 formDataToSend.append("file", formData.file);
             }
-
+            console.log(formationTypeid)
+            console.log(formDataToSend)
             const response = await axiosClient.post(
                 "formations",
                 formDataToSend,
