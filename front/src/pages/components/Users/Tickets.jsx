@@ -116,7 +116,7 @@ const Tickets = () => {
 
     const fetchTicketData = async () => {
         try {
-            const response = await axiosClient.get(`ticketsss/${currentUser.id}`);
+            const response = await axiosClient.get(`ticketsss/${3}`);
             const allTicketsData = response.data;
             setTicketss(allTicketsData);
             console.log(allTicketsData);
@@ -344,7 +344,9 @@ const Tickets = () => {
         (tick) =>
             tick.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
             (tick.user?.name &&
-                tick.user.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                tick.user.name
+                    .toLowerCase()
+                    .includes(searchQuery.toLowerCase()))
     );
 
     return (
@@ -397,11 +399,46 @@ const Tickets = () => {
                                 </div>
                             </div>
                             <div className="flex-1 m-10 bg-gray-100 shadow-2xl ">
-                            <div className="flex max-h-[80vh] flex-wrap overflow-auto  p-5">
-                                {filteredTickets.map((tick) => (
-                                    <Cardticket2 key={tick.id} tick={tick} />
-                                ))}
-                            </div>
+                            <div className="flex pb-8 max-h-[80vh] overflow-y-auto flex-wrap p-5">
+                                    {filteredTickets.map((tick) => (
+                                      <>  <Cardticket2
+                                            key={tick.id}
+                                            tick={tick}
+                                        /><Cardticket2
+                                        key={tick.id}
+                                        tick={tick}
+                                    />
+                                         <Cardticket2
+                                            key={tick.id}
+                                            tick={tick}
+                                        /> <Cardticket2
+                                        key={tick.id}
+                                        tick={tick}
+                                    />v <Cardticket2
+                                    key={tick.id}
+                                    tick={tick}
+                                /> <Cardticket2
+                                key={tick.id}
+                                tick={tick}
+                            /> <Cardticket2
+                            key={tick.id}
+                            tick={tick}
+                        /> <Cardticket2
+                        key={tick.id}
+                        tick={tick}
+                    /> <Cardticket2
+                    key={tick.id}
+                    tick={tick}
+                /> <Cardticket2
+                key={tick.id}
+                tick={tick}
+            /> <Cardticket2
+            key={tick.id}
+            tick={tick}
+        />
+                                       </> 
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     ) : (
