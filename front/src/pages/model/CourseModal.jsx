@@ -11,7 +11,6 @@ const CourseModal = ({ isOpen, formationType, onClose }) => {
         file: null,
     });
 
-    console.log(formationType);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -30,19 +29,15 @@ const CourseModal = ({ isOpen, formationType, onClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
             const formDataToSend = new FormData();
             formDataToSend.append("name", formData.name);
             formDataToSend.append("description", formData.description);
-            formDataToSend.append(
-                "formation_type_id",
-                formationType.formationTypeId
-            );
+            formDataToSend.append( "formation_type_id", formationType.formationTypeId );
             if (formData.file) {
                 formDataToSend.append("file", formData.file);
             }
-
+            console.log(formDataToSend)
             const response = await axiosClient.post(
                 "formations",
                 formDataToSend,

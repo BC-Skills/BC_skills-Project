@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import logo from '../assets/images/logo.png';
 import image from '../assets/images/image.png';
 import axiosClient from '../axios';
@@ -12,6 +12,18 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate(); // Get the navigate function from useNavigate hook
   const [loginError, setLoginError] = useState(false);
+  const { userToken, profile } = useStateContext();
+
+  useEffect(() => {
+    if (userToken!==null) {
+    if (profile.name === 'admin') {
+      navigate("/dashboard"); 
+    } else {
+      navigate("/users"); 
+    }
+}
+}, [userToken]);
+
 
 
   const handleSubmit = async (e) => {
