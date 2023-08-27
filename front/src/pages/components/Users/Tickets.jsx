@@ -401,42 +401,11 @@ const Tickets = () => {
                             <div className="flex-1 m-10 bg-gray-100 shadow-2xl ">
                             <div className="flex pb-8 max-h-[80vh] overflow-y-auto flex-wrap p-5">
                                     {filteredTickets.map((tick) => (
-                                      <>  <Cardticket2
+                                     <Cardticket2
                                             key={tick.id}
                                             tick={tick}
-                                        /><Cardticket2
-                                        key={tick.id}
-                                        tick={tick}
-                                    />
-                                         <Cardticket2
-                                            key={tick.id}
-                                            tick={tick}
-                                        /> <Cardticket2
-                                        key={tick.id}
-                                        tick={tick}
-                                    />v <Cardticket2
-                                    key={tick.id}
-                                    tick={tick}
-                                /> <Cardticket2
-                                key={tick.id}
-                                tick={tick}
-                            /> <Cardticket2
-                            key={tick.id}
-                            tick={tick}
-                        /> <Cardticket2
-                        key={tick.id}
-                        tick={tick}
-                    /> <Cardticket2
-                    key={tick.id}
-                    tick={tick}
-                /> <Cardticket2
-                key={tick.id}
-                tick={tick}
-            /> <Cardticket2
-            key={tick.id}
-            tick={tick}
-        />
-                                       </> 
+                                        />
+                                       
                                     ))}
                                 </div>
                             </div>

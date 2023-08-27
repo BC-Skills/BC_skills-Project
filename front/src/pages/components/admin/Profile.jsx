@@ -21,20 +21,10 @@ export default function Profile() {
     };
 
     useEffect(() => {
-        // Check if data exists in session storage when the component mounts
-        const storedPrivileges = sessionStorage.getItem("privileges");
-        const storedRoles = sessionStorage.getItem("roles");
-    
-        if (storedPrivileges && storedRoles) {
-          // If data exists in session storage, parse it and set the state
-          setprivileges(JSON.parse(storedPrivileges));
-          setLoadingPrivileges(false);
-          setRoles(JSON.parse(storedRoles));
-          setLoadingRoles(false);
-        } else {
-          // If data doesn't exist in session storage, fetch it from the API
+   
+     
           fetchData();
-        }
+        
       }, []);
     
       const fetchData = async () => {
@@ -136,9 +126,7 @@ export default function Profile() {
 
     const Delete = async (profileid) => {
         const confirmed = window.confirm("Are you sure you want to delete this profile?");
-    
-        // If user confirms deletion, proceed with the API call
-        if (confirmed) {
+            if (confirmed) {
             axiosClient
                 .delete(`profiles/${profileid}`)
                 .then((response) => {

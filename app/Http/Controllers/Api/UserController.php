@@ -119,7 +119,6 @@ class UserController extends Controller
 
           public function getUsersAndUserById($id)
           {
-              // Find the profile IDs for "Admin" and "Client"
               $adminProfile = Profile::where('name', 'Admin')->first();
               $clientProfile = Profile::where('name', 'Client')->first();
           
@@ -129,7 +128,7 @@ class UserController extends Controller
           
               // Get users with profiles other than "Admin" and "Client"
               $usersQuery = User::where('profile_id', '!=', $adminProfile->id)
-                                ->where('profile_id', '!=', $clientProfile->id);
+                                ->where('profile_id', '!=', $clientProfile->id) ->with('profile');
           
               // If an ID is provided, exclude that user too
               if ($id !== null) {

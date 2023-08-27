@@ -33,6 +33,7 @@ export default function Collaborator({ project, onCloseModal }) {
             const usersData = response.data;
             setUsers(usersData);
             setLoading(false);
+            console.log(usersData)
         } catch (error) {
             console.error("Error fetching users:", error);
             setLoading(false);
@@ -66,7 +67,7 @@ export default function Collaborator({ project, onCloseModal }) {
               : [...prevSelectedUserIds, userId]
           );
       
-          // Attach user to the project
+
           try {
             await axiosClient.post(`projects/${project.id}/users/attach`, {
               users: [userId],
@@ -80,12 +81,10 @@ export default function Collaborator({ project, onCloseModal }) {
             prevSelectedUserIds.filter((id) => id !== userId)
           );
       
-          // Detach user from the project
           try {
             await axiosClient.post(`projects/${project.id}/users/detach`, {
               users: [userId],
             });
-            // Handle success or update the UI if needed
           } catch (error) {
             console.error("Error detaching user:", error);
           }
@@ -218,7 +217,7 @@ export default function Collaborator({ project, onCloseModal }) {
                                                                     <p>
                                                                         Profile:{" "}
                                                                         {
-                                                                            user.profile_name
+                                                                            user.profile.name
                                                                         }
                                                                     </p>
                                                                 </div>
