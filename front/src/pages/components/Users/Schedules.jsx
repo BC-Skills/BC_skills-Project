@@ -14,6 +14,7 @@ const ScheduleTable = () => {
   const [projects, setProjects] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const { profile, currentUser } = useStateContext();
+  
 
   const [searchDate, setSearchDate] = useState('');
   const [searchProject, setSearchProject] = useState('');

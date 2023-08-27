@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 import  { useState, useEffect } from 'react';
 import axiosClient from '../../axios';
+import { useStateContext } from '../../contexts/contextProvider';
+
 
 const ScheduleForm = ({ onClose, userId }) => {
   const [formData, setFormData] = useState({
@@ -13,7 +15,7 @@ const ScheduleForm = ({ onClose, userId }) => {
     file: null, 
     description: '', 
   });
-
+  const {currentUser}=useStateContext();
   const [projects, setProjects] = useState([]);
   const [tickets, setTickets] = useState([]);
 
@@ -21,7 +23,7 @@ const ScheduleForm = ({ onClose, userId }) => {
     // Fetch projects and tickets data from the API
     const fetchProjectsAndTickets = async () => {
       try {
-        const projectsResponse = await axiosClient.get('projects');
+        const projectsResponse = await axiosClient.get(`/projects/${currentUser.id}/userss`);
         const ticketsResponse = await axiosClient.get('tickets');
 
         setProjects(projectsResponse.data);
@@ -137,26 +139,7 @@ const ScheduleForm = ({ onClose, userId }) => {
             required
           />
         </div>
-        <div className="mb-4">
-          <label htmlFor="ticket_id" className="block font-bold mb-1">
-            Ticket Name
-          </label>
-          <select
-            id="ticket_id"
-            name="ticket_id"
-            value={formData.ticket_id}
-            onChange={handleChange}
-            className="border border-gray-400 px-4 py-2 rounded w-full"
-            required
-          >
-            <option value="">Select Ticket</option>
-            {tickets.map((ticket) => (
-              <option key={ticket.id} value={ticket.id}>
-                {ticket.nom}
-              </option>
-            ))}
-          </select>
-        </div>
+      
         <div className="mb-4">
           <label htmlFor="project_id" className="block font-bold mb-1">
             Project Name
@@ -173,6 +156,26 @@ const ScheduleForm = ({ onClose, userId }) => {
             {projects.map((project) => (
               <option key={project.id} value={project.id}>
                 {project.nom}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="mb-4">
+          <label htmlFor="ticket_id" className="block font-bold mb-1">
+            Ticket Name
+          </label>
+          <select
+            id="ticket_id"
+            name="ticket_id"
+            value={formData.ticket_id}
+            onChange={handleChange}
+            className="border border-gray-400 px-4 py-2 rounded w-full"
+            required
+          >
+            <option value="">Select Ticket</option>
+            {tickets.map((ticket) => (
+              <option key={ticket.id} value={ticket.id}>
+                {ticket.nom}
               </option>
             ))}
           </select>
