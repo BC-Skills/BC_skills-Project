@@ -116,7 +116,7 @@ const Tickets = () => {
 
     const fetchTicketData = async () => {
         try {
-            const response = await axiosClient.get(`ticketsss/${3}`);
+            const response = await axiosClient.get(`ticketsss/${currentUser.id}`);
             const allTicketsData = response.data;
             setTicketss(allTicketsData);
             console.log(allTicketsData);
