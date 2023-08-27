@@ -171,5 +171,6 @@ class TicketController extends Controller
             return response()->json(['error' => 'An error occurred.'], 500);
         }
     }
+        
     
 }

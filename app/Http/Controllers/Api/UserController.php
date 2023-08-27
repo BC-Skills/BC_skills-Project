@@ -134,10 +134,10 @@ class UserController extends Controller
               if ($id !== null) {
                   $usersQuery->where('id', '!=', $id);
               }
-          
               $users = $usersQuery->get();
           
               return response()->json($users);
           }
+      
     
 }

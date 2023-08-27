@@ -53,7 +53,7 @@ export default function Cardticket2({ tick }) {
                         className="bg-white w-[150px] p-[10px] text-[20px] font-bold rounded-lg"
                         onClick={handleCardClick}
                     >
-                        More details
+                        Less details
                     </button>
                 </div>
             </ReactCardFlip>
