@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import logo from '../assets/images/logo.png';
 import image from '../assets/images/image.png';
+import image2 from '../assets/images/banner01.png';
 import axiosClient from '../axios';
 import { useStateContext } from '../contexts/contextProvider';
 import {  useNavigate } from 'react-router-dom';
@@ -56,7 +57,7 @@ export default function Login() {
             <div className="flex lg:flex-col xl:justify-center xl:items-start md:flex-col md:justify-center md:items-start">
               <h1 className="text-[30px]">Welcome to our Company </h1>
               <div className="flex-1 ">
-                <img src={image} className=" w-full h-full object-contain " alt="Logo" />
+                <img src={image2} className=" w-full h-full  object-contain  " alt="Logo" />
               </div>
             </div>
           </div>
