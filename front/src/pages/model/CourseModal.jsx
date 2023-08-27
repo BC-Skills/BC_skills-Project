@@ -11,6 +11,10 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose }) => {
         file: null,
     });
 
+    console.log(formationType);
+
+
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({

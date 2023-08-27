@@ -156,6 +156,20 @@ class TicketController extends Controller
     }
 
   
-
+    public function getTicketsByAssignToId($assignToId)
+    {
+        try {
+            // Query the database to find tickets assigned to the given user ID
+            $tickets = Ticket::with('project', 'sprint', 'user', 'assignedToUser')
+                ->where('assign_to', $assignToId)
+                ->get();
+    
+            // Return the tickets with project, sprint, and user information in the response
+            return response()->json($tickets);
+        } catch (\Exception $e) {
+            // Handle any errors that might occur during the process
+            return response()->json(['error' => 'An error occurred.'], 500);
+        }
+    }
     
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import logo from '../assets/images/logo.png';
 import image from '../assets/images/image.png';
 import image2 from '../assets/images/banner01.png';
@@ -13,6 +13,9 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate(); // Get the navigate function from useNavigate hook
   const [loginError, setLoginError] = useState(false);
+  const { userToken, profile } = useStateContext();
+
+
 
 
   const handleSubmit = async (e) => {
