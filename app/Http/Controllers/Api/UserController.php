@@ -126,11 +126,9 @@ class UserController extends Controller
                   return response()->json(['error' => 'Profiles not found'], 404);
               }
           
-              // Get users with profiles other than "Admin" and "Client"
               $usersQuery = User::where('profile_id', '!=', $adminProfile->id)
                                 ->where('profile_id', '!=', $clientProfile->id) ->with('profile');
           
-              // If an ID is provided, exclude that user too
               if ($id !== null) {
                   $usersQuery->where('id', '!=', $id);
               }

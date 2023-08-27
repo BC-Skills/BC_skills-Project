@@ -24,10 +24,7 @@ const ScheduleForm = ({ onClose, userId }) => {
     const fetchProjectsAndTickets = async () => {
       try {
         const projectsResponse = await axiosClient.get(`/projects/${currentUser.id}/userss`);
-        const ticketsResponse = await axiosClient.get('tickets');
-
         setProjects(projectsResponse.data);
-        setTickets(ticketsResponse.data);
       } catch (error) {
         console.error(error);
       }
@@ -36,15 +33,27 @@ const ScheduleForm = ({ onClose, userId }) => {
     fetchProjectsAndTickets();
   }, []);
 
+  useEffect(() => {
+    const fetchProjectsAndTickets = async () => {
+      try {
+        const ticketsResponse = await axiosClient.get(`ticketss/${formData.project_id}`);
+
+        setTickets(ticketsResponse.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchProjectsAndTickets()
+  }, [formData.project_id]);
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    // Extract only the filename without the fakepath
     const fileName = file.name;
 
     setFormData((prevData) => ({
       ...prevData,
       file: file,
-      file_name: fileName, // Add the filename to the formData
+      file_name: fileName, 
     }));
   };
 
@@ -55,6 +64,7 @@ const ScheduleForm = ({ onClose, userId }) => {
       [name]: value,
     }));
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
