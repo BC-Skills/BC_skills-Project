@@ -346,7 +346,11 @@ const Tickets = () => {
             (tick.user?.name &&
                 tick.user.name
                     .toLowerCase()
-                    .includes(searchQuery.toLowerCase()))
+                    .includes(searchQuery.toLowerCase()))||
+                    (tick.project?.nom &&
+                        tick.project?.nom 
+                            .toLowerCase()
+                            .includes(searchQuery.toLowerCase()))
     );
 
     return (

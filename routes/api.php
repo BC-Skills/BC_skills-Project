@@ -151,3 +151,6 @@ Route::get('userss/exadminclient/{id}',  [UserController::class, 'getUsersAndUse
 
 Route::get('ticketsss/{assign}', [TicketController::class, 'getTicketsByAssignToId']);
 
+
+Route::get('/projects/{id}/userss', [ProjectController::class, 'getProjectsForUser']);
+
