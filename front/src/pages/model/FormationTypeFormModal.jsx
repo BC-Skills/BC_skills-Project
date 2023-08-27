@@ -157,7 +157,7 @@ const FormationTypeFormModal = ({ isOpen, onClose, onFormSubmit }) => {
                             />
                         </div>
                         {previewImage && (
-                            <div className="mb-4">
+                            <div className="mb-4 max-w-[300px]">
                                 <img
                                     src={previewImage}
                                     alt="Image Preview"
