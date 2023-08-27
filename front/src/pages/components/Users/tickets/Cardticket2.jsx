@@ -48,7 +48,9 @@ export default function Cardticket2({ tick }) {
                     <h2 className="text-xl font-semibold">project:{tick.project?.nom}</h2>
                         <p>{tick.project?.description}</p>
                         <h2 className="text-xl font-semibold">Sprint:{tick.sprint?.nom}</h2>
-                    </div>{" "}
+                        <p>{tick.sprint?.description}</p>
+
+                    </div>
                     <button
                         className="bg-white w-[150px] p-[10px] text-[20px] font-bold rounded-lg"
                         onClick={handleCardClick}

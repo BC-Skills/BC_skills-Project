@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\User;
+
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -178,6 +180,23 @@ class ProjectController extends Controller
 }
                 
 
+public function getProjectsForUser($id)
+{
+    try {
+        // Find the user by their ID
+        $user = User::findOrFail($id);
+
+        // Get all projects associated with the user
+        $projects = $user->projects;
+
+        // Respond with the projects' data
+        return response()->json($projects, 200);
+    } catch (\Exception $e) {
+        // Handle errors (e.g., database errors)
+        \Log::error('Error retrieving user projects: ' . $e->getMessage());
+        return response()->json(['error' => 'Internal server error'], 500);
+    }
+}
 
 
 }
