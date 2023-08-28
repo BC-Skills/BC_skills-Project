@@ -72,7 +72,7 @@ const handleViewDetails = async (formationType) => {
 
   
   
-  
+
 
   const handleFileUpload = (file) => {
     console.log("Uploading file:", file);
@@ -123,7 +123,7 @@ const handleViewDetails = async (formationType) => {
           onClick={handleOpenFormModal}
           className="bg-[#41415A] hover:bg-[#6C6D96] text-white font-bold py-2 px-4 rounded ml-6 mt-4 "
         >
-          Add Formation Type
+          Ajouter une formation
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-10 ">
@@ -149,9 +149,9 @@ const handleViewDetails = async (formationType) => {
               </p>
               <button
                 onClick={() => handleViewDetails(formationType)}
-                className="inline-block py-2 px-7 border border-[#E5E7EB] rounded-full text-base text-body-color font-medium hover:border-primary hover:bg-primary hover:text-white transition"
+                className="inline-block py-2 px-7 border border-[#E5E7EB] rounded-full text-base text-body-color font-medium hover:border-primary hover:bg-primary hover:text-[#41415A] transition"
               >
-                Courses Access
+                Cours
               </button>
             </div>
           </div>

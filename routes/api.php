@@ -154,3 +154,7 @@ Route::get('ticketsss/{assign}', [TicketController::class, 'getTicketsByAssignTo
 
 Route::get('/projects/{id}/userss', [ProjectController::class, 'getProjectsForUser']);
 
+Route::post('usersss/{profileId}/attachFormation', [FormationController::class, 'attachFormation']);
+
+Route::get('formation-typesd/{formationType}', [FormationTypeController::class, 'index3']);
+

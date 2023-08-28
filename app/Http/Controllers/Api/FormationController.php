@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Formation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 
 
 class FormationController extends Controller
@@ -57,6 +58,7 @@ class FormationController extends Controller
             'description' => $request->description,
             'formation_type_id' => $request->formation_type_id,
             'file_path' => $request->file_path, // Store the file path
+            'duree'=> $request->duree
         ]);
     
         if ($request->hasFile('file')) {
@@ -100,9 +102,13 @@ class FormationController extends Controller
 
     public function show($id)
     {
+        
         $formation = Formation::findOrFail($id);
         return response()->json($formation);
     }
+
+
+    
 
     public function update(Request $request, $id)
     {
@@ -118,4 +124,14 @@ class FormationController extends Controller
         return response()->json(null, 204);
     }
    
+    public function attachFormation(Request $request, $profileId)
+    {
+        $user = User::findOrFail($profileId);
+        $formationId = $request->input('formation_id');
+        $duree = $request->input('duree');
+
+        $user->formations()->attach($formationId, ['duree' => $duree]);
+
+        return response()->json($user, 200);
+    }
 }

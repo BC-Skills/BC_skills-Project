@@ -6,14 +6,73 @@ use App\Http\Controllers\Controller;
 use App\Models\FormationType;
 use Illuminate\Http\Request;
 use App\Models\Formation;
+use App\Models\User;
 
 class FormationTypeController extends Controller
 {
     public function index()
     {
-        $formationTypes = FormationType::with('formations')->get();
-        return response()->json($formationTypes);
+        $formationTypes = FormationType::with('formations.users')->get();
+    
+        $result = [];
+    
+        foreach ($formationTypes as $formationType) {
+            $formationTypeData = [
+                'id' => $formationType->id,
+                'name' => $formationType->name,
+                'description' => $formationType->description,
+                'imagePath' => $formationType->imagePath,
+                'imageUrl' => $formationType->imageUrl, 
+                'formations' => [],
+            ];
+    
+            foreach ($formationType->formations as $formation) {
+                $formationData = $formation->toArray();
+                $formationData['users'] = $formation->users->toArray();
+    
+                $formationTypeData['formations'][] = $formationData;
+            }
+    
+            $result[] = $formationTypeData;
+        }
+    
+        return response()->json($result);
     }
+    
+    
+    public function index3($userId)
+    {
+        $formationTypes = FormationType::with(['formations.users' => function ($query) use ($userId) {
+            $query->where('users.id', $userId);
+        }])->get();
+    
+        $result = [];
+    
+        foreach ($formationTypes as $formationType) {
+            $formationTypeData = [
+                'id' => $formationType->id,
+                'name' => $formationType->name,
+                'description' => $formationType->description,
+                'imagePath' => $formationType->imagePath,
+                'imageUrl' => $formationType->imageUrl,
+                'formations' => [],
+            ];
+    
+            foreach ($formationType->formations as $formation) {
+                if ($formation->users->isEmpty()) {
+                    $formationData = $formation->toArray();
+                    $formationData['users'] = $formation->users->toArray();
+    
+                    $formationTypeData['formations'][] = $formationData;
+                }
+            }
+    
+            $result[] = $formationTypeData;
+        }
+    
+        return response()->json($result);
+    }
+   
 
     // public function store(Request $request)
     // {

@@ -3,6 +3,7 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Formation;
 
 class User extends Authenticatable
 {
@@ -31,6 +32,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Project::class, 'client_id');
     }
+
+    public function formations()
+{
+    return $this->belongsToMany(Formation::class, 'formation_user')
+        ->withPivot('duree') 
+        ->withTimestamps(); 
+}
 
     public function googleAccounts()
     {

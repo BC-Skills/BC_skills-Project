@@ -11,11 +11,11 @@ class Formation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'formation_type_id', 'file_path'];
+    protected $fillable = ['name', 'description', 'formation_type_id', 'file_path','duree'];
 
-    public function developers()
+    public function Users()
     {
-        return $this->belongsToMany(Developer::class, 'formation_developers')
+        return $this->belongsToMany(User::class, 'formation_user')
             ->withPivot('duree');
     }
 

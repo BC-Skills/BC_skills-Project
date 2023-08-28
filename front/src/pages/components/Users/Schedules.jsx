@@ -250,9 +250,9 @@ const ScheduleTable = () => {
               value={searchOption}
               onChange={(e) => setSearchOption(e.target.value)}
             >
-              <option value="date">Search by Date</option>
-              <option value="project">Search by Project</option>
-              <option value="ticket">Search by Ticket</option>
+              <option value="date">Filtrer par Date</option>
+              <option value="project">Filtrer par Project</option>
+              <option value="ticket">Filtrer par Ticket</option>
             </select>
           </div>
         </div>
@@ -331,7 +331,7 @@ const ScheduleTable = () => {
             {schedule.file_path ? (
               <div>
                 <button className="bg-[#9437FF] hover:bg-[#B779FF] text-white font-bold py-1 px-2 rounded" onClick={() => handleFileDownload(schedule.id, schedule.file_name)}>
-                  Download File
+                  Telecharger le fichier
                 </button>
               </div>
             ) : (
@@ -370,12 +370,6 @@ const ScheduleTable = () => {
             <th scope="col" className="px-6 py-4 font-medium text-gray-900">
               Description
             </th>
-            <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-              fichier
-            </th>
-            <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-              Actions
-            </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100 border-t border-gray-100">
@@ -391,17 +385,6 @@ const ScheduleTable = () => {
                 <td className="px-6 py-4 border-b border-gray-200">{ticket ? ticket.nom : '-'}</td>
                 <td className="px-6 py-4 border-b border-gray-200">{project ? project.nom : '-'}</td>
                 <td className="px-6 py-4 border-b border-gray-200">{schedule.description}</td>
-                <td className="px-6 py-4 border-b border-gray-200">
-                  {schedule.file_path ? (
-                    <div>
-                      <button onClick={() => handleFileDownload(schedule.id, schedule.file_name)}>
-                        Download File
-                      </button>
-                    </div>
-                  ) : (
-                    <p>No File Uploaded</p>
-                  )}
-                </td>
                 <td className="px-6 py-4 border-b border-gray-200">
                   <div className="flex justify-end gap-4">{/* ... (existing code for the delete and edit buttons remains unchanged) */}</div>
                 </td>

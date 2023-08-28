@@ -2,6 +2,7 @@
 /* eslint-disable react/prop-types */
 import React, { useRef, useState } from "react";
 import axiosClient from "../../axios";
+import { useStateContext } from "../../contexts/contextProvider";
 
 const CourseModal = ({ isOpen, formationType,formationTypeid, onClose }) => {
     const [showInputs, setShowInputs] = useState(false);
@@ -11,7 +12,8 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose }) => {
         file: null,
     });
 
-    console.log(formationType);
+   
+    const { currentUser } = useStateContext();
 
 
 
@@ -62,8 +64,10 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose }) => {
         try {
             const formDataToSend = new FormData();
             formDataToSend.append("name", formData.name);
+            formDataToSend.append( "duree",formData.duree);
             formDataToSend.append("description", formData.description);
             formDataToSend.append( "formation_type_id",formationTypeid);
+            
             if (formData.file) {
                 formDataToSend.append("file", formData.file);
             }
@@ -86,7 +90,8 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose }) => {
     };
       
 
-    const handleDownload = async (formationId, fileName) => {
+    const handleDownload = async (formationId, fileName , dureee) => {
+        console.log('idgfrvnrdifvnsrdp')
         try {
             const response = await axiosClient.get(
                 `formations/${formationId}/download`,
@@ -94,6 +99,39 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose }) => {
                     responseType: "blob",
                 }
             );
+            
+            const payload = { formation_id: formationId ,
+                duree:dureee
+            
+            };
+            const response2 = await axiosClient.post(
+                `usersss/${currentUser.id}/attachFormation`,payload,
+                {
+                    responseType: "blob",
+                }
+                );
+            const blob = new Blob([response.data]);
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", fileName); // Set the desired file name
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        } catch (error) {
+            console.error("Error downloading file:", error);
+        }
+    };
+    const handleDownload3 = async (formationId, fileName , dureee) => {
+        try {
+            const response = await axiosClient.get(
+                `formations/${formationId}/download`,
+                {
+                    responseType: "blob",
+                }
+            );
+            
+           
             const blob = new Blob([response.data]);
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement("a");
@@ -117,27 +155,31 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose }) => {
             [index]: !prevShowDescriptions[index],
         }));
     };
-
+//formations.users=currentuser
     return (
         <div className={`course-modal ${isOpen ? "visible" : "hidden"}`}>
-            <div className="flex modal-container man-w-[1000px] flex-col pb-2 bg-white m-h-[900px] md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+            <div className={`flex modal-container man-w-[1000px] flex-col pb-2 bg-white m-h-${showInputs ? "full" : "[900px]"} md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto`}>
                 <div className="flex justify-between mt-2 ml-2 mr-2">
                     <h1 className="text-[35px] font-bold">Formation</h1>
                     <button
                         onClick={onClose}
                         className="bg-[#3773ff] hover:bg-[#B779FF] text-white font-bold px-1 rounded"
                     >
-                        Close
+                        Fermer
                     </button>
                 </div>
-                <div className="modal-content flex max-h-[800px] flex-1 p-5 gap-3 overflow-auto">
-                    <div className="grid grid-cols-2 gap-4">
-                    {formationType?.map((formation, index) => (
-  <div
-    key={index}
-    className="bg-gray-100 flex flex-col p-4 shadow-md rounded-md"
-  >
+                <div className="modal-content flex max-h-[500px] flex-1 p-5 gap-3 overflow-y-auto">
+    <div className="grid grid-cols-2 gap-4">
+        {formationType?.map((formation, index) => (
+            <div
+                key={index}
+                className={`flex flex-col p-4 shadow-md rounded-md ${
+                    formation.users.some(user => user.id === currentUser.id) ? 'bg-green-100' : 'bg-gray-100'
+                }`}
+            >
     <h3 className="text-lg font-semibold">{formation.name}</h3>
+
+    <h3 className="text-lg font-regular subpixel-antialiased">Duree : {formation.duree}h </h3>
     <p
       className={`text-gray-600 max-w-[300px] ${
         showDescriptions[index] ? 'block' : 'hidden'
@@ -152,11 +194,17 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose }) => {
       {showDescriptions[index] ? 'Hide' : 'Show'} Description
     </button>
     <button
-      className="mt-2 bg-[#9437FF] hover:bg-[#B779FF] text-white font-bold py-1 px-2 rounded"
-      onClick={() => handleDownload(formation.id, formation.file_path)}
-    >
-      Download
-    </button>
+    className="mt-2 bg-[#9437FF] hover:bg-[#B779FF] text-white font-bold py-1 px-2 rounded"
+    onClick={() => {
+        if (formation.users.some(user => user.id === currentUser.id)) {
+            handleDownload3(formation.id, formation.file_path, formation.duree);
+        } else {
+            handleDownload(formation.id, formation.file_path, formation.duree);
+        }
+    }}
+>
+    Telecharger
+</button>
   </div>
 ))}
 
@@ -171,7 +219,7 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose }) => {
                                         className="block text-gray-700 text-sm font-bold mb-2"
                                         htmlFor="name"
                                     >
-                                        Name:
+                                        Nom:
                                     </label>
                                     <input
                                         type="text"
@@ -179,6 +227,21 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose }) => {
                                         id="name"
                                         name="name"
                                         value={formData.name}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                     <label
+                                        className="block text-gray-700 text-sm font-bold mb-2"
+                                        htmlFor="name"
+                                    >
+                                        duree:
+                                    </label>
+                                    <input
+                                        type="number"
+                                        className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        id="duree"
+                                        name="duree"
+                                        value={formData.duree}
                                         onChange={handleChange}
                                         required
                                     />
@@ -214,7 +277,7 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose }) => {
                                         className="block text-gray-700 text-sm font-bold mb-2"
                                         htmlFor="file"
                                     >
-                                        File:
+                                        Fichier:
                                     </label>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -230,19 +293,27 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose }) => {
                                     </svg>
                                 </div>
                             </div>
+                            <div className="flex gap-6">
                             <button
                                 onClick={handleSubmit}
                                 className="bg-[#9437FF] flex-1 hover:bg-[#B779FF] text-white font-bold py-1 px-2 rounded"
                             >
-                                Upload and Submit
+                                Ajouter
                             </button>
+                            <button
+                                 onClick={() => setShowInputs(false)}
+                                className="bg-[#9437FF] flex-1 hover:bg-[#B779FF] text-white font-bold py-1 px-2 rounded"
+                            >
+                                Annuler
+                            </button>
+                            </div>
                         </div>
                     ) : (
                         <button
                             onClick={() => setShowInputs(true)}
                             className="bg-[#9437FF] hover:bg-[#B779FF] flex-1 text-white font-bold py-1 px-2 rounded"
                         >
-                            Show Inputs
+                            Ajouter un cours?
                         </button>
                     )}
                 </div>
