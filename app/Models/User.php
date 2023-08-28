@@ -84,4 +84,9 @@ public function receivedMessages()
     return $this->hasMany(Message::class, 'to', 'id');
 }
 
+public function competences()
+{
+    return $this->hasMany(Competence::class, 'competence_user');
+}
+
 }

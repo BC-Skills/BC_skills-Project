@@ -18,7 +18,11 @@ export default function Formations() {
   const [showMore, setShowMore] = useState({});
   const [selectedFormationType, setSelectedFormationType] = useState(null);
   const [selectedFormationTypeid, setSelectedFormationTypeid] = useState(null);
+  const [selectedformationTypen, setformationTypen] = useState(null);
 
+  const [selectetotal, setselectetotal] = useState(null);
+
+  
   useEffect(() => {
     const parsedLinks = JSON.parse(storedLinks) || [];
     const hasFormationLink = parsedLinks.some((link) => link.name === "formation");
@@ -67,8 +71,10 @@ export default function Formations() {
 
   
 // In Formations component
-const handleViewDetails = async (formationType) => {
+const handleViewDetails = async (formationType, formationTypen) => {
   try {
+    setformationTypen(formationTypen)
+    setselectetotal(formationType.totalFormationDuration)
     setSelectedFormationType(formationType.formations); // Pass the courses array
     setSelectedFormationTypeid(formationType.id)
   } catch (error) {
@@ -154,7 +160,7 @@ const handleViewDetails = async (formationType) => {
                 </button>
               </p>
               <button
-                onClick={() => handleViewDetails(formationType)}
+                onClick={() => handleViewDetails(formationType, formationType.name)}
                 className="inline-block py-2 px-7 border border-[#E5E7EB] rounded-full text-base text-body-color font-medium hover:border-primary hover:bg-primary hover:text-[#41415A] transition"
               >
                 Cours
@@ -199,6 +205,8 @@ const handleViewDetails = async (formationType) => {
   formationTypeid={selectedFormationTypeid}
   onFileUpload={handleFileUpload}
   fecthformtiontype={fecthformtiontype}
+  selectedformationTypen={selectedformationTypen}
+  selectetotal={selectetotal}
 />
 
   </div>
