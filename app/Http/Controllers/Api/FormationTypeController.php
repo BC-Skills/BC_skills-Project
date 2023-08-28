@@ -101,11 +101,11 @@ class FormationTypeController extends Controller
     // }
     public function store(Request $request)
 {
-    $request->validate([
-        'name' => 'required|string',
-        'description' => 'required|string',
-        'imagePath' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust the file types and size limit as needed
-    ]);
+    // $request->validate([
+    //     'name' => 'required|string',
+    //     'description' => 'required|string',
+    //     'imagePath' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust the file types and size limit as needed
+    // ]);
 
     // Handle the image upload and store the image in the public disk
     if ($request->hasFile('imagePath')) {

@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react";
 import axiosClient from "../../axios";
 import { useStateContext } from "../../contexts/contextProvider";
 
-const CourseModal = ({ isOpen, formationType,formationTypeid, onClose }) => {
+const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthformtiontype }) => {
     const [showInputs, setShowInputs] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
@@ -71,8 +71,7 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose }) => {
             if (formData.file) {
                 formDataToSend.append("file", formData.file);
             }
-            console.log(formationTypeid)
-            console.log(formDataToSend)
+            fecthformtiontype()
             const response = await axiosClient.post(
                 "formations",
                 formDataToSend,
@@ -118,6 +117,7 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose }) => {
             document.body.appendChild(link);
             link.click();
             link.remove();
+            fecthformtiontype()
         } catch (error) {
             console.error("Error downloading file:", error);
         }
@@ -168,7 +168,7 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose }) => {
                         Fermer
                     </button>
                 </div>
-                <div className="modal-content flex max-h-[500px] flex-1 p-5 gap-3 overflow-y-auto">
+                <div className="modal-content flex max-h-[500px]  flex-1 p-5 gap-3 overflow-y-auto">
     <div className="grid grid-cols-2 gap-4">
         {formationType?.map((formation, index) => (
             <div

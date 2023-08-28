@@ -26,14 +26,20 @@ export default function Formations() {
       navigate("/users");
     }
 
-    axiosClient.get("formation-types")
+    fecthformtiontype()
+
+  }, [storedLinks]);
+
+  const fecthformtiontype=async ()=>{
+     axiosClient.get("formation-types")
       .then(response => {
         setFormationTypes(response.data);
       })
       .catch(error => {
         console.error("Error fetching formation types:", error);
       });
-  }, [storedLinks]);
+
+  }
 
   const handleOpenFormModal = () => {
     setIsFormModalOpen(true);
@@ -126,12 +132,12 @@ const handleViewDetails = async (formationType) => {
           Ajouter une formation
         </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-10 ">
+      <div className=" flex-1 flex flex-row flex-wrap gap-12 items-center justify-center">
         {currentFormations.map((formationType, index) => (
           <div
             key={formationType.id}
-            className={`bg-white rounded-lg overflow-hidden mb-10 shadow-2xl max-w-[350px]`} >
-            <img src={formationType.imageUrl} alt="Formation Type" className="w-full  " />
+            className={`bg-white rounded-lg overflow-hidden  mb-10 shadow-2xl max-w-[450px] max-h-[500px] min-w-[500px]`} >
+            <img src={formationType.imageUrl} alt="Formation Type" className="w-full max-h-[300px] " />
             <div className="p-8 sm:p-9 md:p-7 xl:p-9 text-center">
               <h3 className="font-semibold text-dark text-xl mb-4 hover:text-primary">
                 {formationType.name}
@@ -176,7 +182,7 @@ const handleViewDetails = async (formationType) => {
         </ul>
       </div>
       {isFormModalOpen && (
-        <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-200 bg-opacity-50">
+        <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center  bg-gray-200 bg-opacity-50">
           <FormationTypeFormModal
             isOpen={isFormModalOpen}
             onClose={handleCloseFormModal}
@@ -192,6 +198,7 @@ const handleViewDetails = async (formationType) => {
   formationType={selectedFormationType} // This is an array of formation objects
   formationTypeid={selectedFormationTypeid}
   onFileUpload={handleFileUpload}
+  fecthformtiontype={fecthformtiontype}
 />
 
   </div>
