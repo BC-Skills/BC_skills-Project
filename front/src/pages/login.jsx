@@ -59,6 +59,7 @@ export default function Login() {
             </h1>
             <div className="flex lg:flex-col xl:justify-center xl:items-start md:flex-col md:justify-center md:items-start">
               <h1 className="text-[30px]">Welcome to our Company </h1>
+              
               <div className="flex-1 ">
                 <img src={image2} className=" w-full h-full  object-contain  " alt="Logo" />
               </div>

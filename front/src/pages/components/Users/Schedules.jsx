@@ -211,6 +211,7 @@ const ScheduleTable = () => {
           </div>
         </div>
         <div className="flex justify-center items-center mt-4 space-x-4">
+       
           {searchOption === 'date' ? (
             <div className="relative">
               <input
@@ -240,7 +241,9 @@ const ScheduleTable = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 19l-4.35-4.35" />
               </svg>
             </div>
+            
           )}
+
           <div>
             <select
               className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
@@ -257,7 +260,7 @@ const ScheduleTable = () => {
           onClick={handleAddSchedule}
           className="bg-[#41415A] hover:bg-[#6C6D96] text-white font-bold py-2 px-4 rounded ml-6 mt-4"
         >
-          Add Schedule
+          Ajouter un Schedule
         </button>
       </div>
 
@@ -443,7 +446,7 @@ const ScheduleTable = () => {
           table="table-to-export"
           filename={`schedule_of_${currentUser.name}_${currentDate}`}
           sheet="schedule_table"
-          buttonText="Export to Excel"
+          buttonText="Exporter en Excel"
         />
       </div>
     </div>
