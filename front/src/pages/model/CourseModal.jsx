@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react";
 import axiosClient from "../../axios";
 import { useStateContext } from "../../contexts/contextProvider";
 
-const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthformtiontype }) => {
+const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthformtiontype, selectedformationTypen , selectetotal}) => {
     const [showInputs, setShowInputs] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
@@ -90,25 +90,29 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthfor
       
 
     const handleDownload = async (formationId, fileName , dureee) => {
-        console.log('idgfrvnrdifvnsrdp')
+        
         try {
             const response = await axiosClient.get(
-                `formations/${formationId}/download`,
-                {
-                    responseType: "blob",
-                }
+                `formations/${formationId}/download`
             );
-            
             const payload = { formation_id: formationId ,
-                duree:dureee
-            
+              duree:dureee
             };
+          
             const response2 = await axiosClient.post(
-                `usersss/${currentUser.id}/attachFormation`,payload,
-                {
-                    responseType: "blob",
-                }
+                `usersss/${currentUser.id}/attachFormation`,payload
                 );
+                
+            if(response2.data===selectetotal){
+                      const payload2 = { name: selectedformationTypen ,
+                                user_id:currentUser.id
+                            };
+                    const response3= await axiosClient.post(`competences`,payload2,
+                    {
+                        responseType: "blob",
+                    }
+                    );
+                }
             const blob = new Blob([response.data]);
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement("a");
@@ -131,7 +135,6 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthfor
                 }
             );
             
-           
             const blob = new Blob([response.data]);
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement("a");
@@ -197,7 +200,7 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthfor
     className="mt-2 bg-[#9437FF] hover:bg-[#B779FF] text-white font-bold py-1 px-2 rounded"
     onClick={() => {
         if (formation.users.some(user => user.id === currentUser.id)) {
-            handleDownload3(formation.id, formation.file_path, formation.duree);
+            handleDownload3(formation.id, formation.file_path, formation.duree, );
         } else {
             handleDownload(formation.id, formation.file_path, formation.duree);
         }

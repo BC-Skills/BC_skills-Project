@@ -17,7 +17,6 @@ return new class extends Migration
             $table->unsignedBigInteger('formation_id');
             $table->integer('duree');
             $table->timestamps();
-    
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('formation_id')->references('id')->on('formations')->onDelete('cascade');
         });
@@ -28,5 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('formation_user');
     }
 };

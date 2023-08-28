@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Project;
 use Illuminate\Http\Request;
-
+use App\Models\Competence;
 class ClientController extends Controller
 {
     public function getProjects($clientId)

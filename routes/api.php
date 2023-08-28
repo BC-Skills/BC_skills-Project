@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\StatusController;
 use App\Http\Controllers\Api\ScheduleController;
 
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\CompetenceController;
 
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
@@ -160,3 +161,4 @@ Route::get('formation-typesd/{formationType}', [FormationTypeController::class, 
 
 Route::get('/userss/allemp', [UserController::class, 'index2']);
 
+Route::apiResource('competences', CompetenceController::class);

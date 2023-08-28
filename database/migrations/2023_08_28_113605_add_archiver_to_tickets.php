@@ -22,7 +22,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('tickets', function (Blueprint $table) {
-            //
+            $table->dropColumn(['archiver']);
+
         });
     }
 };

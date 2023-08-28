@@ -11,33 +11,50 @@ use App\Models\User;
 class FormationTypeController extends Controller
 {
     public function index()
-    {
-        $formationTypes = FormationType::with('formations.users')->get();
-    
-        $result = [];
-    
-        foreach ($formationTypes as $formationType) {
-            $formationTypeData = [
-                'id' => $formationType->id,
-                'name' => $formationType->name,
-                'description' => $formationType->description,
-                'imagePath' => $formationType->imagePath,
-                'imageUrl' => $formationType->imageUrl, 
-                'formations' => [],
-            ];
-    
-            foreach ($formationType->formations as $formation) {
-                $formationData = $formation->toArray();
-                $formationData['users'] = $formation->users->toArray();
-    
-                $formationTypeData['formations'][] = $formationData;
+{
+    $formationTypes = FormationType::with('formations.users')->get();
+
+    $result = [];
+
+    foreach ($formationTypes as $formationType) {
+        $formationTypeData = [
+            'id' => $formationType->id,
+            'name' => $formationType->name,
+            'description' => $formationType->description,
+            'imagePath' => $formationType->imagePath,
+            'imageUrl' => $formationType->imageUrl, 
+            'formations' => [],
+            'formationCount' => 0, // Initialize the count of formations for this type
+            'totalFormationDuration' => 0, // Initialize the total duration
+            'userFormationDuration' => [], // Initialize the user formation duration array
+        ];
+
+        foreach ($formationType->formations as $formation) {
+            $formationData = $formation->toArray();
+            $formationData['users'] = $formation->users->toArray();
+
+            $formationTypeData['formations'][] = $formationData;
+            $formationTypeData['formationCount']++; // Increment the formation count
+            $formationTypeData['totalFormationDuration'] += $formation->duree; // Add formation duration
+
+            // Update user formation duration
+            foreach ($formation->users as $user) {
+                $userId = $user['id'];
+                $userFormationDuration = ($formationTypeData['userFormationDuration'][$userId] ?? 0) + $formation->duree;
+                $formationTypeData['userFormationDuration'][] = $userFormationDuration;
             }
-    
-            $result[] = $formationTypeData;
         }
-    
-        return response()->json($result);
+
+        // Calculate the total user formation duration
+        $totalUserFormationDuration = array_sum($formationTypeData['userFormationDuration']);
+        $formationTypeData['userFormationDurationTotal'] = $totalUserFormationDuration;
+
+        $result[] = $formationTypeData;
     }
+
+    return response()->json($result);
+}
+
     
     
     public function index3($userId)
