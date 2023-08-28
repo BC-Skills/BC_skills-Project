@@ -76,7 +76,7 @@ const Setting = () => {
                 onClick={() => setShowChangePasswordForm(!showChangePasswordForm)}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300"
               >
-                Change Password
+                changer mot de passe
               </button>
               {passwordUpdateStatus === 'success' && (
                 <p className="text-green-500 mt-2">Password updated successfully!</p>
@@ -96,7 +96,7 @@ const Setting = () => {
                 <form onSubmit={handlePasswordChange}>
                   <div className="mb-4">
                     <label htmlFor="newPassword" className="block font-bold mb-1">
-                      New Password
+                      nouveau mot de passe
                     </label>
                     <input
                       type="password"
@@ -116,7 +116,7 @@ const Setting = () => {
                       type="submit"
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300"
                     >
-                      Update Password
+                      modifier mot de passe 
                     </button>
                   </div>
                 </form>
@@ -125,7 +125,7 @@ const Setting = () => {
             <div className="mt-10">
               <div className="mb-4">
                 <label htmlFor="profilePicture" className="block font-bold mb-1">
-                  Profile Picture
+                Image de profil
                 </label>
                 <input
                   type="file"

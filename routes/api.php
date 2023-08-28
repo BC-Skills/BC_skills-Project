@@ -158,3 +158,5 @@ Route::post('usersss/{profileId}/attachFormation', [FormationController::class, 
 
 Route::get('formation-typesd/{formationType}', [FormationTypeController::class, 'index3']);
 
+Route::get('/userss/allemp', [UserController::class, 'index2']);
+

@@ -12,10 +12,9 @@ class TicketController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::all();
+        $tickets = Ticket::where('archiver', 'non')->get();
         return response()->json($tickets);
     }
-
     public function storez(Request $request)
     {
         $ticket = Ticket::create($request->all());
@@ -25,7 +24,7 @@ class TicketController extends Controller
 
     public function show($id)
     {
-        $ticket = Ticket::findOrFail($id);
+        $ticket = Ticket::where('archiver', 'non')->findOrFail($id);
         return response()->json($ticket);
     }
 
@@ -39,7 +38,15 @@ class TicketController extends Controller
     public function destroy($id)
     {
         $ticket = Ticket::findOrFail($id);
-        $ticket->delete();
+    
+        if ($ticket->archiver === 'non') {
+            $ticket->archiver = 'oui';
+        } else {
+            $ticket->archiver = 'non';
+        }
+    
+        $ticket->save();
+    
         return response()->json(null, 204);
     }
 
@@ -48,7 +55,7 @@ class TicketController extends Controller
         $user = User::findOrFail($userId);
         $hours = ['08:00', '09:00', '10:00', '11:00', '12:00']; // Add all hours you want to display
 
-        $allTickets = Ticket::all(); // Fetch all tickets from the database
+        $allTickets = Ticket::where('archiver', 'non')->get(); // Fetch non-archived tickets
 
         return view('pages/tasksTest', compact('user', 'hours', 'allTickets'));
     }
@@ -104,6 +111,7 @@ class TicketController extends Controller
             // Query the database to find tickets with the given project ID
             $tickets = Ticket::with('project', 'sprint', 'user', 'assignedToUser','sprint')
                 ->where('project_id', $projectId)
+                ->where('archiver', 'non') // Add condition to exclude archived tickets
                 ->get();
     
             // Return the tickets with project, sprint, and user information in the response
@@ -121,6 +129,7 @@ class TicketController extends Controller
             $tickets = Ticket::with('project', 'sprint', 'user', 'assignedToUser')
                 ->where('project_id', $projectId)
                 ->where('sprint_id', $sprintId)
+                ->where('archiver', 'non') // Add condition to exclude archived tickets
                 ->get();
     
             // Return the tickets with project, sprint, and user information in the response
@@ -138,6 +147,7 @@ class TicketController extends Controller
             $tickets = Ticket::with('project', 'sprint', 'user', 'assignedToUser')
                 ->where('project_id', $projectId)
                 ->whereNull('sprint_id')
+                ->where('archiver', 'non') // Add condition to exclude archived tickets
                 ->get();
     
             // Return the tickets with project, sprint, and user information in the response
@@ -150,7 +160,7 @@ class TicketController extends Controller
     
     public function update2(Request $request, $id)
     {
-        $ticket = Ticket::findOrFail($id);
+        $ticket = Ticket::where('archiver', 'non')->findOrFail($id); // Fetch non-archived ticket
         $ticket->update($request->all());
         return response()->json($ticket, 200);
     }
@@ -162,6 +172,7 @@ class TicketController extends Controller
             // Query the database to find tickets assigned to the given user ID
             $tickets = Ticket::with('project', 'sprint', 'user', 'assignedToUser')
                 ->where('assign_to', $assignToId)
+                ->where('archiver', 'non') // Add condition to exclude archived tickets
                 ->get();
     
             // Return the tickets with project, sprint, and user information in the response

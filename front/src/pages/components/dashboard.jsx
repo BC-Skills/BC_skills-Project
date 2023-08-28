@@ -152,7 +152,7 @@ export default function Dashboard({children}) {
                             <span className="icon">
                                 <ion-icon name="log-out-outline"></ion-icon>
                             </span>
-                            <span className="title">Log Out</span>
+                            <span className="title">Se déconnecter</span>
                         </a>
                     </li>
                 </ul>

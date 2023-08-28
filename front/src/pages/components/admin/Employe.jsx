@@ -35,25 +35,20 @@ export default function Employe() {
 
 
     useEffect(() => {
-        const storedUsersData = sessionStorage.getItem("usersData");
 
-        if (storedUsersData) {
-          setUsers(JSON.parse(storedUsersData));
-          setLoading(false);
-        } else {
+     
           fetchUsersData();
-        }
+        
       }, []);
       
 
     const fetchUsersData = async () => {
         try {
-          const response = await axiosClient.get("users");
+          const response = await axiosClient.get("userss/allemp");
           const usersData = response.data;
           setUsers(usersData);
-            console.log(usersData)
           // Store the user data in session storage
-          sessionStorage.setItem("usersData", JSON.stringify(usersData));
+          
       
           // Fetch profile data for each user
           
@@ -159,7 +154,7 @@ export default function Employe() {
                         >
                             <path d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"></path>
                         </svg>
-                        Add user
+                        Ajoute User
                     </button>
                 </div>
             </div>
@@ -183,7 +178,7 @@ export default function Employe() {
                                                     scope="col"
                                                     className="p-4 text-xs font-medium text-left text-gray-500 uppercase lg:p-5"
                                                 >
-                                                    Name
+                                                    Nom
                                                 </th>
                                                 <th
                                                     scope="col"
@@ -196,6 +191,12 @@ export default function Employe() {
                                                     className="p-4 text-xs font-medium text-left text-gray-500 uppercase lg:p-5"
                                                 >
                                                     Telephone
+                                                </th>
+                                                <th
+                                                    scope="col"
+                                                    className="p-4 text-xs font-medium text-left text-gray-500 uppercase lg:p-5"
+                                                >
+                                                    status
                                                 </th>
                                                 <th
                                                     scope="col"
@@ -242,6 +243,9 @@ export default function Employe() {
                                                     <td className="p-4 text-base font-medium text-gray-900 whitespace-nowrap lg:p-5">
                                                         {user.tel}
                                                     </td>
+                                                    <td className="p-4 text-base font-medium text-gray-900 whitespace-nowrap lg:p-5">
+                                                        {user.status}
+                                                    </td>
                                                     <td className="p-4 space-x-4 whitespace-nowrap lg:p-5">
                                                         <button
                                                             type="button"
@@ -262,7 +266,7 @@ export default function Employe() {
                                                                 <path d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"></path>
                                                             </svg>
                                                             <span>
-                                                                Edit user
+                                                                Modifier user
                                                             </span>
                                                         </button>
                                                         <button
@@ -272,8 +276,11 @@ export default function Employe() {
                                                                     user.id
                                                                 )
                                                             }
-                                                            className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-black rounded-lg shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
-                                                        >
+                                                            className={`inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white rounded-lg shadow-md hover:scale-[1.02] transition-transform ${
+                                                                user.status === 'non archiver'
+                                                                    ? 'bg-black shadow-gray-300'
+                                                                    : 'bg-blue-500 shadow-blue-300'
+                                                            }`}                                                        >
                                                             <svg
                                                                 className="mr-2 w-5 h-5"
                                                                 fill="currentColor"
@@ -283,7 +290,7 @@ export default function Employe() {
                                                                 <path d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"></path>
                                                             </svg>
                                                             <span>
-                                                                Delete user
+                                                            {user.status === 'non archiver' ? 'Archiver user' : 'Restore user'}
                                                             </span>
                                                         </button>
                                                     </td>

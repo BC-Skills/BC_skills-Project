@@ -39,19 +39,28 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
-        $user->delete();
+    
+        if ($user->status === 'non archiver') {
+            $user->status = 'archive';
+        } else {
+            $user->status = 'non archiver';
+        }
+    
+        $user->save();
+    
         return response()->json(null, 204);
     }
-
 
    
    
     public function getAdmin()
-    {
-        $users = User::where('profile_id', '!=', '1')->get();
-    
-        return response()->json($users);
-    }
+{
+    // Get active users (excluding those with status 'archive') who are not admins
+    $users = User::where('status', '!=', 'archive')->where('profile_id', '!=', '1')->get();
+
+    return response()->json($users);
+}
+
 
           // Controller function for updating the user's password
           public function updatePassword(Request $request, $userId)
@@ -76,66 +85,95 @@ class UserController extends Controller
                   return response()->json(['error' => 'Internal server error'], 500);
               }
           }
-          public function index()
-          {
-              // Get all users with their profiles
-              $users = User::with('profile')->get();
-      
-              // Map each user to include the profile name
-              $usersData = $users->map(function ($user) {
-                  return [
-                      'id' => $user->id,
-                      'profile_picture'=> $user->profile_picture,
-                      'name' => $user->name,
-                      'email' => $user->email,
-                      'tel' => $user->tel,
-                      'profile_id' => $user->profile_id,
-                      'profile_name' => $user->profile ? $user->profile->name : 'Loading...', // Include the profile name
-                  ];
-              });
-      
-              return response()->json($usersData);
-          }
+            public function index()
+            {
+                // Get all active users (excluding those with status 'archive') with their profiles
+                $users = User::where('status', '!=', 'archive')->with('profile')->get();
 
+                // Map each user to include the profile name
+                $usersData = $users->map(function ($user) {
+                    return [
+                        'id' => $user->id,
+                        'profile_picture'=> $user->profile_picture,
+                        'name' => $user->name,
+                        'email' => $user->email,
+                        'tel' => $user->tel,
+                        'profile_id' => $user->profile_id,
+                        'profile_name' => $user->profile ? $user->profile->name : 'Loading...',
+                    ];
+                });
 
-          public function getClients()
-          {
-              // Find the profile with the name "Client"
-              $clientProfile = Profile::where('name', 'Client')->first();
-          
-              if (!$clientProfile) {
-                  return response()->json(['error' => 'Client profile not found'], 404);
-              }
-          
-              // Get users with the "Client" profile along with their profile info
-              $clients = User::where('profile_id', $clientProfile->id)
-                             ->with('profile') // Eager load the profile relationship
-                             ->get();
-          
-              return response()->json($clients);
-          }
+                return response()->json($usersData);
+            }
 
 
 
-          public function getUsersAndUserById($id)
-          {
-              $adminProfile = Profile::where('name', 'Admin')->first();
-              $clientProfile = Profile::where('name', 'Client')->first();
-          
-              if (!$adminProfile || !$clientProfile) {
-                  return response()->json(['error' => 'Profiles not found'], 404);
-              }
-          
-              $usersQuery = User::where('profile_id', '!=', $adminProfile->id)
-                                ->where('profile_id', '!=', $clientProfile->id) ->with('profile');
-          
-              if ($id !== null) {
-                  $usersQuery->where('id', '!=', $id);
-              }
-              $users = $usersQuery->get();
-          
-              return response()->json($users);
-          }
+            public function index2()
+            {
+                // Get all active users (excluding those with status 'archive') with their profiles
+                $users = User::with('profile')->get();
+
+                // Map each user to include the profile name
+                $usersData = $users->map(function ($user) {
+                    return [
+                        'id' => $user->id,
+                        'profile_picture'=> $user->profile_picture,
+                        'name' => $user->name,
+                        'email' => $user->email,
+                        'tel' => $user->tel,
+                        'status' => $user->status,
+                        'profile_id' => $user->profile_id,
+                        'profile_name' => $user->profile ? $user->profile->name : 'Loading...',
+                    ];
+                });
+
+                return response()->json($usersData);
+            }
+
+
+
+            public function getClients()
+            {
+                // Find the profile with the name "Client"
+                $clientProfile = Profile::where('name', 'Client')->first();
+            
+                if (!$clientProfile) {
+                    return response()->json(['error' => 'Client profile not found'], 404);
+                }
+            
+                // Get active users with the "Client" profile along with their profile info
+                $clients = User::where('status', '!=', 'archive')
+                                ->where('profile_id', $clientProfile->id)
+                                ->with('profile')
+                                ->get();
+            
+                return response()->json($clients);
+            }
+            
+
+
+
+            public function getUsersAndUserById($id)
+            {
+                $adminProfile = Profile::where('name', 'Admin')->first();
+                $clientProfile = Profile::where('name', 'Client')->first();
+            
+                if (!$adminProfile || !$clientProfile) {
+                    return response()->json(['error' => 'Profiles not found'], 404);
+                }
+            
+                $usersQuery = User::where('status', '!=', 'archive')
+                                  ->where('profile_id', '!=', $adminProfile->id)
+                                  ->where('profile_id', '!=', $clientProfile->id)
+                                  ->with('profile');
+            
+                if ($id !== null) {
+                    $usersQuery->where('id', '!=', $id);
+                }
+                $users = $usersQuery->get();
+            
+                return response()->json($users);
+            }
       
     
 }

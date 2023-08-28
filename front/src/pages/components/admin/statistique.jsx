@@ -45,10 +45,10 @@ export default function Statistique() {
         const newChart = new Chart(ctx, {
             type: selectedChartType,
             data: {
-                labels: ["Started", "Pending", "Completed"],
+                labels: ["A faire", "En Cours", "Fini"],
                 datasets: [
                     {
-                        label: "Project Status",
+                        label: "L'état du projet",
                         data: [
                             statistics.started_project_count,
                             statistics.pending_project_count,
@@ -140,10 +140,10 @@ export default function Statistique() {
         const newChart = new Chart(ctx, {
             type: selectedChartType,
             data: {
-                labels: ["Started", "Pending", "Completed"],
+                labels: ["A faire", "En Cours", "Fini"],
                 datasets: [
                     {
-                        label: "Sprint Status",
+                        label: "L'état du phase",
                         data: [
                             selectedProjectSprintCounts.started_sprint_count,
                             selectedProjectSprintCounts.pending_sprint_count,
@@ -199,10 +199,10 @@ export default function Statistique() {
         const newChart = new Chart(ctx, {
             type: selectedChartType, // Use the selected chart type
             data: {
-                labels: ["Started", "Pending", "Completed"],
+                labels: ["A faire", "En Cours", "Fini"],
                 datasets: [
                     {
-                        label: "Sprint Ticket Status",
+                        label: "L'état du Tache",
                         data: [
                             selectedSprintTicketCounts.started_ticket_count,
                             selectedSprintTicketCounts.pending_ticket_count,
@@ -369,8 +369,8 @@ export default function Statistique() {
                 <div className="flex-1 flex flex-col px-4 py-4 flex-wrap gap-4 ">
                     <div className="flex-1 rounded-2xl shadow-xl shadow-gray-300">
                         <div className="flex-1  shadow-gray-300">
-                            <h3 className="text-3xl font-semibold m-4 text-center text-purple-600">
-                                Top Ticket Finishers
+                            <h3 className="text-3xl font-semibold m-4 text-center text-purple-600">                   
+                Meilleurs finisseurs de Taches
                             </h3>
                             {topTicketFinishers.map((user) => (
                                 <div
@@ -404,7 +404,7 @@ export default function Statistique() {
                     <div className="flex-1 rounded-2xl shadow-xl shadow-gray-300">
                     <div className="flex-1  shadow-gray-300">
                             <h3 className="text-3xl font-semibold m-4 text-center text-purple-600">
-                                Top Projects Finishers
+                            Meilleurs finisseurs des Projets
                             </h3>
                             {topprojectmanagers.map((user) => (
                                 <div
