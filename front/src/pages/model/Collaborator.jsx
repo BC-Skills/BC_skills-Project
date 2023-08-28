@@ -122,7 +122,7 @@ export default function Collaborator({ project, onCloseModal }) {
                         <div className="px-6 py-6 lg:px-8">
                             <div className="flex items-center justify-between pb-3">
                                 <h3 className="mb-4 text-[30px] font-bold text-gray-900 dark:text-black">
-                                    Collaborator
+                                    Collaborateur
                                 </h3>
                                 <button
                                     type="button"
@@ -151,7 +151,7 @@ export default function Collaborator({ project, onCloseModal }) {
                                 <div className="flex-1 flex-col flex">
                                     <div className="flex flex-row justify-between items-center">
                                         <h1 className="text-[30px] font-bold">
-                                            Employe
+                                            Employés
                                         </h1>
                                         <div className="mt-5 mb-2 border-2 py-1 px-3 flex justify-between  rounded-md hover:border-blue-500">
                                             <input
@@ -177,7 +177,7 @@ export default function Collaborator({ project, onCloseModal }) {
                                     </div>
                                     <div className="flex-1 bg-gray-200 shadow-2xl rounded-2xl flex flex-col gap-3 pt-6 px-3 overflow-y-auto">
                                         {loading ? (
-                                            <p>Loading users...</p>
+                                            <p>Chargement des utilisateurs...</p>
                                         ) : (
                                             <div className="grid gap-3 lg:grid-cols-2 md:grid-cols-2">
                                                 {filteredUsers.map((user) => {

@@ -104,7 +104,7 @@ export default function DetailsProject({ project, onCloseModal }) {
                                         {project.nom}
                                     </h1>
                                     <h1 className="text-[25px] text-blue-800 font-bold font-serif">
-                                        Durre : {project.duree}/Months
+                                        Durée : {project.duree}/Months
                                     </h1>
                                 </div>
                                 <div className="flex-1 flex flex-row gap-4">
@@ -117,7 +117,7 @@ export default function DetailsProject({ project, onCloseModal }) {
                                                 Email: {project.client?.email}
                                             </h1>
                                             <h1 className="text-[15px] font-bold">
-                                                tele : {project.client?.tel}
+                                                tel : {project.client?.tel}
                                             </h1>
                                         </div>
                                         <div className="relative w-16 h-16">
@@ -144,7 +144,7 @@ export default function DetailsProject({ project, onCloseModal }) {
                                                 {project.project_manager?.email}
                                             </h1>
                                             <h1 className="text-[15px] font-bold">
-                                                tele :{" "}
+                                                tel :{" "}
                                                 {project.project_manager?.tel}
                                             </h1>
                                         </div>
@@ -159,7 +159,7 @@ export default function DetailsProject({ project, onCloseModal }) {
                                             />
                                         </div>
                                         <div className="w-20 text-black font-bold">
-                                            Manager:
+                                            Chef de projet:
                                         </div>
                                     </div>
                                 </div>
@@ -192,13 +192,13 @@ export default function DetailsProject({ project, onCloseModal }) {
                                 </div>
                                 <div className="flex-1 flex flex-row mt-10  items-center">
                                     <div className="flex-1 font-bold text-[20px]">
-                                        <h1>Start date:</h1>
+                                        <h1>Date debut:</h1>
                                         <h1 className="ml-10">
                                             {project.start_date}
                                         </h1>
                                     </div>
                                     <div className="flex-1 font-bold text-[20px]">
-                                        <h1>End date:</h1>
+                                        <h1>Date fin:</h1>
                                         <h1 className="ml-10">
                                             {project.end_date}
                                         </h1>
@@ -206,7 +206,7 @@ export default function DetailsProject({ project, onCloseModal }) {
                                 </div>
                                 <div className="flex-1 flex flex-col mt-10   items-center">
                                     <h1 className="text-blue-800  font-bold text-[35px]">
-                                        Sprints
+                                        Phases
                                     </h1>
                                 </div>
                                 <div className="flex-1">
@@ -266,7 +266,7 @@ export default function DetailsProject({ project, onCloseModal }) {
                                                             {showDescriptionId ===
                                                                 sprint.id && (
                                                                 <div className="max-h-32 overflow-y-auto">
-                                                                    description:{" "}
+                                                                    
                                                                     {
                                                                         sprint.description
                                                                     }
