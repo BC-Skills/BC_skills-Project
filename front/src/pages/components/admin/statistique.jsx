@@ -309,7 +309,7 @@ export default function Statistique() {
                 </div>
             </div>
             <div className="flex-1 flex flex-row px-4 py-4 sm:flex-col flex-wrap gap-4 ">
-                <div className="flex-1 flex flex-col pt-10 rounded-2xl justify-around bg-gradient-to-r max-h-[60vh] from-gray-50 to-gray-100  shadow-xl shadow-gray-300">
+                <div className="flex-1 flex flex-col pt-10 rounded-2xl justify-around bg-gradient-to-r  from-gray-50 to-gray-100  shadow-xl shadow-gray-300">
                     <canvas id="myChart" width="400" height="200"></canvas>
                     <div className=" flex flex-row px-4 py-4 flex-wrap gap-4">
                         <div className="flex-1 rounded-2xl shadow-xl bg-gradient-to-r from-indigo-50 to-indigo-200">

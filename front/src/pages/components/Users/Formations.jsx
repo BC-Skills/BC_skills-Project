@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../../../axios";
@@ -129,8 +130,7 @@ const handleViewDetails = async (formationType) => {
         {currentFormations.map((formationType, index) => (
           <div
             key={formationType.id}
-            className={`bg-white rounded-lg overflow-hidden mb-10 shadow-2xl `}
-          >
+            className={`bg-white rounded-lg overflow-hidden mb-10 shadow-2xl max-w-[350px]`} >
             <img src={formationType.imageUrl} alt="Formation Type" className="w-full  " />
             <div className="p-8 sm:p-9 md:p-7 xl:p-9 text-center">
               <h3 className="font-semibold text-dark text-xl mb-4 hover:text-primary">

@@ -15,34 +15,27 @@ class ProfilSeeder extends Seeder
         $data = [
             [
                 'name' => 'admin',
-                // Add other attributes here
             ],
             [
                 'name' => 'developer',
-                // Add other attributes here
             ],
             [
                 'name' => 'adminsystem',
-                // Add other attributes here
             ],
             [
                 'name' => 'manager',
-                // Add other attributes here
             ],
             [
                 'name' => 'chefprojet',
-                // Add other attributes here
             ],
             [
                 'name' => 'RH',
-                // Add other attributes here
             ],
             [
                 'name' => 'ControlleF',
-                // Add other attributes here
-            ],  [
+            ],
+            [
                 'name' => 'Client',
-                // Add other attributes here
             ],
         ];
 
