@@ -154,3 +154,6 @@ Route::get('ticketsss/{assign}', [TicketController::class, 'getTicketsByAssignTo
 
 Route::get('/projects/{id}/userss', [ProjectController::class, 'getProjectsForUser']);
 
+
+Route::get('/userss/allemp', [UserController::class, 'index2']);
+
