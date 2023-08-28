@@ -1,4 +1,5 @@
-import React, { useRef, useState } from "react";
+/* eslint-disable react/prop-types */
+import  { useRef, useState } from "react";
 import axiosClient from "../../axios";
 
 const FormationTypeFormModal = ({ isOpen, onClose, onFormSubmit }) => {
@@ -122,7 +123,6 @@ const FormationTypeFormModal = ({ isOpen, onClose, onFormSubmit }) => {
                             ></textarea>
                         </div>
                         <div className="mb-4">
-                           
                             <div
                                 className="flex gap-3 text-[#9CA3AF] flex-row items-center justify-center"
                                 onClick={() => filePicker.current.click()}

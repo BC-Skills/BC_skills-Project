@@ -84,6 +84,7 @@ export default function Projects() {
     const [shouldShowAddButton, setShouldShowAddButton] = useState(false);
     const [shouldEnableDragDrop, setShouldEnableDragDrop] = useState(true);
     const [show, setshow] = useState(false);
+    const [edit, setedit] = useState(false);
 
 
     useEffect(() => {
@@ -103,6 +104,7 @@ export default function Projects() {
 
                     setShouldShowAddButton(hasAddPrivilege);
                     setShouldEnableDragDrop(hasEditPrivilege);
+                    setedit(hasEditPrivilege)
                     setshow(shows)
                 }
             });
@@ -375,7 +377,7 @@ export default function Projects() {
                                     name="checkmark-circle-outline"
                                 ></ion-icon>
                                 <h1 className="text-[25px] font-bold text-white">
-                                    Start
+                                    A faire
                                 </h1>
                                 <h1 className="font-bold ml-11 text-[25px] text-red">
                                     {startProjectscount}/{allProjectscount}
@@ -447,7 +449,7 @@ export default function Projects() {
                                     name="checkmark-circle-outline"
                                 ></ion-icon>
                                 <h1 className="text-[25px] font-bold">
-                                    Panding
+                                En Cours
                                 </h1>
                                 <h1 className="font-bold ml-11  text-[25px] text-red">
                                     {inProgressProjectscount}/{allProjectscount}
@@ -521,7 +523,7 @@ export default function Projects() {
                                     name="checkmark-circle-outline"
                                 ></ion-icon>
                                 <h1 className="text-[25px] font-bold">
-                                    Completed
+                                Fini
                                 </h1>
                                 <h1 className="font-bold ml-11  text-[25px] text-red">
                                     {completedProjectscount}/{allProjectscount}
@@ -603,13 +605,13 @@ export default function Projects() {
                     onCloseModal={handleCloseEditModal}
                 />
             )}
-            {Collaborateur && (
+            {edit && Collaborateur && (
                 <Collaborator
                     project={selectedUserId}
                     onCloseModal={handleCollaboratorclose}
                 />
             )}
-            {sprints && (
+            {edit && sprints && (
                 <Sprints
                     project={selectedUserId}
                     onCloseModal={handleSprintsclose}

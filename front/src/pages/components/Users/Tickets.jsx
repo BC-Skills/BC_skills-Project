@@ -41,6 +41,12 @@ const Tickets = () => {
     const { profile } = useStateContext();
     const [dev, setdev] = useState(false);
 
+
+    const onchangebutttonticket=() =>{
+        setdev(!dev)
+    }
+
+
     useEffect(() => {
         if (profile.name === "developer") {
             setdev(true);
@@ -365,7 +371,7 @@ const Tickets = () => {
                                         id="searchInput"
                                         className="flex-grow outline-none text-gray-600 focus:text-blue-600"
                                         type="text"
-                                        placeholder="Search Project..."
+                                        placeholder="Search Tickets..."
                                         value={searchQuery}
                                         onChange={(e) =>
                                             setSearchQuery(e.target.value)
@@ -384,6 +390,14 @@ const Tickets = () => {
                                         </svg>
                                     </span>
                                 </div>
+                                <button
+                                    type="button"
+                                    onClick={onchangebutttonticket}
+                                    className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white rounded-lg bg-blue-600 to-voilet-500 sm:ml-auto shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
+                                >
+                                    
+                                    Mes Taches
+                                </button>
                                 <div className="flex flex-row gap-6 justify-center items-center">
                                     <div className="flex-1">
                                         <h1 className="text-[20px] font-bold">
@@ -420,6 +434,7 @@ const Tickets = () => {
                                 <Header
                                     onSelectProject={handleProjectSelect}
                                     onSelectSprint={handleSprintSelect}
+                                    onchangebutttonticket={onchangebutttonticket}
                                 />
                                 <div className="flex-1 flex gap-10 flex-wrap   sm:flex-col lg:flex-row mt-12">
                                     <div className="flex-[1.5]  flex gap-10 rounded-2xl overflow-hidden  flex-wrap flex-row">

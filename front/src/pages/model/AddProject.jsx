@@ -36,9 +36,9 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
     };
 
     const status = [
-        { id: "Completed", name: "Completed" },
         { id: "Start", name: "Start" },
-        { id: "Pending", name: "Pending" },
+        { id: "Pending", name: "Pending" }, 
+        { id: "Completed", name: "Completed" },
     ];
 
     // Create state variables to store the fetched users

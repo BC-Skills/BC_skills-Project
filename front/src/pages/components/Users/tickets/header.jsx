@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import axiosClient from "../../../../axios";
 import { useStateContext } from "../../../../contexts/contextProvider";
 
-export default function Header({ onSelectProject , onSelectSprint }) {
+export default function Header({ onSelectProject , onSelectSprint ,onchangebutttonticket}) {
     const { currentUser, profile } = useStateContext();
     const [projects, setProjects] = useState([]);
     const [selectedProjectId, setSelectedProjectId] = useState("");
@@ -88,6 +88,13 @@ export default function Header({ onSelectProject , onSelectSprint }) {
                     ))}
                     <option value={'Without'}>Without Sprints</option>
                 </select>
+                <button
+                        type="button"
+                        onClick={onchangebutttonticket}
+                        className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white rounded-lg bg-blue-600 to-voilet-500 sm:ml-auto shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
+                    >
+                        Mes Taches
+                    </button>
             </div>
             <div className="flex flex-row gap-6 justify-center items-center">
                 <div className="flex-1">

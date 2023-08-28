@@ -16,27 +16,21 @@ class statusseeder extends Seeder
         $data = [
             [
                 'name' => 'projets',
-                // Add other attributes here
             ],
             [
                 'name' => 'tickets',
-                // Add other attributes here
             ],
             [
                 'name' => 'schedules',
-                // Add other attributes here
             ],
             [
                 'name' => 'formation',
-                // Add other attributes here
             ],
             [
                 'name' => 'users',
-                // Add other attributes here
             ],
             [
                 'name' => 'sprints',
-                // Add other attributes here
             ],
            
         ];
