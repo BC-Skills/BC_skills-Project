@@ -22,7 +22,18 @@ const CourseModal = ({
 
     const { currentUser } = useStateContext();
 
-
+    const handleDeleteCourse = async (courseId) => {
+        if (window.confirm("Are you sure you want to delete this course?")) {
+          try {
+            await axiosClient.delete(`formations/${courseId}`);
+            // Fetch updated formation types after successful deletion
+            fecthformtiontype();
+          } catch (error) {
+            console.error("Error deleting course:", error);
+          }
+        }
+      };
+      
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -208,35 +219,52 @@ const CourseModal = ({
                                     {formation.name}
                                 </h3>
 
-    <h3 className="text-lg font-regular subpixel-antialiased">Duree : {formation.duree}h </h3>
-    <p
-      className={`text-gray-600 max-w-[300px] ${
-        showDescriptions[index] ? 'block' : 'hidden'
-      }`}
-    >
-      {formation.description}
-    </p>
-    <button
-      className="mt-2 text-gray-600 underline"
-      onClick={() => toggleDescription(index)}
-    >
-      {showDescriptions[index] ? 'Hide' : 'Show'} Description
-    </button>
-    <button
-    className="mt-2 bg-[#9437FF] hover:bg-[#B779FF] text-white font-bold py-1 px-2 rounded"
-    onClick={() => {
-        if (formation.users.some(user => user.id === currentUser.id)) {
-            handleDownload3(formation.id, formation.file_path, formation.duree, );
-        } else {
-            handleDownload(formation.id, formation.file_path, formation.duree);
-        }
-    }}
->
-    Telecharger
-</button>
-  </div>
-))}
-
+                                <h3 className="text-lg font-regular subpixel-antialiased">
+                                    Duree : {formation.duree}h{" "}
+                                </h3>
+                                <p
+                                    className={`text-gray-600 max-w-[300px] ${
+                                        showDescriptions[index]
+                                            ? "block"
+                                            : "hidden"
+                                    }`}
+                                >
+                                    {formation.description}
+                                </p>
+                                <button
+                                    className="mt-2 text-gray-600 underline"
+                                    onClick={() => toggleDescription(index)}
+                                >
+                                    {showDescriptions[index] ? "Hide" : "Show"}{" "}
+                                    Description
+                                </button>
+                                <button
+                                    className="mt-2 bg-[#9437FF] hover:bg-[#B779FF] text-white font-bold py-1 px-2 rounded"
+                                    onClick={() => {
+                                        if (
+                                            formation.users.some(
+                                                (user) =>
+                                                    user.id === currentUser.id
+                                            )
+                                        ) {
+                                            handleDownload3(
+                                                formation.id,
+                                                formation.file_path,
+                                                formation.duree
+                                            );
+                                        } else {
+                                            handleDownload(
+                                                formation.id,
+                                                formation.file_path,
+                                                formation.duree
+                                            );
+                                        }
+                                    }}
+                                >
+                                    Telecharger
+                                </button>
+                            </div>
+                        ))}
                     </div>
                 </div>
                 <div className="modal-content flex h-[1OOpx] px-4 justify-center items-start border-[2px] p-1 border-black pb-4 ">

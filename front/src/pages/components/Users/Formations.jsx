@@ -26,24 +26,19 @@ export default function Formations() {
 
 
   const [shouldShowAddButton, setShouldShowAddButton] = useState(false);
-  const [shouldEnableDragDrop, setShouldEnableDragDrop] = useState(true);
 
   useEffect(() => {
     const storedLinks = localStorage.getItem("links");
     const parsedLinks = JSON.parse(storedLinks) || [];
     const hasFormationLink = parsedLinks.some((link) => link.name === "formation");
-
+    fecthformtiontype()
     if (!hasFormationLink) {
         navigate("/users");
     } else {
         parsedLinks.forEach(link => {
-            if (link.name === "projets") {
+            if (link.name === "formation") {
                 const hasAddPrivilege = link.privilegeNames.includes("add");
-                const hasEditPrivilege = link.privilegeNames.includes("edit");
-                const shows = link.privilegeNames.includes("show");
-
                 setShouldShowAddButton(hasAddPrivilege);
-                setShouldEnableDragDrop(hasEditPrivilege);
              
             }
         });
@@ -59,6 +54,7 @@ export default function Formations() {
      axiosClient.get("formation-types")
       .then(response => {
         setFormationTypes(response.data);
+        console.log(response.data)
       })
       .catch(error => {
         console.error("Error fetching formation types:", error);
@@ -89,20 +85,6 @@ export default function Formations() {
       [id]: !prevState[id]
     }));
   };
-
-  const handleDelete = (formationTypeId) => {
-    if (window.confirm("Are you sure you want to delete this formation type?")) {
-      axiosClient.delete(`formation-types/${formationTypeId}`)
-        .then(() => {
-          // Update the list of formation types after successful deletion
-          setFormationTypes(prevFormationTypes => prevFormationTypes.filter(type => type.id !== formationTypeId));
-        })
-        .catch(error => {
-          console.error("Error deleting formation type:", error);
-        });
-    }
-  };
-  
 
   
 // In Formations component
@@ -202,12 +184,6 @@ const handleViewDetails = async (formationType, formationTypen) => {
               >
                 Cours
               </button>
-              <button
-  onClick={() => handleDelete(formationType.id)}
-  className="inline-block py-2 px-7 border border-red-500 rounded-full text-base text-red-500 font-medium hover:bg-red-500 hover:text-white transition"
->
-  Delete
-</button>
             </div>
           </div>
         ))}
