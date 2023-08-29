@@ -42,13 +42,14 @@ export default function Collaborator({ project, onCloseModal }) {
     useEffect(() => {
         const filteredUsers = users.filter((user) => {
             return (
-                user.name.toLowerCase().includes(searchQuery) ||
-                user.email.toLowerCase().includes(searchQuery) ||
-                user.tel.toLowerCase().includes(searchQuery) ||
-                user.profile_name.toLowerCase().includes(searchQuery)
+                (user.name && user.name.toLowerCase().includes(searchQuery)) ||
+                (user.email && user.email.toLowerCase().includes(searchQuery)) ||
+                (user.tel && user.tel.toLowerCase().includes(searchQuery)) ||
+                (user.profile_name && user.profile_name.toLowerCase().includes(searchQuery)) ||
+                (user.competences && user.competences.some((comp) => comp.name.toLowerCase().includes(searchQuery)))
             );
         });
-
+    
         setFilteredUsers(filteredUsers);
     }, [searchQuery, users]);
 
@@ -103,14 +104,14 @@ export default function Collaborator({ project, onCloseModal }) {
         }
     };
     const getRandomColor = () => {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
+        const letters = "0123456789ABCDEF";
+        let color = "#";
         for (let i = 0; i < 6; i++) {
-          color += letters[Math.floor(Math.random() * 16)];
+            color += letters[Math.floor(Math.random() * 16)];
         }
         return color;
-      };
-    
+    };
+
     return (
         <>
             <div
@@ -187,7 +188,7 @@ export default function Collaborator({ project, onCloseModal }) {
                                                     return (
                                                         <div
                                                             key={user.id}
-                                                            className="bg-white h-32 rounded-xl p-4 flex items-center justify-between"
+                                                            className="bg-white h-42 rounded-xl p-4 flex items-center justify-between"
                                                         >
                                                             <div className="bg-white h-32 rounded-xl p-4 flex items-center">
                                                                 <div className="w-16 h-16 mr-4">
@@ -225,29 +226,46 @@ export default function Collaborator({ project, onCloseModal }) {
                                                                                 .name
                                                                         }
                                                                     </p>
-                                                                    <p className="flex  flex-row gap-3">
-                                                                        {" "}
+                                                                    <div className="flex flex-row gap-3">
                                                                         Competence:{" "}
-                                                                        {user.competences.map(
-                                                                            (
-                                                                                comp
-                                                                            ) => (
-                                                                                <span
-                                                                                    key={
-                                                                                        comp.id
-                                                                                    }
-                                                                                    className=""
-                                                                                    style={{
-                                                                                        color: getRandomColor(),
-                                                                                    }} // Apply random color
-                                                                                >
-                                                                                    {
+                                                                        <div className=" max-w-[200px] flex flex-row gap-1 overflow-x-auto">
+                                                                            {user.competences.map(
+                                                                                (
+                                                                                    comp
+                                                                                ) => (
+                                                                                    <span
+                                                                                        key={
+                                                                                            comp.id
+                                                                                        }
+                                                                                        className="text-white p-1 rounded-xl font-bold"
+                                                                                        style={{
+                                                                                            backgroundColor:
+                                                                                                getRandomColor(),
+                                                                                        }}
+                                                                                    >
+                                                                                        {comp.name &&
                                                                                         comp.name
-                                                                                    }
-                                                                                </span>
-                                                                            )
-                                                                        )}
-                                                                    </p>
+                                                                                            .toLowerCase()
+                                                                                            .includes(
+                                                                                                searchQuery
+                                                                                            ) ? (
+                                                                                            <span>
+                                                                                                {
+                                                                                                    comp.name
+                                                                                                }
+                                                                                            </span>
+                                                                                        ) : (
+                                                                                            <span className="hidden">
+                                                                                                {
+                                                                                                    comp.name
+                                                                                                }
+                                                                                            </span>
+                                                                                        )}
+                                                                                    </span>
+                                                                                )
+                                                                            )}
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             <div className="flex gap-3 items-center">
