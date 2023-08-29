@@ -60,8 +60,8 @@ export default function Models({ onCloseModal, fetchUsersData }) {
                         <div className="px-6 py-6 lg:px-8">
                             <div className="flex items-center justify-between pb-3">
                                 <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Add Employee</h3>
-                                <button type="button" onClick={onCloseModal} data-modal-hide="edit-user-modal" className="text-white hover:text-gray-400 focus:outline-none">
-                                    Close Button SVG or Text Here
+                                <button type="button" onClick={onCloseModal} data-modal-hide="edit-user-modal"  className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                    Fermer
                                 </button>
                             </div>
                             <form className="space-y-6" action="#" id="addEmployeeForm" onSubmit={handleSubmit} encType="multipart/form-data">

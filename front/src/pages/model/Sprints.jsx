@@ -89,7 +89,7 @@ export default function Sprints({ project, onCloseModal }) {
                             <div className="flex  flex-col justify-between pb-3">
                                 <div className="flex flex-row flex-1  justify-between">
                                     <h3 className="mb-4 text-[50px] font-medium text-gray-900 dark:text-blue-700">
-                                        Sprints
+                                        Phases
                                     </h3>
                                     <button
                                         type="button"
@@ -164,7 +164,7 @@ export default function Sprints({ project, onCloseModal }) {
                                         </div>
                                         <div>
                                             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                                                Sprint Status
+                                                Status de la phase
                                             </label>
                                             <select
                                                 name="status"
@@ -183,7 +183,7 @@ export default function Sprints({ project, onCloseModal }) {
                                         </div>
                                         <div>
                                             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                                                Start Date
+                                                Date debut
                                             </label>
                                             <input
                                                 type="date" // Use type 'date' for date input
@@ -192,7 +192,7 @@ export default function Sprints({ project, onCloseModal }) {
                                             />
                                             <div>
                                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                                                    End Date
+                                                    Date fin
                                                 </label>
                                                 <input
                                                     type="date" // Use type 'date' for date input
@@ -203,7 +203,7 @@ export default function Sprints({ project, onCloseModal }) {
                                         </div>
                                         <div>
                                             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                                                Sprint Description
+                                                Description de la phase
                                             </label>
                                             <textarea
                                                 name="description"
@@ -219,13 +219,13 @@ export default function Sprints({ project, onCloseModal }) {
                                                 }
                                                 className="mr-2 px-4 py-2 text-sm font-medium text-gray-600 bg-gray-200 border border-gray-300 rounded-md shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             >
-                                                Cancel
+                                                Annuler
                                             </button>
                                             <button
                                                 type="submit"
                                                 className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                             >
-                                                Add Sprint
+                                                Ajouter une phase
                                             </button>
                                         </div>
                                     </form>
@@ -236,7 +236,7 @@ export default function Sprints({ project, onCloseModal }) {
                                         onClick={handleAddSprint}
                                         className="w-full mr-2 px-4 py-2 text-sm font-medium text-gray-600 bg-gray-200 border border-gray-300 rounded-md shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     >
-                                        Add Sprints
+                                        Ajouter une phase
                                     </button>
                                 )}
                                 <div className="grid grid-cols-1 mt-8  sm:grid-cols-2 max-h-[50vh] overflow-auto lg:grid-cols-2 gap-4">
@@ -254,7 +254,7 @@ export default function Sprints({ project, onCloseModal }) {
                                         >
                                             <div className="font-bold  mb-2 text-[30px] flex items-center gap-3 justify-center">
                                                 <span className="font-normal text-sm mt-2">
-                                                    Name:
+                                                    Nom:
                                                 </span>{" "}
                                                 {sprint.name}
                                             </div>
@@ -262,13 +262,13 @@ export default function Sprints({ project, onCloseModal }) {
                                             <div className="flex justify-between mt-2">
                                                 <div>
                                                     <span className="font-bold">
-                                                        Start date:
+                                                        Date debut:
                                                     </span>{" "}
                                                     {sprint.date_debut}
                                                 </div>
                                                 <div>
                                                     <span className="font-bold">
-                                                        End date:
+                                                        Date fin:
                                                     </span>{" "}
                                                     {sprint.date_fin}
                                                 </div>

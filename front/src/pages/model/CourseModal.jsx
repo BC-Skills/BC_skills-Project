@@ -15,7 +15,18 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthfor
    
     const { currentUser } = useStateContext();
 
-
+    const handleDeleteCourse = async (courseId) => {
+        if (window.confirm("Are you sure you want to delete this course?")) {
+          try {
+            await axiosClient.delete(`formations/${courseId}`);
+            // Fetch updated formation types after successful deletion
+            fecthformtiontype();
+          } catch (error) {
+            console.error("Error deleting course:", error);
+          }
+        }
+      };
+      
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -213,6 +224,12 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthfor
     }}
 >
     Telecharger
+</button>
+<button
+  className="mt-2 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
+  onClick={() => handleDeleteCourse(formation.id)}
+>
+  Delete
 </button>
   </div>
 ))}

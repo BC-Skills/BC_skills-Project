@@ -371,7 +371,7 @@ const Tickets = () => {
                                         id="searchInput"
                                         className="flex-grow outline-none text-gray-600 focus:text-blue-600"
                                         type="text"
-                                        placeholder="Search Tickets..."
+                                        placeholder="Rechercher les Tickets..."
                                         value={searchQuery}
                                         onChange={(e) =>
                                             setSearchQuery(e.target.value)
@@ -568,7 +568,7 @@ const Tickets = () => {
                                                                             .value
                                                                     )
                                                                 }
-                                                                placeholder="Enter ticket name"
+                                                                placeholder="Nom ticket"
                                                                 className="p-2 m-2 border  border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-400"
                                                             />
                                                             <button
@@ -717,7 +717,7 @@ const Tickets = () => {
                                                                             .value
                                                                     )
                                                                 }
-                                                                placeholder="Enter ticket name"
+                                                                placeholder="Nom ticket"
                                                                 className="p-2 m-2 border  border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-400"
                                                             />
                                                             <button
@@ -865,7 +865,7 @@ const Tickets = () => {
                                                                             .value
                                                                     )
                                                                 }
-                                                                placeholder="Enter ticket name"
+                                                                placeholder="Nom du ticket"
                                                                 className="p-2 m-2 border  border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-400"
                                                             />
                                                             <button

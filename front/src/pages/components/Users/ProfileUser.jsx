@@ -134,10 +134,10 @@ const ProfilePage = () => {
                 Changer le mot de passe
               </button>
               {passwordUpdateStatus === 'success' && (
-                <p className="text-green-500 mt-2">Password updated successfully!</p>
+                <p className="text-green-500 mt-2">Mot de passe mis à jour avec succès!</p>
               )}
               {passwordUpdateStatus === 'error' && (
-                <p className="text-red-500 mt-2">An error occurred while updating the password.</p>
+                <p className="text-red-500 mt-2">Une erreur s'est produite lors de la mise à jour du mot de passe.</p>
               )}
               <Transition
                 show={showChangePasswordForm}
@@ -171,7 +171,7 @@ const ProfilePage = () => {
                       type="submit"
                       className="bg-[#41415A] hover:bg-[#6C6D96]  text-white font-bold py-2 px-4 rounded transition-colors duration-300"
                     >
-                      Update Password
+                      Modifier le mot de passe
                     </button>
                   </div>
                 </form>
