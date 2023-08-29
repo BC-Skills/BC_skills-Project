@@ -4,7 +4,15 @@ import React, { useRef, useState } from "react";
 import axiosClient from "../../axios";
 import { useStateContext } from "../../contexts/contextProvider";
 
-const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthformtiontype, selectedformationTypen , selectetotal}) => {
+const CourseModal = ({
+    isOpen,
+    formationType,
+    formationTypeid,
+    onClose,
+    fecthformtiontype,
+    selectedformationTypen,
+    selectetotal,shouldShowAddButton
+}) => {
     const [showInputs, setShowInputs] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
@@ -12,7 +20,6 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthfor
         file: null,
     });
 
-   
     const { currentUser } = useStateContext();
 
     const handleDeleteCourse = async (courseId) => {
@@ -24,8 +31,8 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthfor
           } catch (error) {
             console.error("Error deleting course:", error);
           }
-        }
-      };
+        }
+      };
       
 
     const handleChange = (e) => {
@@ -51,10 +58,10 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthfor
     //             description: formData.description,
     //             formation_type_id: formationTypeid, // formationTypeId doesn't exist
     //           };
-              
+
     //       console.log(requestData)
     //       console.log(formationTypeid)
-      
+
     //       const response = await axiosClient.post(
     //         "formations",
     //         requestData,
@@ -64,25 +71,26 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthfor
     //           },
     //         }
     //       );
-      
+
     //       onClose();
     //     } catch (error) {
     //       console.error("Error submitting formation:", error);
     //     }
     //   };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const formDataToSend = new FormData();
             formDataToSend.append("name", formData.name);
-            formDataToSend.append( "duree",formData.duree);
+            formDataToSend.append("duree", formData.duree);
             formDataToSend.append("description", formData.description);
-            formDataToSend.append( "formation_type_id",formationTypeid);
-            
+            formDataToSend.append("formation_type_id", formationTypeid);
+
             if (formData.file) {
                 formDataToSend.append("file", formData.file);
             }
-            fecthformtiontype()
+            fecthformtiontype();
             const response = await axiosClient.post(
                 "formations",
                 formDataToSend,
@@ -98,38 +106,40 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthfor
             console.error("Error submitting formation:", error);
         }
     };
-      
 
-    const handleDownload = async (formationId, fileName , dureee) => {
-        
+    const handleDownload = async (formationId, fileName, dureee) => {
         try {
             const response = await axiosClient.get(
                 `formations/${formationId}/download`
             );
-            const payload = { formation_id: formationId ,
-              duree:dureee,formationType:formationTypeid,
+            const payload = {
+                formation_id: formationId,
+                duree: dureee,
+                formationType: formationTypeid,
             };
-            console.log(formationTypeid)
+            console.log(formationTypeid);
 
             const response2 = await axiosClient.post(
-                `usersss/${currentUser.id}/attachFormation`,payload
-                );
-                console.log(response2.data,selectetotal)
-            
-            
-                if(response2.data===selectetotal){
-                       const payload2 = { name: selectedformationTypen ,
-                    user_id:currentUser.id
-                            };
-              
-                    const response3= await axiosClient.post(`competences`,payload2,
+                `usersss/${currentUser.id}/attachFormation`,
+                payload
+            );
+            console.log(response2.data, selectetotal);
+
+            if (response2.data === selectetotal) {
+                const payload2 = {
+                    name: selectedformationTypen,
+                    user_id: currentUser.id,
+                };
+
+                const response3 = await axiosClient.post(
+                    `competences`,
+                    payload2,
                     {
                         responseType: "blob",
                     }
-                   
-                    ); console.log(response3)
-
-                }
+                );
+                console.log(response3);
+            }
             const blob = new Blob([response.data]);
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement("a");
@@ -138,12 +148,12 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthfor
             document.body.appendChild(link);
             link.click();
             link.remove();
-            fecthformtiontype()
+            fecthformtiontype();
         } catch (error) {
             console.error("Error downloading file:", error);
         }
     };
-    const handleDownload3 = async (formationId, fileName , dureee) => {
+    const handleDownload3 = async (formationId, fileName, dureee) => {
         try {
             const response = await axiosClient.get(
                 `formations/${formationId}/download`,
@@ -151,7 +161,7 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthfor
                     responseType: "blob",
                 }
             );
-            
+
             const blob = new Blob([response.data]);
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement("a");
@@ -175,10 +185,14 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthfor
             [index]: !prevShowDescriptions[index],
         }));
     };
-//formations.users=currentuser
+    //formations.users=currentuser
     return (
         <div className={`course-modal ${isOpen ? "visible" : "hidden"}`}>
-            <div className={`flex modal-container man-w-[1000px] flex-col pb-2 bg-white m-h-${showInputs ? "full" : "[900px]"} md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto`}>
+            <div
+                className={`flex modal-container man-w-[1000px] flex-col pb-2 bg-white m-h-${
+                    showInputs ? "full" : "[900px]"
+                } md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto`}
+            >
                 <div className="flex justify-between mt-2 ml-2 mr-2">
                     <h1 className="text-[35px] font-bold">Formation</h1>
                     <button
@@ -189,15 +203,21 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthfor
                     </button>
                 </div>
                 <div className="modal-content flex max-h-[500px]  flex-1 p-5 gap-3 overflow-y-auto">
-    <div className="grid grid-cols-2 gap-4">
-        {formationType?.map((formation, index) => (
-            <div
-                key={index}
-                className={`flex flex-col p-4 shadow-md rounded-md ${
-                    formation.users.some(user => user.id === currentUser.id) ? 'bg-green-100' : 'bg-gray-100'
-                }`}
-            >
-    <h3 className="text-lg font-semibold">{formation.name}</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                        {formationType?.map((formation, index) => (
+                            <div
+                                key={index}
+                                className={`flex flex-col p-4 shadow-md rounded-md ${
+                                    formation.users.some(
+                                        (user) => user.id === currentUser.id
+                                    )
+                                        ? "bg-green-100"
+                                        : "bg-gray-100"
+                                }`}
+                            >
+                                <h3 className="text-lg font-semibold">
+                                    {formation.name}
+                                </h3>
 
     <h3 className="text-lg font-regular subpixel-antialiased">Duree : {formation.duree}h </h3>
     <p
@@ -229,7 +249,7 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthfor
   className="mt-2 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
   onClick={() => handleDeleteCourse(formation.id)}
 >
-  Supprimer
+  Delete
 </button>
   </div>
 ))}
@@ -256,7 +276,7 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthfor
                                         onChange={handleChange}
                                         required
                                     />
-                                     <label
+                                    <label
                                         className="block text-gray-700 text-sm font-bold mb-2"
                                         htmlFor="name"
                                     >
@@ -320,27 +340,35 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthfor
                                 </div>
                             </div>
                             <div className="flex gap-6">
-                            <button
-                                onClick={handleSubmit}
-                                className="bg-[#9437FF] flex-1 hover:bg-[#B779FF] text-white font-bold py-1 px-2 rounded"
-                            >
-                                Ajouter
-                            </button>
-                            <button
-                                 onClick={() => setShowInputs(false)}
-                                className="bg-[#9437FF] flex-1 hover:bg-[#B779FF] text-white font-bold py-1 px-2 rounded"
-                            >
-                                Annuler
-                            </button>
+                                <button
+                                    onClick={handleSubmit}
+                                    className="bg-[#9437FF] flex-1 hover:bg-[#B779FF] text-white font-bold py-1 px-2 rounded"
+                                >
+                                    Ajouter
+                                </button>
+                                <button
+                                    onClick={() => setShowInputs(false)}
+                                    className="bg-[#9437FF] flex-1 hover:bg-[#B779FF] text-white font-bold py-1 px-2 rounded"
+                                >
+                                    Annuler
+                                </button>
                             </div>
                         </div>
                     ) : (
+                       <> {shouldShowAddButton && (
+                        <>
                         <button
                             onClick={() => setShowInputs(true)}
                             className="bg-[#9437FF] hover:bg-[#B779FF] flex-1 text-white font-bold py-1 px-2 rounded"
                         >
                             Ajouter un cours?
                         </button>
+                        </>
+                        
+                        )}
+                        
+                        </>
+
                     )}
                 </div>
             </div>

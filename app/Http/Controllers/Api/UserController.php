@@ -242,7 +242,8 @@ class UserController extends Controller
                 $usersQuery = User::where('status', '!=', 'archive')
                                   ->where('profile_id', '!=', $adminProfile->id)
                                   ->where('profile_id', '!=', $clientProfile->id)
-                                  ->with('profile');
+                                  ->with('profile')
+                                  ->with('competences'); 
             
                 if ($id !== null) {
                     $usersQuery->where('id', '!=', $id);

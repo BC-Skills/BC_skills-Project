@@ -6,7 +6,7 @@ import { Transition } from '@headlessui/react';
 
 
 const ProfilePage = () => {
-  const { currentUser, profile } = useStateContext();
+  const { currentUser, profile,setCurrentUser } = useStateContext();
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [passwordUpdateStatus, setPasswordUpdateStatus] = useState(null);
@@ -46,7 +46,6 @@ const ProfilePage = () => {
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append('profile_picture', file);
-    console.log(file);
   
     try {
       const response = await axiosClient.post(`/userss/${currentUser.id}/update-profile-picture`, formData, {
@@ -55,6 +54,8 @@ const ProfilePage = () => {
         },
       });
       // Handle success
+      setCurrentUser(response.data)
+
       console.log('Profile picture updated:', response.data);
     } catch (error) {
       // Handle error
@@ -81,17 +82,16 @@ const ProfilePage = () => {
                
               </Transition>
             </div>
-            <div class="text-center">
-              
-  <img
-    src={currentUser.profile_picture}
-    class="mx-auto mb-4 w-32 rounded-lg w-full h-full object-contain "
-    alt="Avatar" />
-  <h5 class="mb-2 text-xl font-medium leading-tight">  {currentUser.name}</h5>
-  <p class="text-neutral-500 dark:text-neutral-400"> {profile && profile.name}</p>
-  <p class="text-neutral-500 dark:text-neutral-400"> Email: {currentUser.email}</p>
-  <p class="text-neutral-500 dark:text-neutral-400"> Tel: {currentUser.tel}</p>
-</div>
+            <div className="text-center">
+            <img
+              src={currentUser.profile_picture}
+              className="mx-auto mb-4 w-32 rounded-lg "
+              alt="Avatar" />
+            <h5 className="mb-2 text-xl font-medium leading-tight">  {currentUser.name}</h5>
+            <p className="text-neutral-500 dark:text-neutral-400"> {profile && profile.name}</p>
+            <p className="text-neutral-500 dark:text-neutral-400"> Email: {currentUser.email}</p>
+            <p className="text-neutral-500 dark:text-neutral-400"> Tel: {currentUser.tel}</p>
+          </div>
   {/* Display user's competences badges */}
   <div className="mt-4 flex ml-[16%] mr-[16%] justify-center space-x-2 max-w-[300px] flex-wrap gap-4 items-center">
           {userCompetences.map((competence, index) => (
