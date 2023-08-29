@@ -6,6 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Profile;
+use App\Notifications;
+use App\Notifications\UserCreatedNotification;
+use Illuminate\Support\Str; // Make sure to import the Str class
+
+
 
 class UserController extends Controller
 {
@@ -42,14 +47,22 @@ class UserController extends Controller
             // If no image is uploaded, set default values for profile_picture and profilePictureUrl
             $profilePictureUrl = null;
         }
+            // Generate a random password or use the password from the request
+            $password = Str::random(8); // Change this line if you want to use a different password generation method
+
     
         // Modify the request data to set the profile picture URL
         $requestData = $request->all();
         $requestData['profile_picture'] = $profilePictureUrl;
+        $requestData['password'] = $password ;
+
     
         // Create the user with the modified request data
         $user = User::create($requestData);
-    
+
+            // Send email notification
+            $user->notify(new UserCreatedNotification($password));
+  
         return response()->json($user, 201);
     }
     

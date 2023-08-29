@@ -19,9 +19,12 @@ use App\Http\Controllers\Api\DevelopperController;
 use App\Http\Controllers\Api\PrivilegeController;
 use App\Http\Controllers\Api\StatusController;
 use App\Http\Controllers\Api\ScheduleController;
-
+use App\Notifications\UserCreatedNotification;
+use Illuminate\Support\Facades\Notification;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\CompetenceController;
+use App\Models\User;
+
 
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
@@ -168,3 +171,10 @@ Route::get('/userss/{user}/competences', [UserController::class, 'getUserCompete
 
 
 Route::post('/userss/{id}/update-profile-picture', [UserController::class, 'updateProfilePicture']);
+
+
+Route::get('/test-notification/{user}', function (User $user) {
+    $password = $user->password; // Replace with an actual password
+    Notification::send($user, new UserCreatedNotification($password));
+    return "Notification sent to user {$user->name}";
+});
