@@ -96,23 +96,28 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthfor
                 `formations/${formationId}/download`
             );
             const payload = { formation_id: formationId ,
-              duree:dureee
+              duree:dureee,formationType:formationTypeid,
             };
-          
+            console.log(formationTypeid)
+
             const response2 = await axiosClient.post(
                 `usersss/${currentUser.id}/attachFormation`,payload
                 );
-                const payload2 = { name: selectedformationTypen ,
-                    "user_id":currentUser.id
+                console.log(response2.data,selectetotal)
+            
+            
+                if(response2.data===selectetotal){
+                       const payload2 = { name: selectedformationTypen ,
+                    user_id:currentUser.id
                             };
-                console.log(payload2)
-            if(response2.data===selectetotal){
-                      
+              
                     const response3= await axiosClient.post(`competences`,payload2,
                     {
                         responseType: "blob",
                     }
-                    );
+                   
+                    ); console.log(response3)
+
                 }
             const blob = new Blob([response.data]);
             const url = window.URL.createObjectURL(blob);

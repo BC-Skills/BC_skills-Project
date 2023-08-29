@@ -129,14 +129,29 @@ class FormationController extends Controller
         $user = User::findOrFail($profileId);
         $formationId = $request->input('formation_id');
         $duree = $request->input('duree');
-
-        $user->formations()->attach($formationId, ['duree' => $duree]);
+        $formationTypeId = $request->input('formationType');
+        
+        // Attach the formation to the user with formation_type_id
+        $user->formations()->attach(
+            $formationId, [
+                'duree' => $duree,
+                'formation_type_id' => $formationTypeId
+            ]);
+        
+        // Refresh the user instance to ensure you have the latest attached formations
+        
         $user = User::findOrFail($profileId);
-        $attachedFormations = $user->formations()->withPivot('duree')->get();
-        $totalDuree = $attachedFormations->sum('pivot.duree');
+        $attachedFormations = $user->formations()
+            ->wherePivot('formation_type_id', $formationTypeId)
+            ->withPivot('duree')
+            ->get();
     
+        $totalDuree = $attachedFormations->sum('pivot.duree');
+        
         return response()->json($totalDuree, 200);
     }
+    
+    
 }
 // public function attachFormation(Request $request, $profileId)
 // {

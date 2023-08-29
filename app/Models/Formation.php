@@ -13,11 +13,13 @@ class Formation extends Model
 
     protected $fillable = ['name', 'description', 'formation_type_id', 'file_path','duree'];
 
-    public function Users()
+    public function users()
     {
         return $this->belongsToMany(User::class, 'formation_user')
-            ->withPivot('duree');
+            ->withPivot('duree', 'formation_type_id')
+            ->withTimestamps();
     }
+    
 
     public function formationType()
     {
