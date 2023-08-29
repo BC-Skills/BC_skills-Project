@@ -37,7 +37,7 @@ class User extends Authenticatable
     public function formations()
 {
     return $this->belongsToMany(Formation::class, 'formation_user')
-        ->withPivot('duree') 
+        ->withPivot('duree','formation_type_id') 
         ->withTimestamps(); 
 }
 
