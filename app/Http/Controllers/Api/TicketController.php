@@ -112,6 +112,7 @@ class TicketController extends Controller
             $tickets = Ticket::with('project', 'sprint', 'user', 'assignedToUser','sprint')
                 ->where('project_id', $projectId)
                 ->where('archiver', 'non') // Add condition to exclude archived tickets
+                ->where('status','A Faire')
                 ->get();
     
             // Return the tickets with project, sprint, and user information in the response
