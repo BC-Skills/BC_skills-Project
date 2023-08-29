@@ -6,7 +6,7 @@ import { Transition } from '@headlessui/react';
 
 
 const ProfilePage = () => {
-  const { currentUser, profile } = useStateContext();
+  const { currentUser, profile, setCurrentUser } = useStateContext();
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [passwordUpdateStatus, setPasswordUpdateStatus] = useState(null);
@@ -28,7 +28,6 @@ const ProfilePage = () => {
     }
   };
   useEffect(() => {
-    // Fetch user's competences here
     fetchUserCompetences(currentUser.id);
   }, [currentUser.id]);
   
@@ -45,17 +44,17 @@ const ProfilePage = () => {
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     const formData = new FormData();
-    formData.append('profile_picture', file);
-    console.log(file);
-  
+    formData.append('profile_picture', file);  
     try {
       const response = await axiosClient.post(`/userss/${currentUser.id}/update-profile-picture`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+        
       });
       // Handle success
       console.log('Profile picture updated:', response.data);
+      setCurrentUser(response.data)
     } catch (error) {
       // Handle error
       console.error('Error updating profile picture:', error);
