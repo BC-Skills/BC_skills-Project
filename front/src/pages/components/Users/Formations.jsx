@@ -54,7 +54,6 @@ export default function Formations() {
      axiosClient.get("formation-types")
       .then(response => {
         setFormationTypes(response.data);
-        console.log(response.data)
       })
       .catch(error => {
         console.error("Error fetching formation types:", error);
