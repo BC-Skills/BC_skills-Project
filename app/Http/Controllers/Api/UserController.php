@@ -15,11 +15,45 @@ class UserController extends Controller
     //     return response()->json($users);
     // }
 
+    // public function store(Request $request)
+    // {
+    //     $user = User::create($request->all());
+    //     return response()->json($user, 201);
+    // }
+
     public function store(Request $request)
     {
-        $user = User::create($request->all());
+        // Validate the incoming request data if needed
+        // $request->validate([
+        //     'name' => 'required|string',
+        //     'email' => 'required|email|unique:users',
+        //     'password' => 'required|min:8',
+        //     'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        // ]);
+    
+        // Handle the profile picture upload and store the image in the public disk
+        if ($request->hasFile('profile_picture')) {
+            $image = $request->file('profile_picture');
+            $imagePath = $image->store('public/profile_pictures');
+    
+            // Generate URL for the uploaded image
+            $profilePictureUrl = asset('storage/profile_pictures/' . basename($imagePath));
+        } else {
+            // If no image is uploaded, set default values for profile_picture and profilePictureUrl
+            $profilePictureUrl = null;
+        }
+    
+        // Modify the request data to set the profile picture URL
+        $requestData = $request->all();
+        $requestData['profile_picture'] = $profilePictureUrl;
+    
+        // Create the user with the modified request data
+        $user = User::create($requestData);
+    
         return response()->json($user, 201);
     }
+    
+
 
     public function show($id)
     {
@@ -33,6 +67,30 @@ class UserController extends Controller
         $user->update($request->all());
         return response()->json($user, 200);
     }
+
+    
+    public function updateProfilePicture(Request $request, $id)
+{
+    $user = User::findOrFail($id);
+
+    // Handle the profile picture update if a new file is provided
+    if ($request->hasFile('profile_picture')) {
+        // Delete the old profile picture if it exists
+        // if ($user->profile_picture) {
+        //     Storage::delete('public/profile_pictures/' . basename($user->profile_picture));
+        // }
+
+        $image = $request->file('profile_picture');
+        $imagePath = $image->store('public/profile_pictures');
+
+        // Generate URL for the uploaded image
+        $profilePictureUrl = asset('storage/profile_pictures/' . basename($imagePath));
+        $user->profile_picture = $profilePictureUrl;
+        $user->save();
+    }
+
+    return response()->json($user, 200);
+}
 
 
 
@@ -52,7 +110,13 @@ class UserController extends Controller
     }
 
    
-   
+    public function getUserCompetences(User $user)
+    {
+        $competences = $user->competences; 
+        
+        return response()->json($competences);
+    }
+
     public function getAdmin()
 {
     // Get active users (excluding those with status 'archive') who are not admins

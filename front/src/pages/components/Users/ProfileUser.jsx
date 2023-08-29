@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useStateContext } from '../../../contexts/contextProvider';
 import axiosClient from '../../../axios';
 import { Transition } from '@headlessui/react';
+
+
 
 const ProfilePage = () => {
   const { currentUser, profile } = useStateContext();
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [passwordUpdateStatus, setPasswordUpdateStatus] = useState(null);
+  const [userCompetences, setUserCompetences] = useState([]);
+  const competenceColors = ['#FF9300', '#983FFB','#068FF1', '#05EB07'];
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
@@ -23,9 +27,39 @@ const ProfilePage = () => {
       console.error('Error updating password:', error);
     }
   };
+  useEffect(() => {
+    // Fetch user's competences here
+    fetchUserCompetences(currentUser.id);
+  }, [currentUser.id]);
+  
 
-  const handleFileChange = (e) => {
+    const fetchUserCompetences = async (userId) => {
+    try {
+      const response = await axiosClient.get(`/userss/${userId}/competences`);
+      setUserCompetences(response.data);
+    } catch (error) {
+      console.error('Error fetching user competences:', error);
+    }
+  };
+
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('profile_picture', file);
+    console.log(file);
+  
+    try {
+      const response = await axiosClient.post(`/userss/${currentUser.id}/update-profile-picture`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      // Handle success
+      console.log('Profile picture updated:', response.data);
+    } catch (error) {
+      // Handle error
+      console.error('Error updating profile picture:', error);
+    }
   };
 
   return (
@@ -44,14 +78,36 @@ const ProfilePage = () => {
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <img
-                  className="w-24 h-24 object-cover rounded-full shadow-lg"
-                  src={currentUser.profile_picture}
-                  alt="Profile"
-                />
+               
               </Transition>
             </div>
-            <div className="divide-y divide-gray-200">
+            <div class="text-center">
+  <img
+    src={currentUser.profile_picture}
+    class="mx-auto mb-4 w-32 rounded-lg "
+    alt="Avatar" />
+  <h5 class="mb-2 text-xl font-medium leading-tight">  {currentUser.name}</h5>
+  <p class="text-neutral-500 dark:text-neutral-400"> {profile && profile.name}</p>
+  <p class="text-neutral-500 dark:text-neutral-400"> Email: {currentUser.email}</p>
+  <p class="text-neutral-500 dark:text-neutral-400"> Tel: {currentUser.tel}</p>
+</div>
+  {/* Display user's competences badges */}
+  <div className="mt-4 flex ml-[16%] mr-[16%] justify-center space-x-2 max-w-[300px] flex-wrap gap-4 items-center">
+          {userCompetences.map((competence, index) => (
+            <span
+              key={competence.id}
+              style={{
+                backgroundColor: competenceColors[index % competenceColors.length],
+                color: '#fff', // You can adjust the text color as needed
+              }}
+              className="inline-block rounded whitespace-nowrap px-2 py-1 text-xs font-semibold"
+            >
+              {competence.name}
+            </span>
+          ))}
+        </div>
+
+            {/* <div className="divide-y divide-gray-200">
               <div className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
                 <div className="flex justify-center">
                   <h2 className="text-xl leading-6 font-medium text-gray-900">
@@ -67,10 +123,10 @@ const ProfilePage = () => {
                   <p>Email: {currentUser.email}</p>
                 </div>
                 <div className="flex justify-center">
-                  <p>Tel: {currentUser.tel}</p>
+                  <p></p>
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="mt-10">
               <button
                 onClick={() => setShowChangePasswordForm(!showChangePasswordForm)}
@@ -130,7 +186,7 @@ const ProfilePage = () => {
                 <input
                   type="file"
                   id="profilePicture"
-                  name="profilePicture"
+                  name="profile_picture" // This should match the field name in the backend
                   onChange={handleFileChange}
                   className="border border-gray-400 px-4 py-2 rounded w-full"
                   accept="image/*"

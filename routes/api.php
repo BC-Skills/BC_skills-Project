@@ -41,7 +41,6 @@ Route::apiResource('formations', FormationController::class);
 Route::get('formation-types/{formationType}/formations', [FormationTypeController::class, 'getFormations']);
 Route::get('formations/{id}/download', [FormationController::class, 'downloadFile']);
 
-
 Route::apiResource('formationdevelopers', FormationDeveloperController::class);
 Route::apiResource('formation-types', FormationTypeController::class);
 Route::apiResource('profiles', ProfileController::class);
@@ -63,6 +62,7 @@ Route::post('/messages', 'MessageController@store');
 Route::post('profiless/{profileId}/attach-privileges', [ProfileController::class, 'attachPrivileges']);
 Route::post('profiless/{profile}/detach-privileges', [ProfileController::class, 'detachPrivileges']);
 Route::get('profiless/{profileId}/privileges', [ProfileController::class, 'getPrivileges']);
+
 
 
 Route::post('/projects/{projectId}/users/attach', [ProjectController::class, 'attachUser']);
@@ -162,3 +162,9 @@ Route::get('formation-typesd/{formationType}', [FormationTypeController::class, 
 Route::get('/userss/allemp', [UserController::class, 'index2']);
 
 Route::apiResource('competences', CompetenceController::class);
+
+
+Route::get('/userss/{user}/competences', [UserController::class, 'getUserCompetences']);
+
+
+Route::post('/userss/{id}/update-profile-picture', [UserController::class, 'updateProfilePicture']);
