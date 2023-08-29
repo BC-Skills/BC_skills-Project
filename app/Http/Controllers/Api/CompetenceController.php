@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Models\Competence;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 
 class CompetenceController extends Controller
 {
@@ -16,11 +17,12 @@ class CompetenceController extends Controller
 
     public function store(Request $request)
     {
-
-        $competence = Competence::create([
-            'name' => $request->input('name'),
-        ]);
-
+        $data = $request->all();
+        
+        $user = User::findOrFail($data['user_id']); // Fetch the user by ID
+        
+        $competence = $user->competences()->create($data);
+        
         return response()->json($competence, 201);
     }
 
