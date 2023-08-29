@@ -31,8 +31,8 @@ const CourseModal = ({
           } catch (error) {
             console.error("Error deleting course:", error);
           }
-        }
-      };
+        }
+      };
       
 
     const handleChange = (e) => {
@@ -263,6 +263,16 @@ const CourseModal = ({
                                 >
                                     Telecharger
                                 </button>
+                                {shouldShowAddButton && (
+                        <>
+                                <button
+                        className="mt-2 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
+                        onClick={() => handleDeleteCourse(formation.id)}
+                      >
+                        Supprimer
+                      </button>
+                      </>
+                                )}
                             </div>
                         ))}
                     </div>
@@ -367,12 +377,19 @@ const CourseModal = ({
                         </div>
                     ) : (
                        <> {shouldShowAddButton && (
+                        <>
                         <button
                             onClick={() => setShowInputs(true)}
                             className="bg-[#9437FF] hover:bg-[#B779FF] flex-1 text-white font-bold py-1 px-2 rounded"
                         >
                             Ajouter un cours?
-                        </button>)}</>
+                        </button>
+                        </>
+                        
+                        )}
+                        
+                        </>
+
                     )}
                 </div>
             </div>

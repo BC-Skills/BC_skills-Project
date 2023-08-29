@@ -99,7 +99,18 @@ const handleViewDetails = async (formationType, formationTypen) => {
 };
 
   
-  
+const handleDelete = (formationTypeId) => {
+  if (window.confirm("Are you sure you want to delete this formation type?")) {
+    axiosClient.delete(`formation-types/${formationTypeId}`)
+      .then(() => {
+        // Update the list of formation types after successful deletion
+        setFormationTypes(prevFormationTypes => prevFormationTypes.filter(type => type.id !== formationTypeId));
+      })
+      .catch(error => {
+        console.error("Error deleting formation type:", error);
+      });
+    }
+  };
 
 
   const handleFileUpload = (file) => {
@@ -183,6 +194,12 @@ const handleViewDetails = async (formationType, formationTypen) => {
               >
                 Cours
               </button>
+              <button
+  onClick={() => handleDelete(formationType.id)}
+  className="inline-block py-2 px-7 border border-red-500 rounded-full text-base text-red-500 font-medium hover:bg-red-500 hover:text-white transition"
+>
+  Delete
+</button>
             </div>
           </div>
         ))}
