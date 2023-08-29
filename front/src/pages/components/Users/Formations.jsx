@@ -94,7 +94,7 @@ const handleViewDetails = async (formationType, formationTypen) => {
     setSelectedFormationType(formationType.formations); // Pass the courses array
     setSelectedFormationTypeid(formationType.id)
   } catch (error) {
-    console.error("Error fetching courses:", error);
+    console.error("Error fetching coursess:", error);
   }
 };
 
