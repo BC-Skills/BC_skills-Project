@@ -307,7 +307,7 @@ export default function Projects() {
                         className="flex-grow outline-none text-gray-600 focus:text-blue-600"
                         type="text"
                         
-                        placeholder="Search Project..."
+                        placeholder="Rechercher un Projet..."
                         value={searchQuery}
                         onChange={handleSearchChange}
                     />

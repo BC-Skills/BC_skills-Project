@@ -123,7 +123,7 @@ const ScheduleForm = ({ onClose, userId }) => {
         </div>
         <div className="mb-4">
           <label htmlFor="start_hour" className="block font-bold mb-1">
-            Start Hour
+            Heure debut
           </label>
           <input
             type="time"
@@ -137,7 +137,7 @@ const ScheduleForm = ({ onClose, userId }) => {
         </div>
         <div className="mb-4">
           <label htmlFor="end_hour" className="block font-bold mb-1">
-            End Hour
+            Heure fin
           </label>
           <input
             type="time"
@@ -152,7 +152,7 @@ const ScheduleForm = ({ onClose, userId }) => {
       
         <div className="mb-4">
           <label htmlFor="project_id" className="block font-bold mb-1">
-            Project Name
+            Nom Projet
           </label>
           <select
             id="project_id"
@@ -162,7 +162,7 @@ const ScheduleForm = ({ onClose, userId }) => {
             className="border border-gray-400 px-4 py-2 rounded w-full"
             required
           >
-            <option value="">Select Project</option>
+            <option value="">Selectionner un Project</option>
             {projects.map((project) => (
               <option key={project.id} value={project.id}>
                 {project.nom}
@@ -172,7 +172,7 @@ const ScheduleForm = ({ onClose, userId }) => {
         </div>
         <div className="mb-4">
           <label htmlFor="ticket_id" className="block font-bold mb-1">
-            Ticket Name
+            Nom ticket
           </label>
           <select
             id="ticket_id"
@@ -182,7 +182,7 @@ const ScheduleForm = ({ onClose, userId }) => {
             className="border border-gray-400 px-4 py-2 rounded w-full"
             required
           >
-            <option value="">Select Ticket</option>
+            <option value="">Selectionner Ticket</option>
             {tickets.map((ticket) => (
               <option key={ticket.id} value={ticket.id}>
                 {ticket.nom}
@@ -206,7 +206,7 @@ const ScheduleForm = ({ onClose, userId }) => {
         </div>
         <div className="mb-4">
           <label htmlFor="file" className="block font-bold mb-1">
-            File (PDF/Word)
+            Fichier (PDF/Word)
           </label>
           <input
             type="file"
@@ -220,7 +220,7 @@ const ScheduleForm = ({ onClose, userId }) => {
         </div>
         <div className="text-right">
           <button type="button" onClick={onClose} className="text-gray-500 mr-2">
-            Cancel
+            Annuler
           </button>
           <button
             type="submit"

@@ -173,7 +173,7 @@ const ProfilePage = () => {
                       type="submit"
                       className="bg-[#41415A] hover:bg-[#6C6D96]  text-white font-bold py-2 px-4 rounded transition-colors duration-300"
                     >
-                      Update Password
+                      Modifier le mot de passe
                     </button>
                   </div>
                 </form>

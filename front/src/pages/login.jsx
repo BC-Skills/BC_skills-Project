@@ -58,7 +58,7 @@ export default function Login() {
                 <AnimatedText text="BCSKILLS" />
             </h1>
             <div className="flex lg:flex-col xl:justify-center xl:items-start md:flex-col md:justify-center md:items-start">
-              <h1 className="text-[30px]">Welcome to our Company </h1>
+              <h1 className="text-[30px]">Bienvenue chez BC Skills group </h1>
               
               <div className="flex-1 ">
                 <img src={image2} className=" w-full h-full  object-contain  " alt="Logo" />
@@ -72,7 +72,7 @@ export default function Login() {
           </div>
           <form onSubmit={handleSubmit} className="flex flex-col gap-10 items-center">
           {loginError && (
-        <p className="text-red-500 text-center mt-2">Invalid email or password. Please try again.</p>
+        <p className="text-red-500 text-center mt-2">Email ou mot de passe incorrect</p>
       )}
             <input
               className="w-[400px] h-[70px] rounded-md shadow-md pl-10 placeholder:font-bold placeholder:text-black"
@@ -98,7 +98,7 @@ export default function Login() {
               </button>
             </div>
             <button className="w-[350px] h-[70px] bg-blue-500 rounded-xl shadow-xl" type="submit">
-              Sign in
+              Se connecter
             </button>
             <div className="flex flex-row items-center gap-5">
               <div className="h-[2px] w-[150px] bg-[#41415a]"></div>

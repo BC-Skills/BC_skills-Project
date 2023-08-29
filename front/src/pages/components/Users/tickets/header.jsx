@@ -66,7 +66,7 @@ export default function Header({ onSelectProject , onSelectSprint ,onchangebuttt
                     value={selectedProjectId}
                     onChange={handleProjectChange}
                 >
-                    <option value={null}>Select Project</option>
+                    <option value={null}>Selectionner un projet</option>
                     {projects.map((project) => (
                         <option value={project.id} key={project.id}>
                             {project.nom}
@@ -80,13 +80,13 @@ export default function Header({ onSelectProject , onSelectSprint ,onchangebuttt
                     value={selectedSprintId}
                     onChange={handleSprintChange} // Call handleSprintChange for sprint selection
                 >
-                    <option value="">Select Sprints</option>
+                    <option value="">Selectionner une phase</option>
                     {sprints.map((sprint) => (
                         <option value={sprint.id} key={sprint.id}>
                             {sprint.name}
                         </option>
                     ))}
-                    <option value={'Without'}>Without Sprints</option>
+                    <option value={'Without'}>Sans phase</option>
                 </select>
                 <button
                         type="button"

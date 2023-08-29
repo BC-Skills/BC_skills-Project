@@ -170,14 +170,14 @@ const FormationTypeFormModal = ({ isOpen, onClose, onFormSubmit }) => {
                                 className="bg-[#41415A] hover:bg-[#6C6D96] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                 type="submit"
                             >
-                                Add
+                                Ajouter
                             </button>
                             <button
                                 className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                 type="button"
                                 onClick={onClose}
                             >
-                                Cancel
+                                Annuler
                             </button>
                         </div>
                     </form>

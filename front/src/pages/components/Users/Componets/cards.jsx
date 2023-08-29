@@ -83,7 +83,7 @@ export default function Cards({ project, onEditProject,  AddCollaboratorProject 
                             Email: {project.project_manager?.email}
                         </h1>
                         <h1 className="text-[15px] font-bold">
-                            tele : {project.project_manager?.tel}
+                            tel : {project.project_manager?.tel}
                         </h1>
                     </div>
                     <div className="relative w-16 h-16">
@@ -99,17 +99,17 @@ export default function Cards({ project, onEditProject,  AddCollaboratorProject 
                        <button className="rounded-full bg-blue-500 px-5 py-3 text-base mb-3 font-medium text-white transition duration-200 hover:bg-blue-600 active:bg-blue-700"
                                onClick={() => handleEditClick(project)}
                        >
-                        More Details
+                        plus de Details
                     </button>
                     <button className="rounded-full ml-2 bg-blue-500 px-5 py-3 text-base mb-3 font-medium text-white transition duration-200 hover:bg-blue-600 active:bg-blue-700"
                                onClick={() => handleCollabora(project)}
                        >
-                        Add Collaborator
+                        Ajouter des collaborateurs
                     </button>
                     <button className="rounded-full ml-2 bg-blue-500 px-5 py-3 text-base mb-3 font-medium text-white transition duration-200 hover:bg-blue-600 active:bg-blue-700"
                                onClick={() =>  handleSprint(project)}
                        >
-                        Add Sprints
+                        Ajouter une phase
                     </button>
 
                    

@@ -145,100 +145,77 @@ const ProfilePage = () => {
                 </div>
               </div>
             </div> */}
-                        <div className="mt-10">
-                            <button
-                                onClick={() =>
-                                    setShowChangePasswordForm(
-                                        !showChangePasswordForm
-                                    )
-                                }
-                                className="bg-[#41415A] hover:bg-[#6C6D96]  text-white font-bold py-2 px-4 rounded transition-colors duration-300"
-                            >
-                                Changer le mot de passe
-                            </button>
-                            {passwordUpdateStatus === "success" && (
-                                <p className="text-green-500 mt-2">
-                                    Password updated successfully!
-                                </p>
-                            )}
-                            {passwordUpdateStatus === "error" && (
-                                <p className="text-red-500 mt-2">
-                                    An error occurred while updating the
-                                    password.
-                                </p>
-                            )}
-                            <Transition
-                                show={showChangePasswordForm}
-                                enter="transition-opacity duration-500"
-                                enterFrom="opacity-0"
-                                enterTo="opacity-100"
-                                leave="transition-opacity duration-300"
-                                leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                            >
-                                <form onSubmit={handlePasswordChange}>
-                                    <div className="mb-4">
-                                        <label
-                                            htmlFor="newPassword"
-                                            className="block font-bold mb-1"
-                                        >
-                                            Nouveau Mot de passe
-                                        </label>
-                                        <input
-                                            type="password"
-                                            id="newPassword"
-                                            name="newPassword"
-                                            value={newPassword}
-                                            onChange={(e) =>
-                                                setNewPassword(e.target.value)
-                                            }
-                                            className="border border-gray-400 px-4 py-2 rounded w-full"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="text-right">
-                                        <button
-                                            type="button"
-                                            onClick={() =>
-                                                setShowChangePasswordForm(false)
-                                            }
-                                            className="text-gray-500 mr-2"
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            className="bg-[#41415A] hover:bg-[#6C6D96]  text-white font-bold py-2 px-4 rounded transition-colors duration-300"
-                                        >
-                                            Update Password
-                                        </button>
-                                    </div>
-                                </form>
-                            </Transition>
-                        </div>
-                        <div className="mt-10">
-                            <div className="mb-4">
-                                <label
-                                    htmlFor="profilePicture"
-                                    className="block font-bold mb-1"
-                                >
-                                    Changer la Photo de profile
-                                </label>
-                                <input
-                                    type="file"
-                                    id="profilePicture"
-                                    name="profile_picture" // This should match the field name in the backend
-                                    onChange={handleFileChange}
-                                    className="border border-gray-400 px-4 py-2 rounded w-full"
-                                    accept="image/*"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div className="mt-10">
+              <button
+                onClick={() => setShowChangePasswordForm(!showChangePasswordForm)}
+                className="bg-[#41415A] hover:bg-[#6C6D96]  text-white font-bold py-2 px-4 rounded transition-colors duration-300"
+              >
+                Changer le mot de passe
+              </button>
+              {passwordUpdateStatus === 'success' && (
+                <p className="text-green-500 mt-2">Mot de passe mis à jour avec succès!</p>
+              )}
+              {passwordUpdateStatus === 'error' && (
+                <p className="text-red-500 mt-2">Une erreur s'est produite lors de la mise à jour du mot de passe.</p>
+              )}
+              <Transition
+                show={showChangePasswordForm}
+                enter="transition-opacity duration-500"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="transition-opacity duration-300"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <form onSubmit={handlePasswordChange}>
+                  <div className="mb-4">
+                    <label htmlFor="newPassword" className="block font-bold mb-1">
+                      Nouveau Mot de passe
+                    </label>
+                    <input
+                      type="password"
+                      id="newPassword"
+                      name="newPassword"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      className="border border-gray-400 px-4 py-2 rounded w-full"
+                      required
+                    />
+                  </div>
+                  <div className="text-right">
+                    <button type="button" onClick={() => setShowChangePasswordForm(false)} className="text-gray-500 mr-2">
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="bg-[#41415A] hover:bg-[#6C6D96]  text-white font-bold py-2 px-4 rounded transition-colors duration-300"
+                    >
+                      Modifier le mot de passe
+                    </button>
+                  </div>
+                </form>
+              </Transition>
             </div>
+            <div className="mt-10">
+              <div className="mb-4">
+                <label htmlFor="profilePicture" className="block font-bold mb-1">
+                  Changer la Photo de profile 
+                </label>
+                <input
+                  type="file"
+                  id="profilePicture"
+                  name="profile_picture" // This should match the field name in the backend
+                  onChange={handleFileChange}
+                  className="border border-gray-400 px-4 py-2 rounded w-full"
+                  accept="image/*"
+                />
+              </div>
+            </div>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default ProfilePage;
