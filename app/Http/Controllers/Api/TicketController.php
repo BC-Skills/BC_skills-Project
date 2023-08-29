@@ -12,7 +12,7 @@ class TicketController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::where('archiver', 'non')->get();
+        $tickets = Ticket::where('archiver', 'non')->with('Schedules')->get();
         return response()->json($tickets);
     }
     public function storez(Request $request)
@@ -112,6 +112,7 @@ class TicketController extends Controller
             $tickets = Ticket::with('project', 'sprint', 'user', 'assignedToUser','sprint')
                 ->where('project_id', $projectId)
                 ->where('archiver', 'non') // Add condition to exclude archived tickets
+                ->with('Schedules')
                 ->get();
     
             // Return the tickets with project, sprint, and user information in the response
@@ -130,6 +131,7 @@ class TicketController extends Controller
                 ->where('project_id', $projectId)
                 ->where('sprint_id', $sprintId)
                 ->where('archiver', 'non') // Add condition to exclude archived tickets
+                ->with('Schedules')
                 ->get();
     
             // Return the tickets with project, sprint, and user information in the response
@@ -148,6 +150,7 @@ class TicketController extends Controller
                 ->where('project_id', $projectId)
                 ->whereNull('sprint_id')
                 ->where('archiver', 'non') // Add condition to exclude archived tickets
+                ->with('Schedules')
                 ->get();
     
             // Return the tickets with project, sprint, and user information in the response
@@ -173,6 +176,7 @@ class TicketController extends Controller
             $tickets = Ticket::with('project', 'sprint', 'user', 'assignedToUser')
                 ->where('assign_to', $assignToId)
                 ->where('archiver', 'non') // Add condition to exclude archived tickets
+                ->with('Schedules')
                 ->get();
     
             // Return the tickets with project, sprint, and user information in the response

@@ -73,7 +73,25 @@ export default function Cardtickes({ tickets, fetchticketsData , selectedProject
     };
 
 
-
+    const handleFileDownload = (id, fileName) => {
+        console.log(id,fileName)
+        axiosClient
+          .get(`schedules/download/${id}`, {
+            responseType: 'blob',
+          })
+          .then((response) => {
+            const blob = new Blob([response.data], { type: response.headers['content-type'] });
+            const downloadLink = document.createElement('a');
+            downloadLink.href = window.URL.createObjectURL(blob);
+            downloadLink.setAttribute('download', fileName);
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+          })
+          .catch((error) => {
+            console.error('Error downloading file:', error);
+    });
+   };
 
 
     const fetchUsersData = async (currentUserid) => {
@@ -210,9 +228,14 @@ export default function Cardtickes({ tickets, fetchticketsData , selectedProject
                             >
                                 Assign To Sprint
                             </button>
-                            <button className="p-2 w-full text-left border border-gray-300 bg-blue-100">
-                                More Details
+                            {tickets.status !== "A faire"  &&
+                                <button className="p-2 w-full text-left border border-gray-300 bg-blue-100"
+                            onClick={() => handleFileDownload(tickets.schedules[0]?.id, tickets.schedules[0]?.file_name)}
+                            >
+                             Telecharger file
                             </button>
+                            }
+                           
                         </div>
                     )}
                 </div>
