@@ -82,9 +82,10 @@ const ProfilePage = () => {
               </Transition>
             </div>
             <div class="text-center">
+              
   <img
     src={currentUser.profile_picture}
-    class="mx-auto mb-4 w-32 rounded-lg "
+    class="mx-auto mb-4 w-32 rounded-lg w-full h-full object-contain "
     alt="Avatar" />
   <h5 class="mb-2 text-xl font-medium leading-tight">  {currentUser.name}</h5>
   <p class="text-neutral-500 dark:text-neutral-400"> {profile && profile.name}</p>

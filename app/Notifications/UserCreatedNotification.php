@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Storage;
 
 class UserCreatedNotification extends Notification
 {
@@ -40,15 +41,23 @@ class UserCreatedNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $logoPath = 'https://www.bcskills.com/images/logo.png';
+
+
         return (new MailMessage)
-            ->from('bcskillscontact@gmail.com', 'BC skills Group')
+            ->from('bcskillscontact@gmail.com', 'BC Skills Group')
             ->subject('Account Created')
             ->line('Your account has been created successfully.')
             ->line('Email: ' . $notifiable->email)
             ->line('Password: ' . $this->password)
             ->line('Welcome to our company!')
-            ->action('Visit our website', url('http://localhost:3000/'));
+            ->action('Visit our website', url('http://localhost:3000/'))
+            ->line('Make sure to update your password after logging in.')
+            ->view('emails.user-created', ['logoUrl' => $logoPath,'notifiable'=>$notifiable,'password'=>$this->password]); // Pass the logo URL to the email template
     }
 
     // Rest of the methods...
 }
+
+    // Rest of the methods...
+
