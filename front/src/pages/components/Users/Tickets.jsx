@@ -445,7 +445,7 @@ const Tickets = () => {
                                                 </h1>
                                             </div>
                                             {loading ? (
-                                                <p>Loading...</p>
+                                                <p>Chargement...</p>
                                             ) : (
                                                 <Droppable
                                                     droppableId="A_faire"
@@ -511,8 +511,7 @@ const Tickets = () => {
                                                                 )
                                                             ) : (
                                                                 <p>
-                                                                    No tickets
-                                                                    found.
+                                                                    Pas de tickets.
                                                                 </p>
                                                             )}
                                                             {
@@ -548,7 +547,7 @@ const Tickets = () => {
                                                                     d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                                                                 />
                                                             </svg>
-                                                            Crée tickets
+                                                            Créer tickets
                                                         </button>
                                                     )}
                                                     {todoForm && (
@@ -576,7 +575,7 @@ const Tickets = () => {
                                                                 type="submit"
                                                                 className=" flex first-letter text-2xl h-[40px] mt-2  justify-start items-center border border-gray-300 rounded-md hover:border-blue-500"
                                                             >
-                                                                Create Ticket
+                                                                Créer Ticket
                                                             </button>
                                                         </form>
                                                     )}
@@ -590,7 +589,7 @@ const Tickets = () => {
                                                 </h1>
                                             </div>
                                             {loading ? (
-                                                <p>Loading..</p>
+                                                <p>Chargement..</p>
                                             ) : (
                                                 <Droppable
                                                     droppableId="En_Cours"
@@ -608,7 +607,7 @@ const Tickets = () => {
                                                         >
                                                             {loading ? (
                                                                 <p>
-                                                                    Loading...
+                                                                    Chargement...
                                                                 </p>
                                                             ) : tickets
                                                                   .inProgress
@@ -661,8 +660,7 @@ const Tickets = () => {
                                                                 )
                                                             ) : (
                                                                 <p>
-                                                                    No tickets
-                                                                    found.
+                                                                   Pas de tickets.
                                                                 </p>
                                                             )}
                                                             {
@@ -698,7 +696,7 @@ const Tickets = () => {
                                                                     d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                                                                 />
                                                             </svg>
-                                                            Crée tickets
+                                                            Créer tickets
                                                         </button>
                                                     )}
                                                     {inProgressForm && (
@@ -726,7 +724,7 @@ const Tickets = () => {
                                                                 type="submit"
                                                                 className=" flex first-letter text-2xl h-[40px] mt-2  justify-start items-center border border-gray-300 rounded-md hover:border-blue-500"
                                                             >
-                                                                Create Ticket
+                                                                Créer Ticket
                                                             </button>
                                                         </form>
                                                     )}
@@ -740,7 +738,7 @@ const Tickets = () => {
                                                 </h1>
                                             </div>
                                             {loading ? (
-                                                <p>Loading..</p>
+                                                <p>Chargement..</p>
                                             ) : (
                                                 <Droppable
                                                     droppableId="Fini"
@@ -758,7 +756,7 @@ const Tickets = () => {
                                                         >
                                                             {loading ? (
                                                                 <p>
-                                                                    Loading...
+                                                                    Chargement...
                                                                 </p>
                                                             ) : tickets.done
                                                                   .length ? (
@@ -810,8 +808,7 @@ const Tickets = () => {
                                                                 )
                                                             ) : (
                                                                 <p>
-                                                                    No tickets
-                                                                    found.
+                                                                    Pas de tickets.
                                                                 </p>
                                                             )}
                                                             {
@@ -847,7 +844,7 @@ const Tickets = () => {
                                                                     d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                                                                 />
                                                             </svg>
-                                                            Crée tickets
+                                                            Créer tickets
                                                         </button>
                                                     )}
                                                     {doneForm && (
@@ -875,7 +872,7 @@ const Tickets = () => {
                                                                 type="submit"
                                                                 className=" flex first-letter text-2xl h-[40px] mt-2  justify-start items-center border border-gray-300 rounded-md hover:border-blue-500"
                                                             >
-                                                                Create Ticket
+                                                                Créer Ticket
                                                             </button>
                                                         </form>
                                                     )}
@@ -933,7 +930,7 @@ const Tickets = () => {
                 </>
             ) : (
                 <div className="flex-1 text-[20px] font-bold flex justify-center items-center">
-                    <p>Content to display not available</p>
+                    <p>contenu n'est pas disponible pour le moment</p>
                 </div>
             )}
         </>

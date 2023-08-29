@@ -227,7 +227,7 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                             htmlFor="project_type_id"
                                             className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
                                         >
-                                            Project Type
+                                            Type de projet
                                         </label>
                                         <select
                                             name="project_type_id"
@@ -273,7 +273,7 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                     </div>
                                     <div>
                                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                                            Start Date
+                                            Date Debut
                                         </label>
                                         <input
                                             type="date" // Use type 'date' for date input
@@ -282,7 +282,7 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                         />
                                         <div>
                                             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                                                End Date
+                                                Date Fin
                                             </label>
                                             <input
                                                 type="date" // Use type 'date' for date input
@@ -297,13 +297,13 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                             onClick={onCloseModal}
                                             className="mr-2 px-4 py-2 text-sm font-medium text-gray-600 bg-gray-200 border border-gray-300 rounded-md shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         >
-                                            Cancel
+                                            Annuler
                                         </button>
                                         <button
                                             type="submit"
                                             className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                         >
-                                            Next
+                                            Suivant
                                         </button>
                                     </div>
                                 </form>
@@ -328,7 +328,7 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                             required
                                         >
                                             <option value="">
-                                                Select Client
+                                                Choisir Client
                                             </option>
                                             {users.map((client) => (
                                                 <option
@@ -369,13 +369,13 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                             onClick={handlePreviousStep}
                                             className="mr-2 px-4 py-2 text-sm font-medium text-gray-600 bg-gray-200 border border-gray-300 rounded-md shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         >
-                                            Previous
+                                            Precedent
                                         </button>
                                         <button
                                             type="submit"
                                             className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                         >
-                                            Next
+                                            Suivant
                                         </button>
                                     </div>
                                 </form>
@@ -505,7 +505,7 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                             </div>
                                             <div>
                                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                                                    Sprint status
+                                                    Phase status
                                                 </label>
                                                 <select
                                                     name="status"
@@ -524,7 +524,7 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                             </div>
                                             <div>
                                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                                                    Start Date
+                                                    Date Debut
                                                 </label>
                                                 <input
                                                     type="date" // Use type 'date' for date input
@@ -533,7 +533,7 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                                 />
                                                 <div>
                                                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                                                        End Date
+                                                        Date Fin
                                                     </label>
                                                     <input
                                                         type="date" // Use type 'date' for date input
@@ -544,7 +544,7 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                             </div>
                                             <div>
                                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
-                                                    Sprint Description
+                                                    Phase Description
                                                 </label>
                                                 <textarea
                                                     name="description"
@@ -560,13 +560,13 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                                     }
                                                     className="mr-2 px-4 py-2 text-sm font-medium text-gray-600 bg-gray-200 border border-gray-300 rounded-md shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 >
-                                                    Cancel
+                                                    Annuler
                                                 </button>
                                                 <button
                                                     type="submit"
                                                     className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                                 >
-                                                    Add Sprint
+                                                    Ajouter une phase
                                                 </button>
                                             </div>
                                         </form>
@@ -577,7 +577,7 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                             onClick={handleAddSprint}
                                             className="w-full mr-2 px-4 py-2 text-sm font-medium text-gray-600 bg-gray-200 border border-gray-300 rounded-md shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         >
-                                            Add Sprints
+                                            Ajouter une phase
                                         </button>
                                     )}
 
@@ -587,7 +587,7 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                             onClick={handlePreviousStep}
                                             className="mr-2 px-4 py-2 text-sm font-medium text-gray-600 bg-gray-200 border border-gray-300 rounded-md shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         >
-                                            Previous
+                                            Precedent
                                         </button>
                                         <button
                                             onClick={() => {
@@ -600,7 +600,7 @@ export default function AddProject({ onCloseModal, fetchUsersData }) {
                                             }}
                                             className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                         >
-                                            ADD
+                                            Ajouter
                                         </button>
                                     </div>
                                 </>

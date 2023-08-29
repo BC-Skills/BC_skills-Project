@@ -31,7 +31,7 @@ const ProfilePage = () => {
   return (
     <div className="min-h-screen flex-1 bg-white-100 py-6 flex flex-col items-center justify-center sm:py-12">
       <div className="relative md:min-w-[700px] lg:min-w-[1000px] py-3">
-        <div className="absolute inset-0 bg-gradient-to-r rounded-3xl overflow-hidden from-blue-400 to-purple-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+      <div className="absolute inset-0 bg-gradient-to-r rounded-3xl overflow-hidden from-ff9300 via-983ffb to-068ff1 to-05eb07 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
         <div className="relative px-4 py-10 rounded-3xl overflow-hidden bg-white shadow-lg sm:rounded-3xl sm:p-20">
           <div className="max-w-md mx-auto">
             <div className="flex items-center justify-center">
@@ -74,9 +74,9 @@ const ProfilePage = () => {
             <div className="mt-10">
               <button
                 onClick={() => setShowChangePasswordForm(!showChangePasswordForm)}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300"
+                className="bg-[#41415A] hover:bg-[#6C6D96]  text-white font-bold py-2 px-4 rounded transition-colors duration-300"
               >
-                Change Password
+                Changer le mot de passe
               </button>
               {passwordUpdateStatus === 'success' && (
                 <p className="text-green-500 mt-2">Password updated successfully!</p>
@@ -96,7 +96,7 @@ const ProfilePage = () => {
                 <form onSubmit={handlePasswordChange}>
                   <div className="mb-4">
                     <label htmlFor="newPassword" className="block font-bold mb-1">
-                      New Password
+                      Nouveau Mot de passe
                     </label>
                     <input
                       type="password"
@@ -114,7 +114,7 @@ const ProfilePage = () => {
                     </button>
                     <button
                       type="submit"
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300"
+                      className="bg-[#41415A] hover:bg-[#6C6D96]  text-white font-bold py-2 px-4 rounded transition-colors duration-300"
                     >
                       Update Password
                     </button>
@@ -125,7 +125,7 @@ const ProfilePage = () => {
             <div className="mt-10">
               <div className="mb-4">
                 <label htmlFor="profilePicture" className="block font-bold mb-1">
-                  Profile Picture
+                  Changer la Photo de profile 
                 </label>
                 <input
                   type="file"

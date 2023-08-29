@@ -142,8 +142,8 @@ const handleViewDetails = async (formationType, formationTypen) => {
         {currentFormations.map((formationType, index) => (
           <div
             key={formationType.id}
-            className={`bg-white rounded-lg overflow-hidden  mb-10 shadow-2xl max-w-[450px] max-h-[500px] min-w-[500px]`} >
-            <img src={formationType.imageUrl} alt="Formation Type" className="w-full max-h-[300px] " />
+            className={`bg-white rounded-lg overflow-hidden  mb-10 shadow-2xl max-w-[450px] min-h-[600px]  min-w-[500px]`} >
+            <img src={formationType.imageUrl} alt="Formation Type" className="w-full h-full " />
             <div className="p-8 sm:p-9 md:p-7 xl:p-9 text-center">
               <h3 className="font-semibold text-dark text-xl mb-4 hover:text-primary">
                 {formationType.name}

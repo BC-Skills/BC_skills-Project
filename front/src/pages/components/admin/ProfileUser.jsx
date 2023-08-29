@@ -31,7 +31,7 @@ const Setting = () => {
   return (
     <div className="flex-1 bg-white-100 py-6 flex flex-col items-center justify-center sm:py-12">
       <div className="relative md:min-w-[700px] lg:min-w-[1000px] py-3">
-        <div className="absolute inset-0 bg-gradient-to-r rounded-3xl overflow-hidden from-blue-400 to-purple-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+      <div className="absolute inset-0 bg-gradient-to-r rounded-3xl overflow-hidden from-ff9300 via-983ffb to-068ff1 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
         <div className="relative px-4 py-10 rounded-3xl overflow-hidden bg-white shadow-lg sm:rounded-3xl sm:p-20">
           <div className="max-w-md mx-auto">
             <div className="flex items-center justify-center">

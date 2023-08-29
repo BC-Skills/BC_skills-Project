@@ -339,7 +339,7 @@ export default function Projects() {
                         >
                             <path d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"></path>
                         </svg>
-                        Add Project
+                        Ajouter un projet
                     </button>
                 )}
                 </div>
@@ -385,7 +385,7 @@ export default function Projects() {
                             </div>
                         </div>{" "}
                         {loading ? (
-                            <div>Loading...</div>
+                            <div>Chargement...</div>
                         ) : (
                             <Droppable droppableId="startProjects"
                             isDropDisabled={!shouldEnableDragDrop} // Disable drag-and-drop based on privilege
@@ -458,7 +458,7 @@ export default function Projects() {
                         </div>
                         {loading ? (
                             // Loading indicator or message while data is being fetched
-                            <div>Loading...</div>
+                            <div>Chargement...</div>
                         ) : (
                             <Droppable droppableId="pendingProjects"
                             isDropDisabled={!shouldEnableDragDrop} // Disable drag-and-drop based on privilege
@@ -590,7 +590,7 @@ export default function Projects() {
               ) : (
                 // If `show` is false, render this content
                 <div className="flex-1 text-[20px] font-bold flex justify-center items-center">
-                    <p>Content to display not available</p>
+                    <p>Contenu vide</p>
                 </div>
             )}
             {showModal && (
