@@ -229,7 +229,7 @@ const CourseModal = ({ isOpen, formationType,formationTypeid, onClose , fecthfor
   className="mt-2 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
   onClick={() => handleDeleteCourse(formation.id)}
 >
-  Delete
+  Supprimer
 </button>
   </div>
 ))}
