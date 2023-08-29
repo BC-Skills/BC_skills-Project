@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('competences', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('user_id')->nullable(); // Add the user_id column
+            $table->unsignedBigInteger('user_id'); // User who owns this competence
             $table->timestamps();
 
-            // Define the foreign key constraint
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
