@@ -6,7 +6,7 @@ import { Transition } from '@headlessui/react';
 
 
 const ProfilePage = () => {
-  const { currentUser, profile } = useStateContext();
+  const { currentUser, profile,setCurrentUser } = useStateContext();
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [passwordUpdateStatus, setPasswordUpdateStatus] = useState(null);
@@ -46,7 +46,6 @@ const ProfilePage = () => {
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append('profile_picture', file);
-    console.log(file);
   
     try {
       const response = await axiosClient.post(`/userss/${currentUser.id}/update-profile-picture`, formData, {
@@ -55,6 +54,8 @@ const ProfilePage = () => {
         },
       });
       // Handle success
+      setCurrentUser(response.data)
+
       console.log('Profile picture updated:', response.data);
     } catch (error) {
       // Handle error

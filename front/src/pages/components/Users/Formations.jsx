@@ -22,17 +22,38 @@ export default function Formations() {
 
   const [selectetotal, setselectetotal] = useState(null);
 
-  
+
+
+
+  const [shouldShowAddButton, setShouldShowAddButton] = useState(false);
+  const [shouldEnableDragDrop, setShouldEnableDragDrop] = useState(true);
+
   useEffect(() => {
+    const storedLinks = localStorage.getItem("links");
     const parsedLinks = JSON.parse(storedLinks) || [];
     const hasFormationLink = parsedLinks.some((link) => link.name === "formation");
+
     if (!hasFormationLink) {
-      navigate("/users");
+        navigate("/users");
+    } else {
+        parsedLinks.forEach(link => {
+            if (link.name === "projets") {
+                const hasAddPrivilege = link.privilegeNames.includes("add");
+                const hasEditPrivilege = link.privilegeNames.includes("edit");
+                const shows = link.privilegeNames.includes("show");
+
+                setShouldShowAddButton(hasAddPrivilege);
+                setShouldEnableDragDrop(hasEditPrivilege);
+             
+            }
+        });
     }
+}, []);
 
-    fecthformtiontype()
 
-  }, [storedLinks]);
+
+
+
 
   const fecthformtiontype=async ()=>{
      axiosClient.get("formation-types")
@@ -131,12 +152,14 @@ const handleViewDetails = async (formationType, formationTypen) => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 19l-4.35-4.35" />
           </svg>
         </div>
+        {shouldShowAddButton && (
         <button
           onClick={handleOpenFormModal}
           className="bg-[#41415A] hover:bg-[#6C6D96] text-white font-bold py-2 px-4 rounded ml-6 mt-4 "
         >
           Ajouter une formation
         </button>
+        )}
       </div>
       <div className=" flex-1 flex flex-row flex-wrap gap-12 items-center justify-center">
         {currentFormations.map((formationType, index) => (
@@ -207,6 +230,7 @@ const handleViewDetails = async (formationType, formationTypen) => {
   fecthformtiontype={fecthformtiontype}
   selectedformationTypen={selectedformationTypen}
   selectetotal={selectetotal}
+  shouldShowAddButton={shouldShowAddButton}
 />
 
   </div>

@@ -15,25 +15,24 @@ export default function Collaborator({ project, onCloseModal }) {
 
     const { currentUser } = useStateContext();
 
-
     const handleSearch = () => {
         const searchText = searchInputRef.current.value.toLowerCase();
         setSearchQuery(searchText);
     };
 
     useEffect(() => {
-       
-            fetchUsersData(currentUser.id);
-        
+        fetchUsersData(currentUser.id);
     }, []);
 
     const fetchUsersData = async (currentUserid) => {
         try {
-            const response = await axiosClient.get(`userss/exadminclient/${currentUserid}`);
+            const response = await axiosClient.get(
+                `userss/exadminclient/${currentUserid}`
+            );
             const usersData = response.data;
             setUsers(usersData);
             setLoading(false);
-            console.log(usersData)
+            console.log(usersData);
         } catch (error) {
             console.error("Error fetching users:", error);
             setLoading(false);
@@ -53,63 +52,65 @@ export default function Collaborator({ project, onCloseModal }) {
         setFilteredUsers(filteredUsers);
     }, [searchQuery, users]);
 
-
-
-
-
-
-
     const handleCheckboxChange = async (userId, checked) => {
         if (checked) {
-          setSelectedUserIds((prevSelectedUserIds) =>
-            prevSelectedUserIds.includes(userId)
-              ? prevSelectedUserIds
-              : [...prevSelectedUserIds, userId]
-          );
-      
+            setSelectedUserIds((prevSelectedUserIds) =>
+                prevSelectedUserIds.includes(userId)
+                    ? prevSelectedUserIds
+                    : [...prevSelectedUserIds, userId]
+            );
 
-          try {
-            await axiosClient.post(`projects/${project.id}/users/attach`, {
-              users: [userId],
-            });
-            // Handle success or update the UI if needed
-          } catch (error) {
-            console.error("Error attaching user:", error);
-          }
+            try {
+                await axiosClient.post(`projects/${project.id}/users/attach`, {
+                    users: [userId],
+                });
+                // Handle success or update the UI if needed
+            } catch (error) {
+                console.error("Error attaching user:", error);
+            }
         } else {
-          setSelectedUserIds((prevSelectedUserIds) =>
-            prevSelectedUserIds.filter((id) => id !== userId)
-          );
-      
-          try {
-            await axiosClient.post(`projects/${project.id}/users/detach`, {
-              users: [userId],
-            });
-          } catch (error) {
-            console.error("Error detaching user:", error);
-          }
-        }
-      };
+            setSelectedUserIds((prevSelectedUserIds) =>
+                prevSelectedUserIds.filter((id) => id !== userId)
+            );
 
+            try {
+                await axiosClient.post(`projects/${project.id}/users/detach`, {
+                    users: [userId],
+                });
+            } catch (error) {
+                console.error("Error detaching user:", error);
+            }
+        }
+    };
 
     // Function to fetch project users
     useEffect(() => {
         fetchProjectUsers(); // Fetch project users after initial data is loaded
-      }, [users]); // Only run this effect when users data changes
-    
-      const fetchProjectUsers = async () => {
-        try {
-          const response = await axiosClient.get(`projects/${project.id}/users`);
-          const projectUsers = response.data;
-          // eslint-disable-next-line no-unused-vars
-          setSelectedUserIds((prevSelectedUserIds) => {
-            return projectUsers.map((user) => user.id); // Update selectedUserIds with project users
-          });
-        } catch (error) {
-          console.error("Error fetching project users:", error);
-        }
-      };
+    }, [users]); // Only run this effect when users data changes
 
+    const fetchProjectUsers = async () => {
+        try {
+            const response = await axiosClient.get(
+                `projects/${project.id}/users`
+            );
+            const projectUsers = response.data;
+            // eslint-disable-next-line no-unused-vars
+            setSelectedUserIds((prevSelectedUserIds) => {
+                return projectUsers.map((user) => user.id); // Update selectedUserIds with project users
+            });
+        } catch (error) {
+            console.error("Error fetching project users:", error);
+        }
+    };
+    const getRandomColor = () => {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+      };
+    
     return (
         <>
             <div
@@ -177,7 +178,9 @@ export default function Collaborator({ project, onCloseModal }) {
                                     </div>
                                     <div className="flex-1 bg-gray-200 shadow-2xl rounded-2xl flex flex-col gap-3 pt-6 px-3 overflow-y-auto">
                                         {loading ? (
-                                            <p>Chargement des utilisateurs...</p>
+                                            <p>
+                                                Chargement des utilisateurs...
+                                            </p>
                                         ) : (
                                             <div className="grid gap-3 lg:grid-cols-2 md:grid-cols-2">
                                                 {filteredUsers.map((user) => {
@@ -217,18 +220,54 @@ export default function Collaborator({ project, onCloseModal }) {
                                                                     <p>
                                                                         Profile:{" "}
                                                                         {
-                                                                            user.profile.name
+                                                                            user
+                                                                                .profile
+                                                                                .name
                                                                         }
+                                                                    </p>
+                                                                    <p className="flex  flex-row gap-3">
+                                                                        {" "}
+                                                                        Competence:{" "}
+                                                                        {user.competences.map(
+                                                                            (
+                                                                                comp
+                                                                            ) => (
+                                                                                <span
+                                                                                    key={
+                                                                                        comp.id
+                                                                                    }
+                                                                                    className=""
+                                                                                    style={{
+                                                                                        color: getRandomColor(),
+                                                                                    }} // Apply random color
+                                                                                >
+                                                                                    {
+                                                                                        comp.name
+                                                                                    }
+                                                                                </span>
+                                                                            )
+                                                                        )}
                                                                     </p>
                                                                 </div>
                                                             </div>
                                                             <div className="flex gap-3 items-center">
                                                                 <label className="switch">
-                                                                <input
-      type="checkbox"
-      checked={selectedUserIds.includes(user.id)} // Checkbox is checked if the user is associated with the project
-      onChange={(e) => handleCheckboxChange(user.id, e.target.checked)}
-    />
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        checked={selectedUserIds.includes(
+                                                                            user.id
+                                                                        )} // Checkbox is checked if the user is associated with the project
+                                                                        onChange={(
+                                                                            e
+                                                                        ) =>
+                                                                            handleCheckboxChange(
+                                                                                user.id,
+                                                                                e
+                                                                                    .target
+                                                                                    .checked
+                                                                            )
+                                                                        }
+                                                                    />
                                                                     <span className="slider"></span>
                                                                 </label>
                                                             </div>
