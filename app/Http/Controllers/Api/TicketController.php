@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use App\Models\User;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Models\Schedule;
 use App\Notifications\TicketAssignedNotification;
@@ -164,35 +165,32 @@ class TicketController extends Controller
         }
     }
     
-    public function update2(Request $request, $id)
-    {
-        $ticket = Ticket::where('archiver', 'non')->findOrFail($id); // Fetch non-archived ticket
-        $ticket->update($request->all());
-        return response()->json($ticket, 200);
-    }
     // public function update2(Request $request, $id)
     // {
-    //     // Find the ticket by its ID
-    //     $ticket = Ticket::findOrFail($id);
-
-    //     // Update the ticket with the provided data
+    //     $ticket = Ticket::where('archiver', 'non')->findOrFail($id); // Fetch non-archived ticket
     //     $ticket->update($request->all());
-
-    //     // If the ticket has been assigned, send the TicketAssignedNotification
-    
-    //         $assignedUser = DB::table('users')->where('id', $ticket->assign_to)->first();
-
-    //         if ($assignedUser) {
-    //             $projectName = $ticket->project->name;
-    //             $assignedUserObject = new User(); // Replace this with your User model class
-    //             $assignedUserObject->email = $assignedUser->email;
-    //             $assignedUserObject->notify(new TicketAssignedNotification($ticket->nom, $projectName));
-    //         }
-        
-
     //     return response()->json($ticket, 200);
     // }
 
+    public function update2(Request $request, $id)
+    {
+        // Find the ticket by its ID
+        $ticket = Ticket::findOrFail($id);
+        $user = $request->assign_to;
+
+        // Update the ticket with the provided data
+        $ticket->update($request->all());
+
+        // If the ticket has been assigned, send the TicketAssignedNotification
+        if ($user) {
+            $assignedUser = User::findOrFail($user);
+            $project = Project::findOrFail($ticket->project_id);
+            
+            $assignedUser->notify(new TicketAssignedNotification($ticket, $project));
+        }
+
+        return response()->json($ticket, 200);
+    }
   
     public function getTicketsByAssignToId($assignToId)
     {
@@ -203,6 +201,9 @@ class TicketController extends Controller
                 ->where('archiver', 'non') // Add condition to exclude archived tickets
                 ->with('Schedules')
                 ->get();
+
+                
+         
     
             // Return the tickets with project, sprint, and user information in the response
             return response()->json($tickets);

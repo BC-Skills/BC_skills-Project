@@ -18,7 +18,7 @@
             background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-            background-image: url('https://example.com/background-image.jpg');
+            background-image: url('https://apps.eui.eu/EUI_API/EVENTSV2/Images/Image?id=8958');
             background-size: cover;
             background-repeat: no-repeat;
             border: 2px solid #007bff;

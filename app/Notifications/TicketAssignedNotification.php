@@ -10,13 +10,14 @@ use Illuminate\Notifications\Notification;
 class TicketAssignedNotification extends Notification
 {
     use Queueable;
+    
+    public $ticket;
+    public $project;
 
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct()
+    public function __construct($ticket, $project)
     {
-        //
+        $this->ticket = $ticket;
+        $this->project = $project;
     }
 
     /**
@@ -33,19 +34,25 @@ class TicketAssignedNotification extends Notification
      * Get the mail representation of the notification.
      */
     public function toMail($notifiable)
-{
-    $logoPath = 'https://www.bcskills.com/images/logo.png';
-
-    return (new MailMessage)
-        ->from('bcskillscontact@gmail.com', 'BC Skills Group')
-        ->subject('Ticket Assigned')
-        ->line('A new ticket has been assigned to you.')
-        ->line('Ticket Name: ' . $this->ticketName)
-        ->line('Project: ' . $this->projectName)
-        ->action('Visit our website', url('http://localhost:3000/'))
-        ->line('Thank you for using our service.')
-        ->view('emails.ticket-assigned', ['logoUrl' => $logoPath, 'notifiable' => $notifiable]);
-}
+    {
+        $logoPath = 'https://www.bcskills.com/images/logo.png';
+    
+        return (new MailMessage)
+            ->from('bcskillscontact@gmail.com', 'BC Skills Group')
+            ->subject('Ticket Assigned')
+            ->line('A new ticket has been assigned to you.')
+            ->line('Ticket Name: ' . $this->ticket->nom)
+            ->line('Project: ' . $this->project->nom)
+            ->action('Visit our website', url('http://localhost:3000/'))
+            ->line('Thank you for using our service.')
+            ->view('emails.ticket-assigned', [
+                'logoUrl' => $logoPath,
+                'notifiable' => $notifiable,
+                'ticketName' => $this->ticket->nom,
+                'projectName' => $this->project->nom
+            ]);
+    }
+    
 
     /**
      * Get the array representation of the notification.
