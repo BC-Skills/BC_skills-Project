@@ -7,7 +7,6 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
         }
@@ -15,21 +14,39 @@
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #ffffff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 6px;
+            background: url('https://apps.eui.eu/EUI_API/EVENTSV2/Images/Image?id=8958') no-repeat center center;
+            background-size: cover;
+            filter: brightness(0.9); /* Adjust the brightness as needed */
+            position: relative;
+            border-radius: 10px;
+            border: 2px solid #333; /* Added border styling */
+            overflow: hidden; /* Ensure border doesn't expand the container */
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity as needed */
+            border-radius: 10px; /* Match the container's border radius */
         }
         .logo {
             text-align: center;
-            margin-bottom: 20px;
+            margin-top: 20px;
         }
         .logo img {
             max-width: 150px;
         }
         .content {
             font-size: 16px;
-            line-height: 1.5;
-            margin-bottom: 20px;
+            line-height: 1.6;
+            color: #333; /* Dark text color to match the background */
+            padding: 20px;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
         }
         .button {
             display: inline-block;
@@ -38,26 +55,33 @@
             color: #ffffff;
             text-decoration: none;
             border-radius: 4px;
-            margin-left: 12%
+            font-weight: bold;
+        }
+        .note {
+            color: #ff5757;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="overlay"></div>
         <div class="logo">
             <img src="{{ $logoUrl }}" alt="Company Logo">
         </div>
         <div class="content">
-            <h2>Account Created</h2>
-            <p>Your account has been created successfully.</p>
+            <h2>Welcome to Our Company!</h2>
+            <p>Your account has been successfully created.</p>
             <p><strong>Email:</strong> {{ $notifiable->email }}</p>
             <p><strong>Password:</strong> {{ $password }}</p>
-            <p>Welcome to our company!</p>
-            <p style="color: red;"><strong>Make sure to update your password after logging in.</strong></p>   
-             </div>
-        <div class="button">
-            <a href="{{ url('http://localhost:3000/') }}" style="color: #ffffff; text-decoration: none;">Visit our website</a>
+            <p>Thank you for joining our team. We're excited to have you on board.</p>
         </div>
+        <div class="button-container">
+            <a class="button" href="{{ url('http://localhost:3000/') }}">Visit Our Website</a>
+        </div>
+        <p class="note">Please remember to update your password after logging in.</p>
     </div>
 </body>
 </html>
