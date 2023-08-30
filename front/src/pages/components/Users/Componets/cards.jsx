@@ -41,7 +41,7 @@ export default function Cards({ project, onEditProject,  AddCollaboratorProject 
 
     return (
         <div
-            className="bg-white flex flex-col  p-4 rounded-2xl shadow-2xl"
+            className="bg-[#ffffff] flex flex-col  p-4 rounded-lg shadow-lg shadow-gray-300"
             key={project.id}
         >
             <div className="flex flex-row justify-between items-center">
@@ -58,10 +58,10 @@ export default function Cards({ project, onEditProject,  AddCollaboratorProject 
                         <h1 className="text-[20px] font-bold">
                             {project.client?.name}
                         </h1>
-                        <h1 className="text-[15px] font-bold">
+                        <h1 className="text-[15px]  text-neutral-500 dark:text-neutral-400">
                             Email: {project.client?.email}
                         </h1>
-                        <h1 className="text-[15px] font-bold">
+                        <h1 className="text-[15px] text-neutral-500 dark:text-neutral-400">
                             tele : {project.client?.tel}
                         </h1>
                     </div>
@@ -79,10 +79,10 @@ export default function Cards({ project, onEditProject,  AddCollaboratorProject 
                         <h1 className="text-[20px] font-bold">
                             {project.project_manager?.name}
                         </h1>
-                        <h1 className="text-[15px] font-bold">
+                        <h1 className="text-[15px] text-neutral-500 dark:text-neutral-400">
                             Email: {project.project_manager?.email}
                         </h1>
-                        <h1 className="text-[15px] font-bold">
+                        <h1 className="text-[15px] text-neutral-500 dark:text-neutral-400">
                             tel : {project.project_manager?.tel}
                         </h1>
                     </div>
@@ -96,17 +96,18 @@ export default function Cards({ project, onEditProject,  AddCollaboratorProject 
                     <div className="w-20 text-black font-bold">Manager:</div>
                 </div>
                 <div className="flex-1 flex justify-center items-center">
-                       <button className="rounded-full bg-blue-500 px-5 py-3 text-base mb-3 font-medium text-white transition duration-200 hover:bg-blue-600 active:bg-blue-700"
+                <button className="rounded-lg ml-2 bg-[#41415A] px-5 py-3 hover:bg-[#6C6D96] text-base mb-3 font-medium text-white transition duration-200 "
                                onClick={() => handleEditClick(project)}
                        >
                         plus de Details
                     </button>
-                    <button className="rounded-full ml-2 bg-blue-500 px-5 py-3 text-base mb-3 font-medium text-white transition duration-200 hover:bg-blue-600 active:bg-blue-700"
+                    <button className="rounded-lg ml-2 bg-[#41415A] px-5 py-3 hover:bg-[#6C6D96] text-base mb-3 font-medium text-white transition duration-200 "
                                onClick={() => handleCollabora(project)}
                        >
                         Ajouter des collaborateurs
                     </button>
-                    <button className="rounded-full ml-2 bg-blue-500 px-5 py-3 text-base mb-3 font-medium text-white transition duration-200 hover:bg-blue-600 active:bg-blue-700"
+                     
+                    <button className="rounded-lg ml-2 bg-[#41415A] px-5 py-3 hover:bg-[#6C6D96] text-base mb-3 font-medium text-white transition duration-200 "
                                onClick={() =>  handleSprint(project)}
                        >
                         Ajouter une phase

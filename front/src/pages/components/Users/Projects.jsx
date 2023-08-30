@@ -299,7 +299,7 @@ export default function Projects() {
       );
 
     return (
-        <div className="flex-1 flex flex-col p-4">
+        <div className="flex-1 flex flex-col p-4 pb-0">
             <div className="h-[100px] flex justify-between  items-center">
                 <div className="mt-5 mb-2 border-2 py-1 px-3 flex justify-between  rounded-md hover:border-blue-500">
                     <input
@@ -329,7 +329,7 @@ export default function Projects() {
                     <button
                         type="button"
                         onClick={handleShowModal}
-                        className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white rounded-lg bg-blue-600 to-voilet-500 sm:ml-auto shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
+                        className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white rounded-lg bg-[#41415A] to-voilet-500 sm:ml-auto shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
                     >
                         <svg
                             className="mr-2 -ml-1 w-6 h-6"
@@ -364,8 +364,8 @@ export default function Projects() {
             {show ? (
             <DragDropContext onDragEnd={onDragEnd}>
                 <div className="flex-1 flex flex-row justify-around gap-6">
-                    <div className="flex-1 bg-white gap-10 flex flex-col">
-                        <div className="h-[50px] gap-3 flex relative rounded-xl overflow-hidden bg-violet-300 shadow-md shadow-gray-400">
+                    <div className="flex-1 bg-white  flex flex-col">
+                        <div className="h-[50px] gap-3 flex relative rounded-t-lg overflow-hidden bg-violet-300 ">
                             <div
                                 className={`h-full flex justify-center items-center bg-violet-900 `}
                                 style={{ width: `${withValueStart}%` }}
@@ -394,7 +394,7 @@ export default function Projects() {
                                     <div
                                         {...provided.droppableProps}
                                         ref={provided.innerRef}
-                                        className="flex-1 p-2 flex flex-col gap-6 rounded-3xl shadow-2xl bg-gray-300"
+                                        className="flex-1 p-5 pt-10 flex flex-col gap-4 rounded-lg shadow-lg bg-[#EFF2F7]"
                                     >
                                         {filteredStartProjects.map(
                                             (project, index) => (
@@ -437,8 +437,8 @@ export default function Projects() {
                             </Droppable>
                         )}
                     </div>
-                    <div className="flex-1 bg-white gap-10 flex flex-col">
-                        <div className="h-[50px] gap-3 flex relative rounded-xl overflow-hidden bg-orange-300 shadow-md shadow-gray-400">
+                    <div className="flex-1 bg-white  flex flex-col">
+                        <div className="h-[50px] gap-3 flex relative  rounded-t-lg overflow-hidden bg-orange-300 ">
                             <div
                                 className={` h-full flex justify-center items-center bg-orange-500 `}
                                 style={{ width: `${withValuePending}%` }}
@@ -468,7 +468,7 @@ export default function Projects() {
                                     <div
                                         {...provided.droppableProps}
                                         ref={provided.innerRef}
-                                        className="flex-1 p-2 flex flex-col gap-6 rounded-3xl shadow-2xl bg-gray-300"
+                                        className="flex-1 p-5 pt-10 flex flex-col gap-4 rounded-lg shadow-lg bg-[#EFF2F7]"
                                     >
                                         {filteredPendingProjects.map(
                                             (project, index) => (
@@ -511,8 +511,8 @@ export default function Projects() {
                             </Droppable>
                         )}
                     </div>
-                    <div className="flex-1 bg-white gap-10 flex flex-col">
-                        <div className="h-[50px] gap-3 flex relative rounded-xl overflow-hidden shadow-md bg-green-400 shadow-gray-400">
+                    <div className="flex-1 bg-white  flex flex-col">
+                        <div className="h-[50px] gap-3 flex relative  rounded-t-lg overflow-hidden  bg-green-400 ">
                             <div
                                 className={` h-full flex justify-center items-center  bg-green-800`}
                                 style={{ width: `${withValuecompleted}%` }}
@@ -542,7 +542,7 @@ export default function Projects() {
                                     <div
                                         {...provided.droppableProps}
                                         ref={provided.innerRef}
-                                        className="flex-1 p-2 gap-6 scroll-auto flex flex-col rounded-3xl shadow-2xl bg-gray-300"
+                                        className="flex-1 p-5 pt-10 flex flex-col gap-4 rounded-lg shadow-lg bg-[#EFF2F7]"
                                     >
                                         {filteredCompletedProjects.map(
                                             (project, index) => (

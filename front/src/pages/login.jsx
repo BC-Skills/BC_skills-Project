@@ -55,7 +55,7 @@ export default function Login() {
         <div className="xl:flex-1 xl:p-10 xl:h-[80vh] flex xl:flex-row xl:overflow-hidden sm:hidden">
           <div className="flex flex-1 flex-col justify-center xl:ml-[150px] items-start">
             <h1 className="text-[40px] max-w-[500px] font-bold">
-                <AnimatedText text="BCSKILLS" />
+             BCSKILLS
             </h1>
             <div className="flex lg:flex-col xl:justify-center xl:items-start md:flex-col md:justify-center md:items-start">
               <h1 className="text-[30px]">Bienvenue chez BC Skills group </h1>

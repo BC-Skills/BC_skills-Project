@@ -69,7 +69,7 @@ export default function DetailsProject({ project, onCloseModal }) {
                 className="fixed ml-[25%] mt-[2%] z-50 w-full p-4  overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full "
             >
                 <div className="relative w-full max-w-[800px] bg max-h-full ">
-                    <div className="relative rounded-3xl shadow-2xl bg-gray-100">
+                    <div className="relative rounded-lg shadow-2xl bg-gray-100">
                         <div className="px-6 py-6 lg:px-8">
                             <div className="flex items-center justify-between pb-3">
                                 <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-black">

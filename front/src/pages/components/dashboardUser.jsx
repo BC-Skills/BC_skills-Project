@@ -196,7 +196,7 @@ export default function DashboardUser() {
                     </div>
                     <div className="flex flex-row gap-6 justify-center items-center"></div>
                 </div>
-                <div className="flex-1 p-2 flex  gap-10 flex-row justify-between flex-wrap">
+                <div className="flex-1 p-2 pb-0 flex  gap-10 flex-row justify-between flex-wrap">
                     <Outlet />
                 </div>
             </div>

@@ -119,8 +119,8 @@ export default function Collaborator({ project, onCloseModal }) {
                 aria-hidden="true"
                 className="fixed ml-[17%] mt-[2%] z-50 w-full p-4  overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full "
             >
-                <div className="relative w-full max-w-[1200px] bg max-h-full ">
-                    <div className="relative rounded-3xl shadow-2xl bg-gray-100">
+                <div className="relative w-full max-w-[1200px]  max-h-full ">
+                    <div className="relative rounded-lg shadow-2xl bg-[#EFF2F7]">
                         <div className="px-6 py-6 lg:px-8">
                             <div className="flex items-center justify-between pb-3">
                                 <h3 className="mb-4 text-[30px] font-bold text-gray-900 dark:text-black">
@@ -152,7 +152,7 @@ export default function Collaborator({ project, onCloseModal }) {
                             <div className="flex-1 flex flex-row gap-9 h-[60vh]">
                                 <div className="flex-1 flex-col flex">
                                     <div className="flex flex-row justify-between items-center">
-                                        <h1 className="text-[30px] font-bold">
+                                        <h1 className="text-[30px] font-normal ">
                                             Employés
                                         </h1>
                                         <div className="mt-5 mb-2 border-2 py-1 px-3 flex justify-between  rounded-md hover:border-blue-500">
@@ -177,7 +177,7 @@ export default function Collaborator({ project, onCloseModal }) {
                                             </span>
                                         </div>
                                     </div>
-                                    <div className="flex-1 bg-gray-200 shadow-2xl rounded-2xl flex flex-col gap-3 pt-6 px-3 overflow-y-auto">
+                                    <div className="flex-1 flex flex-col gap-3 pt-6 px-3 overflow-y-auto">
                                         {loading ? (
                                             <p>
                                                 Chargement des utilisateurs...
