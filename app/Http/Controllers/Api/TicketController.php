@@ -7,6 +7,8 @@ use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Schedule;
+use App\Notifications\TicketAssignedNotification;
+use Illuminate\Support\Facades\DB;
 
 class TicketController extends Controller
 {
@@ -168,6 +170,28 @@ class TicketController extends Controller
         $ticket->update($request->all());
         return response()->json($ticket, 200);
     }
+    // public function update2(Request $request, $id)
+    // {
+    //     // Find the ticket by its ID
+    //     $ticket = Ticket::findOrFail($id);
+
+    //     // Update the ticket with the provided data
+    //     $ticket->update($request->all());
+
+    //     // If the ticket has been assigned, send the TicketAssignedNotification
+    
+    //         $assignedUser = DB::table('users')->where('id', $ticket->assign_to)->first();
+
+    //         if ($assignedUser) {
+    //             $projectName = $ticket->project->name;
+    //             $assignedUserObject = new User(); // Replace this with your User model class
+    //             $assignedUserObject->email = $assignedUser->email;
+    //             $assignedUserObject->notify(new TicketAssignedNotification($ticket->nom, $projectName));
+    //         }
+        
+
+    //     return response()->json($ticket, 200);
+    // }
 
   
     public function getTicketsByAssignToId($assignToId)

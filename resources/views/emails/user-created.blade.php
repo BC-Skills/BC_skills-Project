@@ -63,6 +63,17 @@
             text-align: center;
             margin-top: 20px;
         }
+        .note2 {
+            color: #888;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #777;
+        }
     </style>
 </head>
 <body>
@@ -82,6 +93,8 @@
             <a class="button" href="{{ url('http://localhost:3000/') }}">Visit Our Website</a>
         </div>
         <p class="note">Please remember to update your password after logging in.</p>
+        <p class="note2">For security reasons, please remember to keep your password confidential.</p>
+        <p class="footer">&copy; {{ date('Y') }}  BC Skills Group. All rights reserved.</p>
     </div>
 </body>
 </html>

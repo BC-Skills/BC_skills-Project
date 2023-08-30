@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\Profile;
 use App\Notifications;
 use App\Notifications\UserCreatedNotification;
+use App\Notifications\PasswordUpdatedNotification;
+
 use Illuminate\Support\Str; // Make sure to import the Str class
 
 
@@ -153,6 +155,9 @@ class UserController extends Controller
                   // Update the user's password
                   $user->password = bcrypt($request->input('newPassword'));
                   $user->save();
+
+                     // Send the PasswordUpdatedNotification to inform the user about the password update
+                     $user->notify(new PasswordUpdatedNotification());
       
                   // Respond with a success message or any other relevant data
                   return response()->json(['message' => 'Password updated successfully'], 200);

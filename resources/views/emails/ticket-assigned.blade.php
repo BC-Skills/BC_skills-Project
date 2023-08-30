@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Assigned</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f6f6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            background-image: url('https://example.com/background-image.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            border: 2px solid #007bff;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            max-width: 150px;
+        }
+        .content {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .button {
+            display: block;
+            width: 100%;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .button a {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .note {
+            color: #888;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="{{ $logoUrl }}" alt="Company Logo">
+        </div>
+        <div class="content">
+            <h2>New Ticket Assigned</h2>
+            <p>Hello {{ $notifiable->name }},</p>
+            <p>We wanted to let you know that a new ticket has been assigned to you.</p>
+            <p>Ticket Name: {{ $ticketName }}</p>
+            <p>Project: {{ $projectName }}</p>
+            <p>Please take necessary action and keep track of the assigned ticket.</p>
+        </div>
+        <div class="button">
+            <a href="{{ url('http://localhost:3000/') }}" style="color: #ffffff; text-decoration: none;">Visit Our Website</a>
+        </div>
+        <p class="note">Thank you for using our service.</p>
+        <p class="footer">&copy; {{ date('Y') }}  BC Skills Group. All rights reserved.</p>
+    </div>
+</body>
+</html>
