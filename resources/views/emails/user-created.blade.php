@@ -19,7 +19,7 @@
             filter: brightness(0.9); /* Adjust the brightness as needed */
             position: relative;
             border-radius: 10px;
-            border: 2px solid #333; /* Added border styling */
+            border: 2px solid #007bff; /* Added border styling */
             overflow: hidden; /* Ensure border doesn't expand the container */
         }
         .overlay {
