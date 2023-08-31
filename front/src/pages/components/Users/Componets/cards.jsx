@@ -45,11 +45,11 @@ export default function Cards({ project, onEditProject,  AddCollaboratorProject 
             key={project.id}
         >
             <div className="flex flex-row justify-between items-center">
-                <h1 className="text-[30px] font-bold font-serif">
+                <h1 className="text-[30px] font-bold ">
                     {project.nom}
                 </h1>
-                <h1 className="text-[20px] font-bold font-serif">
-                    Durre : {project.duree}/Months
+                <h1 className="text-[20px] font-bold ">
+                    Durée : {project.duree} Mois
                 </h1>
             </div>
             <div className="flex-1 flex flex-col gap-4">

@@ -74,7 +74,7 @@ export default function Dashboard({children}) {
     }, []);
 
     return (
-        <div className="container">
+        <div className="container ">
             <div className={`navigation  ${isSidebarActive ? "active" : ""}`}>
                 <ul className="mt-[10%]">
                     <li className="flex justify-center items-center animate-pulse">
@@ -158,11 +158,10 @@ export default function Dashboard({children}) {
                 </ul>
             </div>
             <div
-                className={`main flex flex-col flex-1   ${
+                className={`main flex flex-col flex-1 bg-[#F2F3F4]  ${
                     isSidebarActive ? "active" : ""
-                }`}
-            >
-                <div className="topbar mt-4 ">
+                }`}>
+                <div className="topbar mt-[1%] ">
                     <div className="toggle" onClick={handleToggleClick}>
                         <ion-icon name="menu-outline"></ion-icon>
                     </div>
@@ -185,7 +184,7 @@ export default function Dashboard({children}) {
                         </div>
                     </div>
                 </div>
-                <div className="flex-1 p-2   flex  gap-10 flex-row justify-between flex-wrap">
+                <div className="h-[120vh] p-2  flex  gap-10 flex-row justify-between flex-wrap ">
                 <Outlet />
                 </div>
             </div>

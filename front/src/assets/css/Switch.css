@@ -3,6 +3,7 @@
     display: inline-block;
     width: 120px;
     height: 34px;
+    
    }
    
    .switch input {
@@ -16,7 +17,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #3C3C3C;
+    background-color: #41415a;
     -webkit-transition: .4s;
     transition: .4s;
     border-radius: 34px;

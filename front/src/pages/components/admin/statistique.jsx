@@ -225,86 +225,67 @@ export default function Statistique() {
     }, [selectedSprintTicketCounts, selectedChartType]);
 
     return (
-        <div className="flex-1  flex flex-col mt-6">
-            <div className="flex-[0.3] flex flex-row px-4 py-4 flex-wrap gap-4">
-                <div className="flex-1 rounded-2xl flex justify-around items-center shadow-xl shadow-gray-300 bg-gradient-to-r from-purple-50 to-purple-200">
-                    <div className="flex-1 flex justify-around">
+        <div className="flex-1  flex flex-col mt-6 bg-gray-50">
+            <div className="flex-[0.2] flex flex-row px-4 py-4 flex-wrap gap-4">
+                <div className="relative flex-1 flex justify-end items-end p-8 ">
+                    <div className="flex-1 flex justify-end items-end shadow-2xl bg-white p-12  rounded-lg shadow-[#f3c17ba0]">
                         <div>
-                            <h3 className="text-3xl leading-tight text-gray-500 dark:text-slate-400">
+                            <h3 className="mb-2 font-sans font-semibold leading-normal text-2xl">
                                 Clients
                             </h3>
-                            <h1 className="text-5xl leading-tight font-semibold">
-                                <div>{statistics.client_count}</div>
+                            <h1 className="mb-0 font-bold text-2xl">
+                                <div className="mb-0 font-bold text-[40px]">{statistics.client_count}</div>
                             </h1>
                         </div>
                     </div>
-                    <span className="flex-1 inline-flex justify-center items-center  h-16 text-emerald-500">
-                        <svg
-                            viewBox="0 0 24 24"
-                            width="88"
-                            height="88"
-                            className="inline-block"
-                        >
-                            <path
-                                fill="currentColor"
-                                d="M16 17V19H2V17S2 13 9 13 16 17 16 17M12.5 7.5A3.5 3.5 0 1 0 9 11A3.5 3.5 0 0 0 12.5 7.5M15.94 13A5.32 5.32 0 0 1 18 17V19H22V17S22 13.37 15.94 13M15 4A3.39 3.39 0 0 0 13.07 4.59A5 5 0 0 1 13.07 10.41A3.39 3.39 0 0 0 15 11A3.5 3.5 0 0 0 15 4Z"
-                            ></path>
-                        </svg>
+                    <span className="absolute top-0 left-12 p-4 rounded-2xl bg-[#FF9300] shadow-xl shadow-[#f3c17b55] " style={{ color: 'white' }}>
+                    <ion-icon size='large'  name="people"></ion-icon>
                     </span>
                 </div>
-                <div className="flex-1 rounded-2xl flex justify-around items-center shadow-xl shadow-gray-300 bg-gradient-to-r from-orange-50 to-orange-200">
-                    <div className="flex-1 flex justify-around">
+                <div className="relative flex-1 flex justify-end items-end p-8">
+                    <div className="flex-1 flex justify-end items-end shadow-xl bg-white p-12   rounded-lg    shadow-[#d5e4f0] ">
                         <div>
-                            <h3 className="text-3xl leading-tight text-gray-500 dark:text-slate-400">
-                                Projects
+                            <h3 className="mb-2 font-sans font-semibold leading-normal text-2xl">
+                                Projets
                             </h3>
-                            <h1 className="text-5xl leading-tight font-semibold">
-                                <div>{statistics.project_count}</div>
+                            <h1 className="mb-0 font-bold text-2xl">
+                                <div className="mb-0 font-bold text-[40px]">{statistics.project_count}</div>
                             </h1>
                         </div>
                     </div>
-                    <span className="flex-1 inline-flex justify-center items-center  h-16 text-emerald-500">
-                        <img src={project} width="88" height="88" alt="" />
+                    <span className=" absolute top-0 left-12 p-4 rounded-2xl bg-[#068FF1] shadow-lg   shadow-[#82c6f7] " style={{ color: 'white' }}>
+                    <ion-icon size='large' name="code"></ion-icon>
                     </span>
                 </div>
-                <div className="flex-1 rounded-2xl flex justify-around items-center shadow-xl shadow-gray-300 bg-gradient-to-r from-blue-50 to-blue-200">
-                    <div className="flex-1 flex justify-around">
+                <div className="relative flex-1 flex justify-end items-end p-8">
+                    <div className="flex-1 flex justify-end items-end  bg-white p-12   rounded-lg shadow-xl   shadow-[#e0cff3]">
                         <div>
-                            <h3 className="text-3xl leading-tight text-gray-500 dark:text-slate-400">
-                                Employes
+                            <h3 className="mb-2 font-sans font-semibold leading-normal text-2xl">
+                                Employés
                             </h3>
-                            <h1 className="text-5xl leading-tight font-semibold">
-                                <div>{statistics.user_count}</div>
+                            <h1 className="mb-0 font-bold text-2xl">
+                                <div className="mb-0 font-bold text-[40px]">{statistics.user_count}</div>
                             </h1>
                         </div>
                     </div>
-                    <span className="flex-1 inline-flex justify-center items-center  h-16 text-red-400">
-                        <svg
-                            viewBox="0 0 24 24"
-                            width="88"
-                            height="88"
-                            className="inline-block"
-                        >
-                            <path
-                                fill="currentColor"
-                                d="M16 17V19H2V17S2 13 9 13 16 17 16 17M12.5 7.5A3.5 3.5 0 1 0 9 11A3.5 3.5 0 0 0 12.5 7.5M15.94 13A5.32 5.32 0 0 1 18 17V19H22V17S22 13.37 15.94 13M15 4A3.39 3.39 0 0 0 13.07 4.59A5 5 0 0 1 13.07 10.41A3.39 3.39 0 0 0 15 11A3.5 3.5 0 0 0 15 4Z"
-                            ></path>
-                        </svg>
+                    <span className=" absolute top-0 left-12 p-4 rounded-2xl bg-[#983FFB] shadow-xl   shadow-[#dcc6f3]" style={{ color: 'white' }}>
+                    <ion-icon size='large'  name="person"></ion-icon>
                     </span>
                 </div>
-                <div className="flex-1 rounded-2xl flex justify-around items-center shadow-xl shadow-gray-300 bg-gradient-to-r from-green-50 to-green-200">
-                    <div className="flex-1 flex justify-around">
+                <div className="relative flex-1 flex justify-end items-end p-8">
+                    <div className="flex-1 flex justify-end items-end  bg-white p-12   rounded-lg shadow-xl   shadow-[#d9ebd9]">
                         <div>
-                            <h3 className="text-3xl leading-tight text-gray-500 dark:text-slate-400">
+                            <h3 className="mb-2 font-sans font-semibold leading-normal text-2xl">
                                 Formation
                             </h3>
-                            <h1 className="text-5xl leading-tight font-semibold">
-                                <div>{statistics.formation_count}</div>
+                            <h1 className="mb-0 font-bold text-2xl">
+                                <div className="mb-0 font-bold text-[40px]">{statistics.client_count}</div>
                             </h1>
                         </div>
                     </div>
-                    <span className="flex-1 inline-flex justify-center items-center  h-16 text-emerald-500">
-                        <img src={presentation} width="88" height="88" alt="" />
+                    <span className=" absolute top-0 left-12 p-4 rounded-2xl bg-[#05EB07] shadow-xl   shadow-[#b9f0ba]" style={{ color: 'white' }}>
+                    <ion-icon size='large' name="school"></ion-icon>
+
                     </span>
                 </div>
             </div>
@@ -312,35 +293,36 @@ export default function Statistique() {
                 <div className="flex-1 flex flex-col pt-10 rounded-2xl justify-around bg-gradient-to-r  from-gray-50 to-gray-100  shadow-xl shadow-gray-300">
                     <canvas id="myChart" width="400" height="200"></canvas>
                     <div className=" flex flex-row px-4 py-4 flex-wrap gap-4">
-                        <div className="flex-1 rounded-2xl shadow-xl bg-gradient-to-r from-indigo-50 to-indigo-200">
+                        <div className="flex-1 rounded-2xl   bg-[#FF9300] shadow-xl shadow-[#f3c17b55]">
                             <select
-                                className="w-full h-[60px] text-center rounded-2xl bg-gradient-to-r from-indigo-50 to-indigo-200"
+                                className="w-full h-[60px] text-center rounded-xl  "
                                 value={selectedChartType}
                                 onChange={(e) =>
                                     setSelectedChartType(e.target.value)
                                 }
                             >
-                                <option value="bar">Bar Chart</option>
-                                <option value="line">Line Chart</option>
-                                <option value="pie">Pie Chart</option>
-                                <option value="doughnut">Doughnut Chart</option>
+                              <option value="bar">Graphique à barres</option>
+                                <option value="line">Graphique linéaire</option>
+                                <option value="pie">Graphique circulaire</option>
+                                <option value="doughnut">Graphique en anneau</option>
                                 <option value="polarArea">
-                                    Polar Area Chart
+                                    Graphique en secteurs polaires
                                 </option>
-                                <option value="radar">Radar Chart</option>
-                                <option value="bubble">Bubble Chart</option>
-                                <option value="scatter">Scatter Chart</option>
+                                <option value="radar">Graphique en radar</option>
+                                <option value="bubble">Graphique à bulles</option>
+                                <option value="scatter">Graphique de dispersion</option>
+
                             </select>
                         </div>
-                        <div className="flex-1 rounded-2xl shadow-xl  bg-slate-500 shadow-gray-300">
+                        <div className="flex-1 rounded-2xl   bg-[#068FF1] shadow-lg   shadow-[#b5d9f2]">
                             <select
-                                className="w-full  h-[60px] text-center rounded-2xl bg-gradient-to-r from-purple-50 to-purple-200"
+                                className="w-full  h-[60px] text-center rounded-2xl "
                                 value={selectedGraphOption}
                                 onChange={(e) =>
                                     setSelectedGraphOption(e.target.value)
                                 }
                             >
-                                <option value="">Projects</option>
+                                <option value="">Projets</option>
                                 {projects?.map((project) => (
                                     <option key={project.id} value={project.id}>
                                         {project.nom}
@@ -348,15 +330,15 @@ export default function Statistique() {
                                 ))}
                             </select>
                         </div>
-                        <div className="flex-1 rounded-2xl shadow-xl  shadow-gray-300">
+                        <div className="flex-1 rounded-2xl   bg-[#05EB07] shadow-xl   shadow-[#c5e8c5]">
                             <select
-                                className="w-full h-[60px] text-center rounded-2xl bg-gradient-to-r from-green-50 to-green-200"
+                                className="w-full h-[60px] text-center rounded-2xl"
                                 value={selectedSprintOption}
                                 onChange={(e) =>
                                     setSelectedSprintOption(e.target.value)
                                 }
                             >
-                                <option value="all">All Sprints</option>
+                                <option value="all">Tous les phases</option>
                                 {projectSprints?.map((sprint) => (
                                     <option key={sprint.id} value={sprint.id}>
                                         {sprint.name}
@@ -369,30 +351,31 @@ export default function Statistique() {
                 <div className="flex-1 flex flex-col px-4 py-4 flex-wrap gap-4 ">
                     <div className="flex-1 rounded-2xl shadow-xl shadow-gray-300">
                         <div className="flex-1  shadow-gray-300">
-                            <h3 className="text-3xl font-semibold m-4 text-center text-purple-600">                   
+                            <h3 className="text-3xl font-semibold m-4  text-black">                   
                 Meilleurs finisseurs de Taches
                             </h3>
                             {topTicketFinishers.map((user) => (
                                 <div
                                     key={user.id}
-                                    className="bg-white p-3 rounded-xl shadow-xl flex items-center justify-between mt-2"
+                                    className=" p-3 flex items-center justify-between mt-2 border-b-[1px]"
                                 >
-                                    <div className="flex space-x-6 items-center">
-                                        <img
+                                    <div className="flex space-x-6 items-center ">
+                                        <div className="flex-shrink-0">  <img
                                             src={user.profile_picture}
-                                            className="w-auto h-24 rounded-lg"
-                                        />
+                                            className="w-12 h-12 rounded-full "
+                                        /></div>
+                                      
                                         <div>
                                             <p className="font-semibold text-base">
                                                 {user.name}
                                             </p>
-                                            <p className="font-semibold text-sm text-gray-400">
+                                            <p className="text-sm text-gray-500 truncate dark:text-gray-400">
                                                 {user.email}
                                             </p>
                                         </div>
                                     </div>
                                     <div className="flex space-x-2 items-center">
-                                        <div className="bg-red-300 rounded-md p-5 justify-around gap-3 flex items-center text-2xl">
+                                        <div className=" rounded-md p-5 justify-around gap-3 flex items-center text-2xl text-black font-bold">
                                         <ion-icon name="ticket-outline"></ion-icon>
                                             {user.finished_ticket_count ?? 0}
                                         </div>
@@ -403,37 +386,65 @@ export default function Statistique() {
                     </div>
                     <div className="flex-1 rounded-2xl shadow-xl shadow-gray-300">
                     <div className="flex-1  shadow-gray-300">
-                            <h3 className="text-3xl font-semibold m-4 text-center text-purple-600">
+                    <h3 className="text-3xl font-semibold m-4  text-black">                   
                             Meilleurs finisseurs des Projets
                             </h3>
                             {topprojectmanagers.map((user) => (
                                 <div
                                     key={user.id}
-                                    className="bg-white p-3 rounded-xl shadow-xl flex items-center justify-between mt-2"
+                                    className=" p-3 flex items-center justify-between mt-2 border-b-[1px]"
                                 >
-                                    <div className="flex space-x-6 items-center">
-                                        <img
+                                  <div className="flex space-x-6 items-center ">
+                                        <div className="flex-shrink-0">  <img
                                             src={user.profile_picture}
-                                            className="w-auto h-24 rounded-lg"
-                                        />
+                                            className="w-12 h-12 rounded-full "
+                                        /></div>
+                                      
                                         <div>
                                             <p className="font-semibold text-base">
                                                 {user.name}
                                             </p>
-                                            <p className="font-semibold text-sm text-gray-400">
+                                            <p className="text-sm text-gray-500 truncate dark:text-gray-400">
                                                 {user.email}
                                             </p>
                                         </div>
                                     </div>
                                     <div className="flex space-x-2 items-center">
-                                        <div className="bg-red-300 rounded-md p-5 justify-around gap-3 flex items-center text-2xl">
+                                    <div className=" rounded-md p-5 justify-around gap-3 flex items-center text-2xl text-black font-bold">
                                         <ion-icon name="code-outline"></ion-icon>
                                             {user.project_count ?? 0}
                                         </div>
                                     </div>
                                 </div>
                             ))}
-                            
+                              {topprojectmanagers.map((user) => (
+                                <div
+                                    key={user.id}
+                                    className=" p-3 flex items-center justify-between mt-2 border-b-[1px]"
+                                >
+                                  <div className="flex space-x-6 items-center ">
+                                        <div className="flex-shrink-0">  <img
+                                            src={user.profile_picture}
+                                            className="w-12 h-12 rounded-full "
+                                        /></div>
+                                      
+                                        <div>
+                                            <p className="font-semibold text-base">
+                                                {user.name}
+                                            </p>
+                                            <p className="text-sm text-gray-500 truncate dark:text-gray-400">
+                                                {user.email}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="flex space-x-2 items-center">
+                                    <div className=" rounded-md p-5 justify-around gap-3 flex items-center text-2xl text-black font-bold">
+                                        <ion-icon name="code-outline"></ion-icon>
+                                            {user.project_count ?? 0}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>

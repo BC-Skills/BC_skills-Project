@@ -1,10 +1,9 @@
-
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import axiosClient from "../../../../axios";
 import PropTypes from "prop-types";
-import { useStateContext } from "../../../../contexts/contextProvider"
+import { useStateContext } from "../../../../contexts/contextProvider";
 
 Cardtickes.propTypes = {
     tickets: PropTypes.shape({
@@ -50,16 +49,17 @@ Cardtickes.propTypes = {
     }),
 };
 // eslint-disable-next-line react/prop-types
-export default function Cardtickes({ tickets, fetchticketsData , selectedProject , modifuy}) {
+export default function Cardtickes({
+    tickets,
+    fetchticketsData,
+    selectedProject,
+    modifuy,
+}) {
     const [showUserList, setShowUserList] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const { currentUser } = useStateContext();
-
-
-
-
 
     const handleImageClick = (user) => {
         setSelectedUser(user);
@@ -73,31 +73,33 @@ export default function Cardtickes({ tickets, fetchticketsData , selectedProject
         setSelectedUser(null);
     };
 
-
     const handleFileDownload = (id, fileName) => {
-        console.log(id,fileName)
+        console.log(id, fileName);
         axiosClient
-          .get(`schedules/download/${id}`, {
-            responseType: 'blob',
-          })
-          .then((response) => {
-            const blob = new Blob([response.data], { type: response.headers['content-type'] });
-            const downloadLink = document.createElement('a');
-            downloadLink.href = window.URL.createObjectURL(blob);
-            downloadLink.setAttribute('download', fileName);
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-          })
-          .catch((error) => {
-            console.error('Error downloading file:', error);
-    });
-   };
-
+            .get(`schedules/download/${id}`, {
+                responseType: "blob",
+            })
+            .then((response) => {
+                const blob = new Blob([response.data], {
+                    type: response.headers["content-type"],
+                });
+                const downloadLink = document.createElement("a");
+                downloadLink.href = window.URL.createObjectURL(blob);
+                downloadLink.setAttribute("download", fileName);
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            })
+            .catch((error) => {
+                console.error("Error downloading file:", error);
+            });
+    };
 
     const fetchUsersData = async (currentUserid) => {
         try {
-            const response = await axiosClient.get(`userss/exadminclient/${currentUserid}`);
+            const response = await axiosClient.get(
+                `userss/exadminclient/${currentUserid}`
+            );
             const usersData = response.data;
             setUsers(usersData);
         } catch (error) {
@@ -106,8 +108,8 @@ export default function Cardtickes({ tickets, fetchticketsData , selectedProject
     };
 
     const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(searchQuery.toLowerCase())
-);
+        user.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     const updateTicketWithUser = async () => {
         try {
@@ -115,7 +117,7 @@ export default function Cardtickes({ tickets, fetchticketsData , selectedProject
                 await axiosClient.put(`ticketss/${tickets.id}`, {
                     assign_to: selectedUser.id,
                 });
-                
+
                 fetchticketsData();
                 console.log("Ticket updated successfully.");
                 setShowUserList(false);
@@ -182,7 +184,9 @@ export default function Cardtickes({ tickets, fetchticketsData , selectedProject
     const [sprints, setSprints] = useState([]);
     const fetchSprintsData = async () => {
         try {
-            const response = await axiosClient.get(`sprintss/${selectedProject}`);
+            const response = await axiosClient.get(
+                `sprintss/${selectedProject}`
+            );
             const sprintsData = response.data;
             setSprints(sprintsData);
         } catch (error) {
@@ -217,118 +221,123 @@ export default function Cardtickes({ tickets, fetchticketsData , selectedProject
                         <div className="absolute top-0 left-0 mt-12  bg-white rounded-md shadow-md">
                             <button
                                 className="p-2 w-full text-left border border-gray-300 bg-purple-100"
-                                onClick={modifuy ? deleteTicket : undefined} 
-
+                                onClick={modifuy ? deleteTicket : undefined}
                             >
                                 Supprimer
                             </button>
                             <button
                                 className="p-2 w-full text-left border border-gray-300 bg-orange-100"
-                                onClick={modifuy ? handleSprintClick : undefined} 
-
+                                onClick={
+                                    modifuy ? handleSprintClick : undefined
+                                }
                             >
                                 Assign To Sprint
                             </button>
-                            {tickets.status !== "A faire"  &&
-                                <button className="p-2 w-full text-left border border-gray-300 bg-blue-100"
-                            onClick={() => handleFileDownload(tickets.schedules[0]?.id, tickets.schedules[0]?.file_name)}
-                            >
-                             Telecharger file
-                            </button>
-                            }
-                           
+                            {tickets.status !== "A faire" && (
+                                <button
+                                    className="p-2 w-full text-left border border-gray-300 bg-blue-100"
+                                    onClick={() =>
+                                        handleFileDownload(
+                                            tickets.schedules[0]?.id,
+                                            tickets.schedules[0]?.file_name
+                                        )
+                                    }
+                                >
+                                    Telecharger file
+                                </button>
+                            )}
                         </div>
                     )}
                 </div>
             </div>
-            <div className="flex-1 pr-6 pl-6 flex flex-row justify-evenly items-center">
-                From to :{" "}
-                <span className="text-orange-400 text-[20px]">
-                    {tickets?.user?.name}
-                </span>
-                <div className="relative p-3 m-2 w-8 h-8">
-                    <img
-                        src={tickets.user?.profile_picture}
-                        alt="Image"
-                        className="cursor-pointer absolute top-0 left-0 w-full h-full rounded-full object-cover"
-                    />
-                </div>
-                assign to:{" "}
-                {tickets?.assigned_to_user?.name ? (
+                <div className="flex-1 pr-6 pl-6 flex flex-row justify-evenly items-center">
+                    De :{" "}
                     <span className="text-orange-400 text-[20px]">
-                        {tickets?.assigned_to_user?.name}
+                        {tickets?.user?.name}
                     </span>
-                ) : (
-                    <span className="text-gray-400">no yet</span>
-                )}{" "}
-                <div className="relative p-3  m-2 w-8 h-8">
-                    <img
-                        src={
-                            tickets?.assigned_to_user?.profile_picture
-                                ? tickets?.assigned_to_user?.profile_picture
-                                : "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/512px-Circle-icons-profile.svg.png"
-                        }
-                        alt={tickets?.assigned_to_user?.name}
-                        className="cursor-pointer absolute top-0 left-0 w-full h-full rounded-full object-cover"
-                        onClick={modifuy ? handleImageClick : undefined} // Disable the onClick if modifuy is false
+                    <div className="relative p-3 m-2 w-8 h-8">
+                        <img
+                            src={tickets.user?.profile_picture}
+                            alt="Image"
+                            className="cursor-pointer absolute top-0 left-0 w-full h-full rounded-full object-cover"
                         />
-                    {showUserList && (
-                        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-70 z-50">
-                            <div className="bg-white rounded-lg p-4">
-                                <div className="flex justify-between items-center mb-4">
-                                    <h2 className="text-xl font-semibold">
-                                        Assign to
-                                    </h2>
-                                    <button
-                                        className="text-gray-500"
-                                        onClick={handleCloseModal}
-                                    >
-                                        Close
-                                    </button>
-                                </div>
-                                <div className="mb-4">
-                                    <input
-                                        type="text"
-                                        placeholder="Search users..."
-                                        className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring focus:border-blue-400"
-                                        value={searchQuery}
-                                        onChange={(e) =>
-                                            setSearchQuery(e.target.value)
-                                        }
-                                    />
-                                </div>
-                                <div
-                                    className="max-h-80 overflow-y-auto grid grid-cols-3 gap-4"
-                                    style={{ maxHeight: "20rem" }}
-                                >
-                                    {filteredUsers.map((user) => (
-                                        <div
-                                            key={user.name}
-                                            className="flex flex-col items-center p-2 border rounded-md cursor-pointer"
-                                            onClick={() => {
-                                                handleImageClick(user);
-                                                updateTicketWithUser();
-                                            }}
+                    </div>
+                    assigné à:{" "}
+                    {tickets?.assigned_to_user?.name ? (
+                        <span className="text-orange-400 text-[20px]">
+                            {tickets?.assigned_to_user?.name}
+                        </span>
+                    ) : (
+                        <span className="text-gray-400">no yet</span>
+                    )}{" "}
+                    <div className="relative p-3  m-2 w-8 h-8">
+                        <img
+                            src={
+                                tickets?.assigned_to_user?.profile_picture
+                                    ? tickets?.assigned_to_user?.profile_picture
+                                    : "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/512px-Circle-icons-profile.svg.png"
+                            }
+                            alt={tickets?.assigned_to_user?.name}
+                            className="cursor-pointer absolute top-0 left-0 w-full h-full rounded-full object-cover"
+                            onClick={modifuy ? handleImageClick : undefined} // Disable the onClick if modifuy is false
+                        />
+                        {showUserList && (
+                            <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-70 z-50">
+                                <div className="bg-white rounded-lg p-4">
+                                    <div className="flex justify-between items-center mb-4">
+                                        <h2 className="text-xl font-semibold">
+                                            Assign to
+                                        </h2>
+                                        <button
+                                            className="text-gray-500"
+                                            onClick={handleCloseModal}
                                         >
-                                            <img
-                                                src={user.profile_picture}
-                                                alt={user.name}
-                                                className="w-16 h-16 rounded-full object-cover mb-2"
-                                            />
-                                            <span>{user.name}</span>
-                                        </div>
-                                    ))}
+                                            Close
+                                        </button>
+                                    </div>
+                                    <div className="mb-4">
+                                        <input
+                                            type="text"
+                                            placeholder="Search users..."
+                                            className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring focus:border-blue-400"
+                                            value={searchQuery}
+                                            onChange={(e) =>
+                                                setSearchQuery(e.target.value)
+                                            }
+                                        />
+                                    </div>
+                                    <div
+                                        className="max-h-80 overflow-y-auto grid grid-cols-3 gap-4"
+                                        style={{ maxHeight: "20rem" }}
+                                    >
+                                        {filteredUsers.map((user) => (
+                                            <div
+                                                key={user.name}
+                                                className="flex flex-col items-center p-2 border rounded-md cursor-pointer"
+                                                onClick={() => {
+                                                    handleImageClick(user);
+                                                    updateTicketWithUser();
+                                                }}
+                                            >
+                                                <img
+                                                    src={user.profile_picture}
+                                                    alt={user.name}
+                                                    className="w-16 h-16 rounded-full object-cover mb-2"
+                                                />
+                                                <span>{user.name}</span>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )}
                 </div>
             </div>
             <div className="flex-1 ml-8 text-orange-400 text-[20px] pr-6 pl-6 flex mt-4 flex-row justify-Start items-center">
                 <span className=" text-black text-[15px]">Sprint : </span>
-                {tickets?.sprint?.name  ? (
+                {tickets?.sprint?.name ? (
                     <span className="text-orange-400 text-[20px]">
-                        {tickets?.sprint?.name }
+                        {tickets?.sprint?.name}
                     </span>
                 ) : (
                     <span className="text-gray-400"> without sprint</span>
@@ -338,13 +347,12 @@ export default function Cardtickes({ tickets, fetchticketsData , selectedProject
                 <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-70 z-50">
                     <div className="bg-white rounded-lg p-4">
                         <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl font-semibold">Sprints</h2>
+                            <h2 className="text-xl font-semibold">Phases</h2>
                             <button
                                 className="text-gray-500"
-                                
                                 onClick={handleCloseSprintList}
                             >
-                                Close
+                                Fermer
                             </button>
                         </div>
                         <div
@@ -372,7 +380,7 @@ export default function Cardtickes({ tickets, fetchticketsData , selectedProject
                                 className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
                                 onClick={updateTicketWithSprint}
                             >
-                                Assign Sprint
+                                Assigner à une phase
                             </button>
                         )}
                     </div>

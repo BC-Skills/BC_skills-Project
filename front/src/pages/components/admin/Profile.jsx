@@ -174,7 +174,7 @@ export default function Profile() {
                                     <div className=" w-16 h-16 border-4 border-t-transparent border-red-400 border-double rounded-full animate-spin"></div>
                                 </div>
                             ) : (
-                                <table className="text-left w-full border-collapse">
+                                <table className="text-left w-full border-collapse ">
                                     <thead>
                                         <tr>
                                             <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">
@@ -201,7 +201,7 @@ export default function Profile() {
                                                                 role
                                                             )
                                                         }
-                                                        className="bg-blue-500 text-white hover:text-black font-bold py-3 px-5 rounded text-xs hover:bg-blue-200"
+                                                        className="bg-[#41415a] text-white hover:text-black font-bold py-3 px-5 rounded text-xs hover:bg-blue-200"
                                                     >
                                                         Details
                                                     </button>
@@ -236,7 +236,7 @@ export default function Profile() {
                 </div>
             </div>
             {selectedRole && (
-                <div className="flex-1 mt-10 mb-10 shadow-xl rounded-xl flex flex-col">
+                <div className="flex-1 bg-white mt-10 mb-10 shadow-xl rounded-xl flex flex-col">
                     <h1 className="text-[30px] mt-10 ml-10">
                         Privilages - {selectedRole.name}
                     </h1>
@@ -261,7 +261,7 @@ export default function Profile() {
                                                     {privilegesGroup.map(
                                                         (privilege) => (
                                                             <div
-                                                                className="bg-gray-600 p-4 border flex justify-between rounded-2xl shadow-2xl"
+                                                                className="bg-gray-300 p-4 border flex justify-between rounded-2xl shadow-2xl"
                                                                 key={
                                                                     privilege.id
                                                                 }
