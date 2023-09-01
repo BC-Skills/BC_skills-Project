@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-
+use App\Models\Profile;
 use App\Models\Privilege;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -59,4 +59,14 @@ class PrivilegeController extends Controller
 
         return response()->json($privileges);
     }
+    
+    public function indexprofil()
+    {
+        $privileges = Privilege::with('status')->get();
+        $profiles = Profile::all();
+        return response()->json(['privileges' => $privileges, 'profiles' => $profiles]);
+    }
+    
+    
+        
 }

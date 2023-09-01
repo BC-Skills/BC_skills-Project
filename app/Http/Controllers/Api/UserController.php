@@ -133,14 +133,16 @@ class UserController extends Controller
     }
 
     public function getAdmin()
-{
-    // Get active users (excluding those with status 'archive') who are not admins
-    $users = User::where('status', '!=', 'archive')->where('profile_id', '!=', '1')->get();
-
-    return response()->json($users);
-}
-
-
+    {
+        // Get active users (excluding those with status 'archive') who are not admins
+        $users = User::where('status', '!=', 'archive')
+                    ->whereHas('profile', function ($query) {
+                        $query->where('name', '!=', 'admin');
+                    })
+                    ->get();
+    
+        return response()->json($users);
+    }
           // Controller function for updating the user's password
           public function updatePassword(Request $request, $userId)
           {

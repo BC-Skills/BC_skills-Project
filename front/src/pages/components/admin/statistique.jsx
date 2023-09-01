@@ -239,7 +239,13 @@ export default function Statistique() {
                         </div>
                     </div>
                     <span className="absolute top-0 left-12 p-4 rounded-2xl bg-[#FF9300] shadow-xl shadow-[#f3c17b55] " style={{ color: 'white' }}>
-                    <ion-icon size='large'  name="people"></ion-icon>
+                <lord-icon
+                    src="https://cdn.lordicon.com/hbvyhtse.json"
+                    trigger="loop"
+                    delay="2000"
+                    colors="primary:#ffffff"
+                    style={{width:`300px;height:300px;`}}>
+                </lord-icon>
                     </span>
                 </div>
                 <div className="relative flex-1 flex justify-end items-end p-8">
@@ -254,7 +260,12 @@ export default function Statistique() {
                         </div>
                     </div>
                     <span className=" absolute top-0 left-12 p-4 rounded-2xl bg-[#068FF1] shadow-lg   shadow-[#82c6f7] " style={{ color: 'white' }}>
-                    <ion-icon size='large' name="code"></ion-icon>
+                    <lord-icon
+                        src="https://cdn.lordicon.com/zlyxhzar.json"
+                        trigger="loop"
+                        colors="primary:#ffffff"
+                        style={{width:`250px;height:250px;`}}>
+                    </lord-icon>
                     </span>
                 </div>
                 <div className="relative flex-1 flex justify-end items-end p-8">
@@ -269,7 +280,13 @@ export default function Statistique() {
                         </div>
                     </div>
                     <span className=" absolute top-0 left-12 p-4 rounded-2xl bg-[#983FFB] shadow-xl   shadow-[#dcc6f3]" style={{ color: 'white' }}>
-                    <ion-icon size='large'  name="person"></ion-icon>
+                    <lord-icon
+                        src="https://cdn.lordicon.com/hbvyhtse.json"
+                        trigger="loop"
+                        delay="2000"
+                        colors="primary:#ffffff"
+                        style={{width:`300px;height:300px;`}}>
+                    </lord-icon>
                     </span>
                 </div>
                 <div className="relative flex-1 flex justify-end items-end p-8">
@@ -284,8 +301,13 @@ export default function Statistique() {
                         </div>
                     </div>
                     <span className=" absolute top-0 left-12 p-4 rounded-2xl bg-[#05EB07] shadow-xl   shadow-[#b9f0ba]" style={{ color: 'white' }}>
-                    <ion-icon size='large' name="school"></ion-icon>
-
+                    <lord-icon
+                        src="https://cdn.lordicon.com/qvbrkejx.json"
+                        trigger="loop"
+                        delay="1000"
+                        colors="primary:#ffffff"
+                        style={{width:`300px;height:300px;`}}>
+                    </lord-icon>
                     </span>
                 </div>
             </div>
@@ -295,7 +317,7 @@ export default function Statistique() {
                     <div className=" flex flex-row px-4 py-4 flex-wrap gap-4">
                         <div className="flex-1 rounded-2xl   bg-[#FF9300] shadow-xl shadow-[#f3c17b55]">
                             <select
-                                className="w-full h-[60px] text-center rounded-xl  "
+                                className="w-full h-[60px] text-center rounded-lg  "
                                 value={selectedChartType}
                                 onChange={(e) =>
                                     setSelectedChartType(e.target.value)
@@ -316,7 +338,7 @@ export default function Statistique() {
                         </div>
                         <div className="flex-1 rounded-2xl   bg-[#068FF1] shadow-lg   shadow-[#b5d9f2]">
                             <select
-                                className="w-full  h-[60px] text-center rounded-2xl "
+                                className="w-full  h-[60px] text-center rounded-lg "
                                 value={selectedGraphOption}
                                 onChange={(e) =>
                                     setSelectedGraphOption(e.target.value)
@@ -332,7 +354,7 @@ export default function Statistique() {
                         </div>
                         <div className="flex-1 rounded-2xl   bg-[#05EB07] shadow-xl   shadow-[#c5e8c5]">
                             <select
-                                className="w-full h-[60px] text-center rounded-2xl"
+                                className="w-full h-[60px] text-center rounded-lg"
                                 value={selectedSprintOption}
                                 onChange={(e) =>
                                     setSelectedSprintOption(e.target.value)

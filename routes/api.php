@@ -178,3 +178,6 @@ Route::get('/test-notification/{user}', function (User $user) {
     Notification::send($user, new UserCreatedNotification($password));
     return "Notification sent to user {$user->name}";
 });
+
+Route::get('profiless/privilages', [PrivilegeController::class, 'indexprofil']);
+

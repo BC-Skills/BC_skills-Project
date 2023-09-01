@@ -29,15 +29,12 @@ export default function Profile() {
     
       const fetchData = async () => {
         try {
-          const privilegesResponse = await axiosClient.get("privileges");
-          setprivileges(privilegesResponse.data);
+          const privilegesResponse = await axiosClient.get("profiless/privilages");
+          setprivileges(privilegesResponse.data.privileges);
           setLoadingPrivileges(false);
-          // Save the fetched privileges data to session storage
-          sessionStorage.setItem("privileges", JSON.stringify(privilegesResponse.data));
-          const rolesResponse = await axiosClient.get("profiles");
-          setRoles(rolesResponse.data);
+        
+          setRoles(privilegesResponse.data.profiles);
           setLoadingRoles(false);
-          sessionStorage.setItem("roles", JSON.stringify(rolesResponse.data));
         } catch (error) {
           console.error("Error fetching data:", error);
           setLoadingPrivileges(false);
@@ -93,29 +90,19 @@ export default function Profile() {
 
     const groupPrivilegesByStatusId = () => {
         const groupedPrivileges = {};
-        const promises = privileges.map((privilege) =>
-            axiosClient.get(`statuses/${privilege.status_id}`)
-        );
-
-        // Wait for all promises to resolve
-        Promise.all(promises)
-            .then((responses) => {
-                responses.forEach((response, index) => {
-                    const statusName = response.data.name;
-                    const privilege = privileges[index];
-
-                    if (!groupedPrivileges[statusName]) {
-                        groupedPrivileges[statusName] = [];
-                    }
-                    groupedPrivileges[statusName].push(privilege);
-                });
-
-                // Set the state with the grouped privileges
-                setGroupedPrivileges(groupedPrivileges);
-            })
-            .catch((error) => {
-                console.error("Error fetching status details:", error);
-            });
+        console.log(privileges); // Add this line
+        privileges.forEach((privilege) => {
+            const status = privilege.status;
+            const statusName = status.name;
+    
+            if (!groupedPrivileges[statusName]) {
+                groupedPrivileges[statusName] = [];
+            }
+    
+            groupedPrivileges[statusName].push(privilege);
+        });
+    
+        setGroupedPrivileges(groupedPrivileges);
     };
     
     useEffect(() => {
